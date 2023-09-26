@@ -51,7 +51,8 @@ final class GitHubAPICampatibilityTests: XCTestCase {
     func test_passesValidation() throws {
         guard let apiDoc = apiDoc else { return }
 
-        try apiDoc.validate()
+        let warnings = try apiDoc.validate(strict: false)
+        XCTAssertEqual(warnings.count, 4)
     }
 
     func test_successfullyParsedBasicMetadata() throws {
@@ -91,13 +92,13 @@ final class GitHubAPICampatibilityTests: XCTestCase {
         XCTAssert(apiDoc.paths.contains(key: "/app/installations/{installation_id}/access_tokens"))
 
         // check for a known POST response
-        XCTAssertNotNil(apiDoc.paths["/app/installations/{installation_id}/access_tokens"]?.post?.responses[status: 201])
+        XCTAssertNotNil(apiDoc.paths["/app/installations/{installation_id}/access_tokens"]?.pathItemValue?.post?.responses[status: 201])
 
         // and a known GET response
-        XCTAssertNotNil(apiDoc.paths["/app/installations/{installation_id}"]?.get?.responses[status: 200])
+        XCTAssertNotNil(apiDoc.paths["/app/installations/{installation_id}"]?.pathItemValue?.get?.responses[status: 200])
 
         // check for parameters
-        XCTAssertFalse(apiDoc.paths["/app/installations/{installation_id}"]?.get?.parameters.isEmpty ?? true)
+        XCTAssertFalse(apiDoc.paths["/app/installations/{installation_id}"]?.pathItemValue?.get?.parameters.isEmpty ?? true)
     }
 
     func test_successfullyParsedComponents() throws {
@@ -119,7 +120,7 @@ final class GitHubAPICampatibilityTests: XCTestCase {
 
         let installationsPath = apiDoc.paths["/app/installations/{installation_id}"]
 
-        let installationsParameters = try installationsPath?.get?.parameters.compactMap(apiDoc.components.lookup)
+        let installationsParameters = try installationsPath?.pathItemValue?.get?.parameters.compactMap(apiDoc.components.lookup)
 
         XCTAssertNotNil(installationsParameters)
         XCTAssertEqual(installationsParameters?.count, 1)

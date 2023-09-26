@@ -15,9 +15,12 @@ let package = Package(
         .library(
             name: "OpenAPIKit",
             targets: ["OpenAPIKit"]),
+        .library(
+            name: "OpenAPIKitCompat",
+            targets: ["OpenAPIKitCompat"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/jpsim/Yams.git", from: "4.0.0") // just for tests
+        .package(url: "https://github.com/jpsim/Yams.git", "4.0.0"..<"6.0.0") // just for tests
     ],
     targets: [
         .target(
@@ -43,7 +46,7 @@ let package = Package(
             name: "OpenAPIKit30Tests",
             dependencies: ["OpenAPIKit30", "Yams"]),
         .testTarget(
-            name: "OpenAPIKit30CompatibilitySuite",
+            name: "OpenAPIKit30RealSpecSuite",
             dependencies: ["OpenAPIKit30", "Yams"]),
         .testTarget(
             name: "OpenAPIKit30ErrorReportingTests",
@@ -56,11 +59,18 @@ let package = Package(
             name: "OpenAPIKitTests",
             dependencies: ["OpenAPIKit", "Yams"]),
         .testTarget(
-            name: "OpenAPIKitCompatibilitySuite",
+            name: "OpenAPIKitRealSpecSuite",
             dependencies: ["OpenAPIKit", "Yams"]),
         .testTarget(
             name: "OpenAPIKitErrorReportingTests",
-            dependencies: ["OpenAPIKit", "Yams"])
+            dependencies: ["OpenAPIKit", "Yams"]),
+
+        .target(
+            name: "OpenAPIKitCompat",
+            dependencies: ["OpenAPIKit30", "OpenAPIKit"]),
+        .testTarget(
+            name: "OpenAPIKitCompatTests",
+            dependencies: ["OpenAPIKitCompat"])
     ],
     swiftLanguageVersions: [ .v5 ]
 )

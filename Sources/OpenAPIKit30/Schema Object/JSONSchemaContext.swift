@@ -210,25 +210,6 @@ extension JSONSchema {
             self.defaultValue = defaultValue
             self.example = AnyCodable(example)
         }
-
-        public enum Permissions: String, Codable {
-            case readOnly
-            case writeOnly
-            case readWrite
-
-            public init<Format: OpenAPIFormat>(
-                _ permissions: CoreContext<Format>.Permissions
-            ) {
-                switch permissions {
-                case .readOnly:
-                    self = .readOnly
-                case .writeOnly:
-                    self = .writeOnly
-                case .readWrite:
-                    self = .readWrite
-                }
-            }
-        }
     }
 }
 
@@ -493,29 +474,6 @@ extension JSONSchema {
         }
     }
 
-    /// The context that only applies to `.string` schemas.
-    public struct StringContext: Equatable {
-        public let maxLength: Int?
-        let _minLength: Int?
-
-        public var minLength: Int {
-            return _minLength ?? 0
-        }
-
-        /// Regular expression
-        public let pattern: String?
-
-        public init(
-            maxLength: Int? = nil,
-            minLength: Int? = nil,
-            pattern: String? = nil
-        ) {
-            self.maxLength = maxLength
-            self._minLength = minLength
-            self.pattern = pattern
-        }
-    }
-
     /// The context that only applies to `.array` schemas.
     public struct ArrayContext: Equatable {
         /// A JSON Type Node that describes
@@ -555,7 +513,7 @@ extension JSONSchema {
         /// is allowed to have.
         public let maxProperties: Int?
         let _minProperties: Int?
-        public let properties: [String: JSONSchema]
+        public let properties: OrderedDictionary<String, JSONSchema>
 
         /// Either a boolean or a schema defining or allowing
         /// additional properties on this object.
@@ -582,9 +540,7 @@ extension JSONSchema {
         ///     is determined by looking at its properties'
         ///     required Bool.
         public var requiredProperties: [String] {
-            return Array(properties.filter { (_, schemaObject) in
-                schemaObject.required
-            }.keys).sorted()
+            properties.filter { _, schema in schema.required }.map { $0.key }
         }
 
         /// The properties of this object that are optional.
@@ -593,9 +549,7 @@ extension JSONSchema {
         ///     is determined by looking at its properties'
         ///     required Bool.
         public var optionalProperties: [String] {
-            return Array(properties.filter { (_, schemaObject) in
-                !schemaObject.required
-            }.keys).sorted()
+            properties.filter { _, schema in !schema.required }.map { $0.key }
         }
 
         /// The minimum number of properties allowed.
@@ -608,7 +562,7 @@ extension JSONSchema {
         }
 
         public init(
-            properties: [String: JSONSchema],
+            properties: OrderedDictionary<String, JSONSchema>,
             additionalProperties: Either<Bool, JSONSchema>? = nil,
             maxProperties: Int? = nil,
             minProperties: Int? = nil
@@ -617,23 +571,6 @@ extension JSONSchema {
             self.additionalProperties = additionalProperties
             self.maxProperties = maxProperties
             self._minProperties = minProperties
-        }
-    }
-
-    /// The context that only applies to `.reference` schemas.
-    public struct ReferenceContext: Equatable {
-        public let required: Bool
-
-        public init(required: Bool = true) {
-            self.required = required
-        }
-
-        public func requiredContext() -> ReferenceContext {
-            return .init(required: true)
-        }
-
-        public func optionalContext() -> ReferenceContext {
-            return .init(required: false)
         }
     }
 }
@@ -708,6 +645,9 @@ extension JSONSchema.CoreContext: Decodable {
 
         format = try container.decodeIfPresent(Format.self, forKey: .format) ?? .unspecified
 
+        let nullable = try container.decodeIfPresent(Bool.self, forKey: .nullable)
+        _nullable = nullable
+
         // default to `true` at decoding site.
         // It is the responsibility of decoders farther upstream
         // to mark this as _not_ required if needed using
@@ -718,9 +658,16 @@ extension JSONSchema.CoreContext: Decodable {
         description = try container.decodeIfPresent(String.self, forKey: .description)
         discriminator = try container.decodeIfPresent(OpenAPI.Discriminator.self, forKey: .discriminator)
         externalDocs = try container.decodeIfPresent(OpenAPI.ExternalDocumentation.self, forKey: .externalDocs)
-        allowedValues = try container.decodeIfPresent([AnyCodable].self, forKey: .allowedValues)
+        if Format.self == JSONTypeFormat.StringFormat.self {
+            if (nullable ?? false) {
+                allowedValues = try container.decodeIfPresent([String?].self, forKey: .allowedValues)?.map(AnyCodable.init)
+            } else {
+                allowedValues = try container.decodeIfPresent([String].self, forKey: .allowedValues)?.map(AnyCodable.init)
+            }
+        } else {
+            allowedValues = try container.decodeIfPresent([AnyCodable].self, forKey: .allowedValues)
+        }
         defaultValue = try container.decodeIfPresent(AnyCodable.self, forKey: .defaultValue)
-        _nullable = try container.decodeIfPresent(Bool.self, forKey: .nullable)
 
         let readOnly = try container.decodeIfPresent(Bool.self, forKey: .readOnly)
         let writeOnly = try container.decodeIfPresent(Bool.self, forKey: .writeOnly)
@@ -753,7 +700,7 @@ extension JSONSchema.CoreContext: Decodable {
 }
 
 extension JSONSchema.NumericContext {
-    internal enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case multipleOf
         case maximum
         case exclusiveMaximum
@@ -801,7 +748,7 @@ extension JSONSchema.NumericContext: Decodable {
 }
 
 extension JSONSchema.IntegerContext {
-    internal enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case multipleOf
         case maximum
         case exclusiveMaximum
@@ -868,34 +815,6 @@ extension JSONSchema.IntegerContext: Decodable {
             }
             return integer
         }.map { Bound(value: $0, exclusive: exclusiveMinimum) }
-    }
-}
-
-extension JSONSchema.StringContext {
-    internal enum CodingKeys: String, CodingKey {
-        case maxLength
-        case minLength
-        case pattern
-    }
-}
-
-extension JSONSchema.StringContext: Encodable {
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encodeIfPresent(maxLength, forKey: .maxLength)
-        try container.encodeIfPresent(_minLength, forKey: .minLength)
-        try container.encodeIfPresent(pattern, forKey: .pattern)
-    }
-}
-
-extension JSONSchema.StringContext: Decodable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        maxLength = try container.decodeIfPresent(Int.self, forKey: .maxLength)
-        _minLength = try container.decodeIfPresent(Int.self, forKey: .minLength)
-        pattern = try container.decodeIfPresent(String.self, forKey: .pattern)
     }
 }
 
@@ -970,7 +889,7 @@ extension JSONSchema.ObjectContext: Decodable {
 
         let requiredArray = try container.decodeIfPresent([String].self, forKey: .required) ?? []
 
-        let decodedProperties = try container.decodeIfPresent([String: JSONSchema].self, forKey: .properties) ?? [:]
+        let decodedProperties = try container.decodeIfPresent(OrderedDictionary<String, JSONSchema>.self, forKey: .properties) ?? [:]
         properties = Self.properties(decodedProperties, takingRequirementsFrom: requiredArray)
     }
 
@@ -988,9 +907,9 @@ extension JSONSchema.ObjectContext: Decodable {
     ///     - properties: The properties before resolving optionality.
     ///     - required: The array of names of properties that should be required.
     internal static func properties(
-        _ properties: [String: JSONSchema],
+        _ properties: OrderedDictionary<String, JSONSchema>,
         takingRequirementsFrom required: [String]
-    ) -> [String: JSONSchema] {
+    ) -> OrderedDictionary<String, JSONSchema> {
         var properties = properties
 
         // mark any optional properties as optional.

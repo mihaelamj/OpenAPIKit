@@ -132,6 +132,14 @@ final class SchemaObjectTests: XCTestCase {
         XCTAssert(passwordString.jsonTypeFormat?.swiftType == String.self)
     }
 
+    func test_vendorExtensionsInit() {
+        let schema = JSONSchema(.string(), vendorExtensions: ["x-test": "hello world"])
+
+        XCTAssertEqual(schema.value, .string(.init(), .init()))
+        XCTAssertTrue(schema.warnings.isEmpty)
+        XCTAssertEqual(schema.vendorExtensions, ["x-test": "hello world"])
+    }
+
     func test_isFragmentAndIsEmpty() {
         let empty = JSONSchema.fragment(.init())
         let fragment = JSONSchema.fragment(.init(nullable: true))
@@ -294,6 +302,10 @@ final class SchemaObjectTests: XCTestCase {
         let anyOf = JSONSchema.any(of: [], core: .init(required: false))
         let oneOf = JSONSchema.one(of: [], core: .init(required: false))
         let not = JSONSchema.not(.string, core: .init(required: false))
+        let reference = JSONSchema.reference(
+            .external(URL(string: "hello/world.json#/hello")!),
+            required: false
+        )
 
         XCTAssertFalse(boolean.required)
         XCTAssertFalse(object.required)
@@ -306,6 +318,7 @@ final class SchemaObjectTests: XCTestCase {
         XCTAssertFalse(anyOf.required)
         XCTAssertFalse(oneOf.required)
         XCTAssertFalse(not.required)
+        XCTAssertFalse(reference.required)
     }
 
     func test_nullable() {
@@ -845,6 +858,36 @@ final class SchemaObjectTests: XCTestCase {
         XCTAssertNil(fragment.stringContext)
     }
 
+    func test_subschemasAccessor() {
+        let boolean = JSONSchema.boolean(.init(format: .unspecified, required: true))
+        let object = JSONSchema.object(.init(format: .unspecified, required: true), .init(properties: [:]))
+        let array = JSONSchema.array(.init(format: .unspecified, required: true), .init(items: .boolean))
+        let number = JSONSchema.number(.init(format: .unspecified, required: true), .init())
+        let integer = JSONSchema.integer(.init(format: .unspecified, required: true), .init())
+        let string = JSONSchema.string(.init(format: .unspecified, required: true), .init(maxLength: 5))
+
+        let allOf = JSONSchema.all(of: [.string(.init(), .init())])
+        let anyOf = JSONSchema.any(of: [boolean])
+        let oneOf = JSONSchema.one(of: [boolean])
+        let not = JSONSchema.not(boolean)
+        let reference = JSONSchema.reference(.external(URL(string: "hello/world.json#/hello")!))
+        let fragment = JSONSchema.fragment(.init(description: "hello world"))
+
+        XCTAssertEqual(boolean.subschemas, [])
+        XCTAssertEqual(object.subschemas, [])
+        XCTAssertEqual(array.subschemas, [.boolean])
+        XCTAssertEqual(number.subschemas, [])
+        XCTAssertEqual(integer.subschemas, [])
+        XCTAssertEqual(string.subschemas, [])
+
+        XCTAssertEqual(allOf.subschemas, [.string])
+        XCTAssertEqual(anyOf.subschemas, [.boolean])
+        XCTAssertEqual(oneOf.subschemas, [.boolean])
+        XCTAssertEqual(not.subschemas, [.boolean])
+        XCTAssertEqual(reference.subschemas, [])
+        XCTAssertEqual(fragment.subschemas, [])
+    }
+
     func test_numericContextFromIntegerContext() {
         let i1 = JSONSchema.IntegerContext(multipleOf: 2)
         let i2 = JSONSchema.IntegerContext(maximum: (10, exclusive: false))
@@ -911,6 +954,16 @@ final class SchemaObjectTests: XCTestCase {
         XCTAssertFalse(not.required)
         XCTAssertFalse(fragment.required)
         XCTAssertFalse(reference.required)
+
+        // all fragments within required get flipped too:
+        switch(allOf.value) {
+        case .all(of: let schemas, core: _):
+            for schema in schemas {
+                XCTAssertFalse(schema.required)
+            }
+        default:
+            break
+        }
     }
 
     func test_optionalToRequired() {
@@ -950,6 +1003,16 @@ final class SchemaObjectTests: XCTestCase {
         XCTAssertTrue(not.required)
         XCTAssertTrue(reference.required)
         XCTAssertTrue(fragment.required)
+
+        // all fragments within required get flipped too:
+        switch(allOf.value) {
+        case .all(of: let schemas, core: _):
+            for schema in schemas {
+                XCTAssertTrue(schema.required)
+            }
+        default:
+            break
+        }
     }
 
     func test_notNullableToNullable() {
@@ -1038,7 +1101,7 @@ final class SchemaObjectTests: XCTestCase {
             .with(allowedValues: ["hello"])
 
         XCTAssertEqual(boolean.allowedValues, [false])
-        XCTAssertEqual(object.allowedValues, [AnyCodable([:])])
+        XCTAssertEqual(object.allowedValues, [AnyCodable([String: String]())])
         XCTAssertEqual(array.allowedValues?[0].value as! [Bool], [false])
         XCTAssertEqual(number.allowedValues, [2.5])
         XCTAssertEqual(integer.allowedValues, [5])
@@ -1099,7 +1162,7 @@ final class SchemaObjectTests: XCTestCase {
             .with(defaultValue: "hello")
 
         XCTAssertEqual(boolean.defaultValue, false)
-        XCTAssertEqual(object.defaultValue, AnyCodable([:]))
+        XCTAssertEqual(object.defaultValue, AnyCodable([String: String]()))
         XCTAssertEqual(array.defaultValue, [false])
         XCTAssertEqual(number.defaultValue, 2.5)
         XCTAssertEqual(integer.defaultValue, 5)
@@ -1273,7 +1336,7 @@ final class SchemaObjectTests: XCTestCase {
 // MARK: - Codable
 extension SchemaObjectTests {
 
-    func test_decodeingFailsForTypo() {
+    func test_decodeingWarnsForTypo() throws {
         let oneOfData = """
         {
             "oneOff": [
@@ -1283,7 +1346,19 @@ extension SchemaObjectTests {
         }
         """.data(using: .utf8)!
 
-        XCTAssertThrowsError(try orderUnstableDecode(JSONSchema.self, from: oneOfData))
+        let warnResult = try orderUnstableDecode(JSONSchema.self, from: oneOfData)
+
+        XCTAssertEqual(warnResult.warnings.count, 1)
+            // NOTE: not the most informative warnings, would like to do better.
+        XCTAssertEqual(warnResult.warnings.first?.localizedDescription, "Inconsistency encountered when parsing `OpenAPI Schema`: Found nothing but unsupported attributes..")
+            // we are actually at the root path in this test case so the
+            // following should be an empty string!
+        XCTAssertEqual(warnResult.warnings.first?.codingPathString, "")
+
+        XCTAssertEqual(
+            warnResult,
+            .fragment()
+        )
     }
 
     func test_decodingFailsForReadOnlyAndWriteOnly() {
@@ -1298,8 +1373,8 @@ extension SchemaObjectTests {
         XCTAssertThrowsError(try orderUnstableDecode(JSONSchema.self, from: readOnlyWriteOnlyData))
     }
 
-    func test_decodingFailsForTypeAndPropertyConflict() {
-        // has type "string" but "items" property that belongs with the "array" type.
+    func test_decodingWarnsForTypeAndPropertyConflict() throws {
+        // has type "object" but "items" property that belongs with the "array" type.
         let badSchema = """
         {
             "type": "object",
@@ -1309,7 +1384,18 @@ extension SchemaObjectTests {
         }
         """.data(using: .utf8)!
 
-        XCTAssertThrowsError(try orderUnstableDecode(JSONSchema.self, from: badSchema))
+        let warnResult = try orderUnstableDecode(JSONSchema.self, from: badSchema)
+
+        XCTAssertEqual(warnResult.warnings.count, 1)
+        XCTAssertEqual(warnResult.warnings.first?.localizedDescription, "Inconsistency encountered when parsing `OpenAPI Schema`: Found schema attributes not consistent with the type specified: object. Specifically, attributes for these other types: [\"array\"].")
+            // we are actually at the root path in this test case so the
+            // following should be an empty string!
+        XCTAssertEqual(warnResult.warnings.first?.codingPathString, "")
+
+            // NOTE: I don't think it actually makes sense to rely more on the
+            // properties (which can only belong to an array) than the explicit given
+            // type "object" but for now I am going with this and will revisit later.
+        XCTAssertEqual(warnResult.value, .object(.init(), .init(properties: [:])))
     }
 
     func test_decodeExampleFragment() throws {
@@ -1387,6 +1473,36 @@ extension SchemaObjectTests {
             """
             {
               "description" : "hello world"
+            }
+            """
+        )
+    }
+
+    func test_decodeExampleWithVendorExtension() throws {
+        let extensionSchema = """
+        {
+            "example" : "hello",
+            "x-hello" : "hello"
+        }
+        """.data(using: .utf8)!
+
+        XCTAssertEqual(
+            try orderUnstableDecode(JSONSchema.self, from: extensionSchema),
+            JSONSchema(.fragment(.init(example: "hello")), vendorExtensions: ["x-hello": "hello"])
+        )
+    }
+
+    func test_encodeExampleVendorExtension() throws {
+        let fragment = JSONSchema(.fragment(.init(example: "hello")), vendorExtensions: ["x-hello": "hello"])
+
+        let encoded = try orderUnstableTestStringFromEncoding(of: fragment)
+
+        assertJSONEquivalent(
+            encoded,
+            """
+            {
+              "example" : "hello",
+              "x-hello" : "hello"
             }
             """
         )
@@ -1677,7 +1793,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(defaultValueObject.defaultValue, ["hello": false])
         XCTAssertEqual(discriminatorObject, JSONSchema.object(discriminator: .init(propertyName: "hello")))
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -1805,7 +1921,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
         XCTAssertEqual(allowedValueObject.title, "hello")
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -1913,7 +2029,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
         XCTAssertEqual(allowedValueObject.description, "hello")
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -2029,7 +2145,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
         XCTAssertEqual(allowedValueObject.externalDocs, .init(url: URL(string: "http://google.com")!))
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -2136,7 +2252,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.allowedValues?[0].value as! [String: Bool], ["hello": false])
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -2243,7 +2359,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.allowedValues?[0].value as! [String: Bool], ["hello": false])
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -2350,7 +2466,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.allowedValues?[0].value as! [String: Bool], ["hello": false])
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -2466,7 +2582,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.allowedValues?[0].value as! [String: Bool], ["hello": false])
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -2496,7 +2612,7 @@ extension SchemaObjectTests {
             ])
             .with(example: AnyCodable(["hello": true]))
 
-        if case let .object(_, objectContext) = requiredObject {
+        if case let .object(_, objectContext) = requiredObject.value {
             XCTAssertEqual(objectContext.requiredProperties, [])
             XCTAssertEqual(objectContext.optionalProperties, ["hello"])
         }
@@ -2613,7 +2729,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
         XCTAssertEqual(allowedValueObject.example, ["hello" : true])
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -2710,7 +2826,7 @@ extension SchemaObjectTests {
             ]
         )
 
-        if case let .object(_, objectContext) = requiredObject {
+        if case let .object(_, objectContext) = requiredObject.value {
             XCTAssertEqual(objectContext.requiredProperties, ["hello"])
             XCTAssertEqual(objectContext.optionalProperties, [])
         }
@@ -2822,7 +2938,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(allowedValueObject.allowedValues?[0].value as! [String: Bool], ["hello": false])
         XCTAssertEqual(allowedValueObject.jsonTypeFormat, .object(.generic))
 
-        guard case let .object(_, contextB) = allowedValueObject else {
+        guard case let .object(_, contextB) = allowedValueObject.value else {
             XCTFail("expected object to be parsed as object")
             return
         }
@@ -3000,7 +3116,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(defaultValueArray.defaultValue, [false])
         XCTAssertEqual(discriminatorArray, JSONSchema.array(discriminator: .init(propertyName: "hello")))
 
-        guard case let .array(_, contextB) = allowedValueArray else {
+        guard case let .array(_, contextB) = allowedValueArray.value else {
             XCTFail("expected array")
             return
         }
@@ -3084,7 +3200,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(nullableArray, JSONSchema.array(.init(format: .generic, nullable: true), .init(items: .boolean(.init(format: .generic)))))
         XCTAssertEqual(allowedValueArray.allowedValues?[0].value as! [Bool], [false])
 
-        guard case let .array(_, contextB) = allowedValueArray else {
+        guard case let .array(_, contextB) = allowedValueArray.value else {
             XCTFail("expected array")
             return
         }
@@ -3166,7 +3282,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(nullableArray.arrayContext?.uniqueItems, true)
         XCTAssertEqual(allowedValueArray.arrayContext?.uniqueItems, true)
 
-        guard case let .array(_, contextB) = allowedValueArray else {
+        guard case let .array(_, contextB) = allowedValueArray.value else {
             XCTFail("expected array")
             return
         }
@@ -3224,7 +3340,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(nullableArray, JSONSchema.array(.init(format: .generic, nullable: true), .init(maxItems: 3)))
         XCTAssertEqual(allowedValueArray.allowedValues?[0].value as! [Bool], [false])
 
-        guard case let .array(_, contextB) = allowedValueArray else {
+        guard case let .array(_, contextB) = allowedValueArray.value else {
             XCTFail("expected array")
             return
         }
@@ -3282,7 +3398,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(nullableArray, JSONSchema.array(.init(format: .generic, nullable: true), .init(minItems: 2)))
         XCTAssertEqual(allowedValueArray.allowedValues?[0].value as! [Bool], [false])
 
-        guard case let .array(_, contextB) = allowedValueArray else {
+        guard case let .array(_, contextB) = allowedValueArray.value else {
             XCTFail("expected array")
             return
         }
@@ -4145,6 +4261,7 @@ extension SchemaObjectTests {
         let deprecatedStringData = #"{"type": "string", "deprecated": true}"#.data(using: .utf8)!
         let allowedValueStringData = #"{"type": "string", "enum": ["hello"]}"#.data(using: .utf8)!
         let discriminatorStringData = #"{"type": "string", "discriminator": {"propertyName": "hello"}}"#.data(using: .utf8)!
+        let nullableStringWithAllowedValuesData = #"{"type": "string", "nullable": true, "enum": ["hello", null]}"#.data(using: .utf8)!
 
         let string = try orderUnstableDecode(JSONSchema.self, from: stringData)
         let nullableString = try orderUnstableDecode(JSONSchema.self, from: nullableStringData)
@@ -4153,6 +4270,7 @@ extension SchemaObjectTests {
         let deprecatedString = try orderUnstableDecode(JSONSchema.self, from: deprecatedStringData)
         let allowedValueString = try orderUnstableDecode(JSONSchema.self, from: allowedValueStringData)
         let discriminatorString = try orderUnstableDecode(JSONSchema.self, from: discriminatorStringData)
+        let nullableStringWithAllowedValues = try orderUnstableDecode(JSONSchema.self, from: nullableStringWithAllowedValuesData)
 
         XCTAssertEqual(string, JSONSchema.string(.init(format: .generic), .init()))
         XCTAssertEqual(nullableString, JSONSchema.string(.init(format: .generic, nullable: true), .init()))
@@ -4161,6 +4279,7 @@ extension SchemaObjectTests {
         XCTAssertEqual(deprecatedString, JSONSchema.string(.init(format: .generic, deprecated: true), .init()))
         XCTAssertEqual(allowedValueString, JSONSchema.string(.init(format: .generic, allowedValues: ["hello"]), .init()))
         XCTAssertEqual(discriminatorString, JSONSchema.string(discriminator: .init(propertyName: "hello")))
+        XCTAssertEqual(nullableStringWithAllowedValues, JSONSchema.string(nullable: true, allowedValues: ["hello", nil]))
     }
 
     func test_decodeStringWithTypeInferred() throws {
@@ -4593,6 +4712,12 @@ extension SchemaObjectTests {
                 .reference(.component(named: "test"))
             ]
         )
+        let allOfWithReferenceAndDescription = JSONSchema.all(
+            of: [
+                .fragment(description: "hello"),
+                .reference(.component(named: "test"))
+            ]
+        )
 
         testEncodingPropertyLines(entity: allOf, propertyLines: [
             "\"allOf\" : [",
@@ -4656,6 +4781,17 @@ extension SchemaObjectTests {
             "  }",
             "]"
         ])
+
+        testEncodingPropertyLines(entity: allOfWithReferenceAndDescription, propertyLines: [
+            "\"allOf\" : [",
+            "  {",
+            "    \"description\" : \"hello\"",
+            "  },",
+            "  {",
+            "    \"$ref\" : \"#\\/components\\/schemas\\/test\"",
+            "  }",
+            "]"
+        ])
     }
 
     func test_decodeAll() throws {
@@ -4697,10 +4833,45 @@ extension SchemaObjectTests {
         }
         """.data(using: .utf8)!
 
+        let allWithReferenceAndDescriptionData = """
+        {
+            "allOf": [
+                { "description": "hello" },
+                { "$ref": "#/components/schemas/test" }
+            ]
+        }
+        """.data(using: .utf8)!
+
+        let allWithNullableSchemaData = """
+        {
+            "allOf": [
+                { "type": "string" },
+                { "type": "number", "nullable": true }
+            ]
+        }
+        """.data(using: .utf8)!
+
+        let nestedOptionalAllData = """
+        {
+            "type": "object",
+            "properties": {
+                "prop1": {
+                    "allOf": [
+                        { "description": "hello" },
+                        { "$ref": "#/components/schemas/test" }
+                    ]
+                }
+            }
+        }
+        """.data(using: .utf8)!
+
         let all = try orderUnstableDecode(JSONSchema.self, from: allData)
         let allWithTitle = try orderUnstableDecode(JSONSchema.self, from: allWithTitleData)
         let allWithDiscriminator = try orderUnstableDecode(JSONSchema.self, from: allWithDiscriminatorData)
         let allWithReference = try orderUnstableDecode(JSONSchema.self, from: allWithReferenceData)
+        let allWithReferenceAndDescription = try orderUnstableDecode(JSONSchema.self, from: allWithReferenceAndDescriptionData)
+        let allWithNullableSchema = try orderUnstableDecode(JSONSchema.self, from: allWithNullableSchemaData)
+        let nestedOptionalAll = try orderUnstableDecode(JSONSchema.self, from: nestedOptionalAllData)
 
         XCTAssertEqual(
             all,
@@ -4740,6 +4911,40 @@ extension SchemaObjectTests {
                 of: [
                     .object(.init(), .init(properties: [:])),
                     .reference(.component(named: "test"))
+                ]
+            )
+        )
+
+        XCTAssertEqual(
+            allWithReferenceAndDescription,
+            JSONSchema.all(
+                of: [
+                    .fragment(description: "hello"),
+                    .reference(.component(named: "test"))
+                ]
+            )
+        )
+
+        XCTAssertEqual(
+            allWithNullableSchema,
+            JSONSchema.all(
+                of: [
+                    .string(),
+                    .number(nullable: true)
+                ],
+                core: .init(nullable: true)
+            )
+        )
+
+        XCTAssertEqual(
+            nestedOptionalAll,
+            JSONSchema.object(
+                properties: [
+                    "prop1": JSONSchema.all(
+                        of: .fragment(required: false, description: "hello"),
+                        .reference(.component(named: "test"), required: false),
+                        required: false
+                    )
                 ]
             )
         )
@@ -4902,10 +5107,20 @@ extension SchemaObjectTests {
         }
         """.data(using: .utf8)!
 
+        let oneWithNullableSchemaData = """
+        {
+            "oneOf": [
+                { "type": "string" },
+                { "type": "number", "nullable": true }
+            ]
+        }
+        """.data(using: .utf8)!
+
         let one = try orderUnstableDecode(JSONSchema.self, from: oneData)
         let oneWithTitle = try orderUnstableDecode(JSONSchema.self, from: oneWithTitleData)
         let oneWithDiscriminator = try orderUnstableDecode(JSONSchema.self, from: oneWithDiscriminatorData)
         let oneWithReference = try orderUnstableDecode(JSONSchema.self, from: oneWithReferenceData)
+        let oneWithNullableSchema = try orderUnstableDecode(JSONSchema.self, from: oneWithNullableSchemaData)
 
         XCTAssertEqual(
             one,
@@ -4946,6 +5161,17 @@ extension SchemaObjectTests {
                     .object(.init(format: .generic), .init(properties: [:])),
                     .reference(.component(named: "test"))
                 ]
+            )
+        )
+
+        XCTAssertEqual(
+            oneWithNullableSchema,
+            JSONSchema.one(
+                of: [
+                    .string(),
+                    .number(nullable: true)
+                ],
+                core: .init(nullable: true)
             )
         )
     }
@@ -5108,10 +5334,20 @@ extension SchemaObjectTests {
         }
         """.data(using: .utf8)!
 
+        let anyWithNullableSchemaData = """
+        {
+            "anyOf": [
+                { "type": "string" },
+                { "type": "number", "nullable": true }
+            ]
+        }
+        """.data(using: .utf8)!
+
         let any = try orderUnstableDecode(JSONSchema.self, from: anyData)
         let anyWithTitle = try orderUnstableDecode(JSONSchema.self, from: anyWithTitleData)
         let anyWithDiscriminator = try orderUnstableDecode(JSONSchema.self, from: anyWithDiscriminatorData)
         let anyWithReference = try orderUnstableDecode(JSONSchema.self, from: anyWithReferenceData)
+        let anyWithNullableSchema = try orderUnstableDecode(JSONSchema.self, from: anyWithNullableSchemaData)
 
         XCTAssertEqual(
             any,
@@ -5152,6 +5388,17 @@ extension SchemaObjectTests {
                     .boolean(.init(format: .generic)),
                     .reference(.component(named: "test"))
                 ]
+            )
+        )
+
+        XCTAssertEqual(
+            anyWithNullableSchema,
+            JSONSchema.any(
+                of: [
+                    .string(),
+                    .number(nullable: true)
+                ],
+                core: .init(nullable: true)
             )
         )
     }
@@ -5214,11 +5461,19 @@ extension SchemaObjectTests {
         }
         """.data(using: .utf8)!
 
+        let notWithNullableSchemaData = """
+        {
+            "not": { "type": "string", "nullable": true }
+        }
+        """.data(using: .utf8)!
+
         let not = try orderUnstableDecode(JSONSchema.self, from: notData)
         let notWithTitle = try orderUnstableDecode(JSONSchema.self, from: notWithTitleData)
+        let notWithNullableSchema = try orderUnstableDecode(JSONSchema.self, from: notWithNullableSchemaData)
 
         XCTAssertEqual(not, JSONSchema.not(.boolean(.init(format: .generic))))
         XCTAssertEqual(notWithTitle, JSONSchema.not(.boolean(.init(format: .generic)), core: .init(title: "hello")))
+        XCTAssertEqual(notWithNullableSchema, JSONSchema.not(.string(nullable: true), core: .init()))
     }
 
     func test_encodeFileReference() {
@@ -5254,6 +5509,40 @@ extension SchemaObjectTests {
             nodeRef,
             JSONSchema.reference(.component(named: "requiredBool"))
         )
+    }
+
+    func test_encodeReferenceOptionality() {
+        let optionalReference = JSONSchema.reference(.component(named: "optionalBool"))
+            .optionalSchemaObject()
+
+        // to observe that optionality has worked, we must encode within an object.
+        let object = JSONSchema.object(properties: ["optionalBool": optionalReference])
+
+        testEncodingPropertyLines(entity: object, propertyLines: [
+            "\"properties\" : {",
+            "  \"optionalBool\" : {",
+            "    \"$ref\" : \"#\\/components\\/schemas\\/optionalBool\"",
+            "  }",
+            "},",
+            "\"type\" : \"object\""
+        ])
+
+        let requiredReference = JSONSchema.reference(.component(named: "requiredBool"))
+
+            // to observe that optionality has worked, we must encode within an object.
+        let object2 = JSONSchema.object(properties: ["requiredBool": requiredReference])
+
+        testEncodingPropertyLines(entity: object2, propertyLines: [
+            "\"properties\" : {",
+            "  \"requiredBool\" : {",
+            "    \"$ref\" : \"#\\/components\\/schemas\\/requiredBool\"",
+            "  }",
+            "},",
+            "\"required\" : [",
+            "  \"requiredBool\"",
+            "],",
+            "\"type\" : \"object\""
+        ])
     }
 }
 

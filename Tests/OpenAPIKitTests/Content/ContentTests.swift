@@ -113,48 +113,6 @@ final class ContentTests: XCTestCase {
             .any: .init(schema: .string(format: .binary))
         ]
     }
-
-    func test_contentTypeStringReflexivity() {
-
-        XCTAssertNil(OpenAPI.ContentType(rawValue: "not a content type"))
-
-        let types: [OpenAPI.ContentType] = [
-            .bmp,
-            .css,
-            .csv,
-            .form,
-            .html,
-            .javascript,
-            .jpg,
-            .json,
-            .jsonapi,
-            .mov,
-            .mp3,
-            .mp4,
-            .mpg,
-            .multipartForm,
-            .pdf,
-            .rar,
-            .rtf,
-            .tar,
-            .tif,
-            .txt,
-            .xml,
-            .yaml,
-            .zip,
-            .anyApplication,
-            .anyAudio,
-            .anyImage,
-            .anyText,
-            .anyVideo,
-            .any,
-            .other("application/custom")
-        ]
-
-        for type in types {
-            XCTAssertEqual(type, OpenAPI.ContentType(rawValue: type.rawValue))
-        }
-    }
 }
 
 // MARK: - Codable
@@ -361,7 +319,7 @@ extension ContentTests {
         XCTAssertEqual(content.schema, .init(.object(properties: ["hello": .string])))
 
         XCTAssertEqual(content.example?.value as? [String: String], [ "hello": "world" ])
-        XCTAssertEqual(content.examples?["hello"]?.exampleValue?.value.codableValue?.value as? [String: String], [ "hello": "world" ])
+        XCTAssertEqual(content.examples?["hello"]?.exampleValue?.value?.codableValue?.value as? [String: String], [ "hello": "world" ])
     }
 
     func test_decodeFailureForBothExampleAndExamples() {

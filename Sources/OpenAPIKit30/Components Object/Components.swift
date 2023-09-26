@@ -24,8 +24,9 @@ extension OpenAPI {
         public var requestBodies: ComponentDictionary<Request>
         public var headers: ComponentDictionary<Header>
         public var securitySchemes: ComponentDictionary<SecurityScheme>
+        public var links: ComponentDictionary<Link>
         public var callbacks: ComponentDictionary<Callbacks>
-        //    public var links:
+        internal var pathItems: ComponentDictionary<PathItem>
 
         /// Dictionary of vendor extensions.
         ///
@@ -42,6 +43,7 @@ extension OpenAPI {
             requestBodies: ComponentDictionary<Request> = [:],
             headers: ComponentDictionary<Header> = [:],
             securitySchemes: ComponentDictionary<SecurityScheme> = [:],
+            links: ComponentDictionary<Link> = [:],
             callbacks: ComponentDictionary<Callbacks> = [:],
             vendorExtensions: [String: AnyCodable] = [:]
         ) {
@@ -52,8 +54,12 @@ extension OpenAPI {
             self.requestBodies = requestBodies
             self.headers = headers
             self.securitySchemes = securitySchemes
+            self.links = links
             self.callbacks = callbacks
             self.vendorExtensions = vendorExtensions
+            // Until OpenAPI 3.1, path items cannot actually be stored in the Components Object. This is here to facilitate path item
+            // references, albeit in a less than ideal way.
+            self.pathItems = [:]
         }
 
         /// An empty OpenAPI Components Object.
@@ -65,65 +71,15 @@ extension OpenAPI {
     }
 }
 
+extension OpenAPI.Components {
+    /// The extension name used to store a Components Object name (the key something is stored under
+    /// within the Components Object). This is used by OpenAPIKit to store the previous Component name 
+    /// of an OpenAPI Object that has been dereferenced (pulled out of the Components and stored inline
+    /// in the OpenAPI Document).
+    public static let componentNameExtension: String = "x-component-name"
+}
+
 extension OpenAPI {
-    /// A key for one of the component dictionaries.
-    ///
-    /// These keys must match the regex
-    /// `^[a-zA-Z0-9\.\-_]+$`.
-    public struct ComponentKey: RawRepresentable, ExpressibleByStringLiteral, Codable, Equatable, Hashable, StringConvertibleHintProvider {
-        public let rawValue: String
-
-        public init(stringLiteral value: StringLiteralType) {
-            self.rawValue = value
-        }
-
-        public init?(rawValue: String) {
-            guard !rawValue.isEmpty else {
-                return nil
-            }
-            var allowedCharacters = CharacterSet.alphanumerics
-            allowedCharacters.insert(charactersIn: "-_.")
-            guard CharacterSet(charactersIn: rawValue).isSubset(of: allowedCharacters) else {
-                return nil
-            }
-            self.rawValue = rawValue
-        }
-
-        public static func problem(with proposedString: String) -> String? {
-            if Self(rawValue: proposedString) == nil {
-                return "Keys for components in the Components Object must conform to the regex `^[a-zA-Z0-9\\.\\-_]+$`. '\(proposedString)' does not.."
-            }
-            return nil
-        }
-
-        public init(from decoder: Decoder) throws {
-            let rawValue = try decoder.singleValueContainer().decode(String.self)
-            guard let key = Self(rawValue: rawValue) else {
-                throw InconsistencyError(
-                    subjectName: "Component Key",
-                    details: "Keys for components in the Components Object must conform to the regex `^[a-zA-Z0-9\\.\\-_]+$`. '\(rawValue)' does not..",
-                    codingPath: decoder.codingPath
-                )
-            }
-            self = key
-        }
-
-        public func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-
-            // we check for consistency on encode because a string literal
-            // may result in an invalid component key being constructed.
-            guard Self(rawValue: rawValue) != nil else {
-                throw InconsistencyError(
-                    subjectName: "Component Key",
-                    details: "Keys for components in the Components Object must conform to the regex `^[a-zA-Z0-9\\.\\-_]+$`. '\(rawValue)' does not..",
-                    codingPath: container.codingPath
-                )
-            }
-
-            try container.encode(rawValue)
-        }
-    }
 
     public typealias ComponentDictionary<T> = OrderedDictionary<ComponentKey, T>
 }
@@ -161,6 +117,10 @@ extension OpenAPI.Components: Encodable {
             try container.encode(securitySchemes, forKey: .securitySchemes)
         }
 
+        if !links.isEmpty {
+            try container.encode(links, forKey: .links)
+        }
+
         if !callbacks.isEmpty {
             try container.encode(callbacks, forKey: .callbacks)
         }
@@ -194,7 +154,13 @@ extension OpenAPI.Components: Decodable {
 
             securitySchemes = try container.decodeIfPresent(OpenAPI.ComponentDictionary<OpenAPI.SecurityScheme>.self, forKey: .securitySchemes) ?? [:]
 
+            links = try container.decodeIfPresent(OpenAPI.ComponentDictionary<OpenAPI.Link>.self, forKey: .links) ?? [:]
+
             callbacks = try container.decodeIfPresent(OpenAPI.ComponentDictionary<OpenAPI.Callbacks>.self, forKey: .callbacks) ?? [:]
+
+            // Until OpenAPI 3.1, path items cannot actually be stored in the Components Object. This is here to facilitate path item
+            // references, albeit in a less than ideal way.
+            pathItems = [:]
 
             vendorExtensions = try Self.extensions(from: decoder)
         } catch let error as DecodingError {

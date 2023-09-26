@@ -11,7 +11,7 @@ import Foundation
 extension OpenAPI {
     /// OpenAPI Spec "Components Object".
     ///
-    /// See [OpenAPI Components Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#components-object).
+    /// See [OpenAPI Components Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md#components-object).
     /// 
     /// This is a place to put reusable components to
     /// be referenced from other parts of the spec.
@@ -24,8 +24,8 @@ extension OpenAPI {
         public var requestBodies: ComponentDictionary<Request>
         public var headers: ComponentDictionary<Header>
         public var securitySchemes: ComponentDictionary<SecurityScheme>
+        public var links: ComponentDictionary<Link>
         public var callbacks: ComponentDictionary<Callbacks>
-        //    public var links:
       
         public var pathItems: ComponentDictionary<PathItem>
 
@@ -44,6 +44,7 @@ extension OpenAPI {
             requestBodies: ComponentDictionary<Request> = [:],
             headers: ComponentDictionary<Header> = [:],
             securitySchemes: ComponentDictionary<SecurityScheme> = [:],
+            links: ComponentDictionary<Link> = [:],
             callbacks: ComponentDictionary<Callbacks> = [:],
             pathItems: ComponentDictionary<PathItem> = [:],
             vendorExtensions: [String: AnyCodable] = [:]
@@ -55,6 +56,7 @@ extension OpenAPI {
             self.requestBodies = requestBodies
             self.headers = headers
             self.securitySchemes = securitySchemes
+            self.links = links
             self.callbacks = callbacks
             self.pathItems = pathItems
             self.vendorExtensions = vendorExtensions
@@ -69,65 +71,15 @@ extension OpenAPI {
     }
 }
 
+extension OpenAPI.Components {
+    /// The extension name used to store a Components Object name (the key something is stored under
+    /// within the Components Object). This is used by OpenAPIKit to store the previous Component name 
+    /// of an OpenAPI Object that has been dereferenced (pulled out of the Components and stored inline
+    /// in the OpenAPI Document).
+    public static let componentNameExtension: String = "x-component-name"
+}
+
 extension OpenAPI {
-    /// A key for one of the component dictionaries.
-    ///
-    /// These keys must match the regex
-    /// `^[a-zA-Z0-9\.\-_]+$`.
-    public struct ComponentKey: RawRepresentable, ExpressibleByStringLiteral, Codable, Equatable, Hashable, StringConvertibleHintProvider {
-        public let rawValue: String
-
-        public init(stringLiteral value: StringLiteralType) {
-            self.rawValue = value
-        }
-
-        public init?(rawValue: String) {
-            guard !rawValue.isEmpty else {
-                return nil
-            }
-            var allowedCharacters = CharacterSet.alphanumerics
-            allowedCharacters.insert(charactersIn: "-_.")
-            guard CharacterSet(charactersIn: rawValue).isSubset(of: allowedCharacters) else {
-                return nil
-            }
-            self.rawValue = rawValue
-        }
-
-        public static func problem(with proposedString: String) -> String? {
-            if Self(rawValue: proposedString) == nil {
-                return "Keys for components in the Components Object must conform to the regex `^[a-zA-Z0-9\\.\\-_]+$`. '\(proposedString)' does not.."
-            }
-            return nil
-        }
-
-        public init(from decoder: Decoder) throws {
-            let rawValue = try decoder.singleValueContainer().decode(String.self)
-            guard let key = Self(rawValue: rawValue) else {
-                throw InconsistencyError(
-                    subjectName: "Component Key",
-                    details: "Keys for components in the Components Object must conform to the regex `^[a-zA-Z0-9\\.\\-_]+$`. '\(rawValue)' does not..",
-                    codingPath: decoder.codingPath
-                )
-            }
-            self = key
-        }
-
-        public func encode(to encoder: Encoder) throws {
-            var container = encoder.singleValueContainer()
-
-            // we check for consistency on encode because a string literal
-            // may result in an invalid component key being constructed.
-            guard Self(rawValue: rawValue) != nil else {
-                throw InconsistencyError(
-                    subjectName: "Component Key",
-                    details: "Keys for components in the Components Object must conform to the regex `^[a-zA-Z0-9\\.\\-_]+$`. '\(rawValue)' does not..",
-                    codingPath: container.codingPath
-                )
-            }
-
-            try container.encode(rawValue)
-        }
-    }
 
     public typealias ComponentDictionary<T> = OrderedDictionary<ComponentKey, T>
 }
@@ -163,6 +115,10 @@ extension OpenAPI.Components: Encodable {
 
         if !securitySchemes.isEmpty {
             try container.encode(securitySchemes, forKey: .securitySchemes)
+        }
+
+        if !links.isEmpty {
+            try container.encode(links, forKey: .links)
         }
 
         if !callbacks.isEmpty {
@@ -201,6 +157,8 @@ extension OpenAPI.Components: Decodable {
                 ?? [:]
 
             securitySchemes = try container.decodeIfPresent(OpenAPI.ComponentDictionary<OpenAPI.SecurityScheme>.self, forKey: .securitySchemes) ?? [:]
+
+            links = try container.decodeIfPresent(OpenAPI.ComponentDictionary<OpenAPI.Link>.self, forKey: .links) ?? [:]
 
             callbacks = try container.decodeIfPresent(OpenAPI.ComponentDictionary<OpenAPI.Callbacks>.self, forKey: .callbacks) ?? [:]
           

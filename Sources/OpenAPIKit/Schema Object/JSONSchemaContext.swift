@@ -60,7 +60,7 @@ public protocol JSONSchemaContext {
     /// be placed on a parent object (one level up from an `allOf`, `anyOf`,
     /// or `oneOf`) as a way to reduce redundancy.
     ///
-    /// See [OpenAPI Discriminator Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#discriminator-object).
+    /// See [OpenAPI Discriminator Object](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.1.0.md#discriminator-object).
     var discriminator: OpenAPI.Discriminator? { get }
 
     /// Get the external docs, if specified. If unspecified, returns `nil`.
@@ -92,8 +92,8 @@ public protocol JSONSchemaContext {
     /// `Format.SwiftType` into a default.
     var defaultValue: AnyCodable? { get }
 
-    /// Get an example, if specified. If unspecified, returns `nil`.
-    var example: AnyCodable? { get }
+    /// Get examples of values fitting the schema.
+    var examples: [AnyCodable] { get }
 
     /// `true` if this schema can only be read from and is therefore
     /// unsupported for request data.
@@ -105,6 +105,9 @@ public protocol JSONSchemaContext {
 
     /// `true` if this schema is deprecated, `false` otherwise.
     var deprecated: Bool { get }
+
+    /// Vendor Extensions (a.k.a. Specification Extensions) for the schema
+    var vendorExtensions: [String: AnyCodable] { get }
 }
 
 extension JSONSchema {
@@ -123,14 +126,25 @@ extension JSONSchema {
 
         public let discriminator: OpenAPI.Discriminator?
 
-        // NOTE: "const" is supported by the newest JSON Schema spec but not
-        // yet by OpenAPI. Instead, will use "enum" with one possible value for now.
-//        public let constantValue: Format.SwiftType?
-
         public let allowedValues: [AnyCodable]?
         public let defaultValue: AnyCodable?
 
-        public let example: AnyCodable?
+        /// One or more examples of values fitting the schema. Note that OpenAPI 3.1 supports
+        /// both `examples` (via the JSON Schema specification) and also `example` which
+        /// comes from OpenAPI 3.0 and is now deprecated. Because the latter is deprecated,
+        /// `example` in an OpenAPI document will be parsed as a single-element `examples`
+        /// property of a schema. It will be encoded as `examples` (so there is no way to output
+        /// the deprecated `example` property from OpenAPIKit).
+        ///
+        /// An empty examples array is omitted from encoding.
+        public let examples: [AnyCodable]
+
+        /// Dictionary of vendor extensions.
+        ///
+        /// These should be of the form:
+        /// `[ "x-extensionKey": <anything>]`
+        /// where the values are anything codable.
+        public var vendorExtensions: [String : AnyCodable]
 
         public var permissions: Permissions { _permissions ?? .readWrite}
         public var deprecated: Bool { _deprecated ?? false }
@@ -149,7 +163,7 @@ extension JSONSchema {
                 && externalDocs == nil
                 && allowedValues == nil
                 && defaultValue == nil
-                && example == nil
+                && examples.isEmpty
                 && _permissions == nil
         }
 
@@ -165,7 +179,8 @@ extension JSONSchema {
             externalDocs: OpenAPI.ExternalDocumentation? = nil,
             allowedValues: [AnyCodable]? = nil,
             defaultValue: AnyCodable? = nil,
-            example: AnyCodable? = nil
+            examples: [AnyCodable] = [],
+            vendorExtensions: [String: AnyCodable] = [:]
         ) {
             self.format = format
             self.required = required
@@ -178,7 +193,8 @@ extension JSONSchema {
             self.externalDocs = externalDocs
             self.allowedValues = allowedValues
             self.defaultValue = defaultValue
-            self.example = example
+            self.examples = examples
+            self.vendorExtensions = vendorExtensions
         }
 
         public init(
@@ -193,7 +209,8 @@ extension JSONSchema {
             externalDocs: OpenAPI.ExternalDocumentation? = nil,
             allowedValues: [AnyCodable]? = nil,
             defaultValue: AnyCodable? = nil,
-            example: String
+            examples: [String],
+            vendorExtensions: [String: AnyCodable] = [:]
         ) {
             self.format = format
             self.required = required
@@ -206,26 +223,8 @@ extension JSONSchema {
             self.externalDocs = externalDocs
             self.allowedValues = allowedValues
             self.defaultValue = defaultValue
-            self.example = AnyCodable(example)
-        }
-
-        public enum Permissions: String, Codable {
-            case readOnly
-            case writeOnly
-            case readWrite
-
-            public init<Format: OpenAPIFormat>(
-                _ permissions: CoreContext<Format>.Permissions
-            ) {
-                switch permissions {
-                case .readOnly:
-                    self = .readOnly
-                case .writeOnly:
-                    self = .writeOnly
-                case .readWrite:
-                    self = .readWrite
-                }
-            }
+            self.examples = examples.map(AnyCodable.init)
+            self.vendorExtensions = vendorExtensions
         }
     }
 }
@@ -247,7 +246,8 @@ extension JSONSchema.CoreContext {
             externalDocs: externalDocs,
             allowedValues: allowedValues,
             defaultValue: defaultValue,
-            example: example
+            examples: examples,
+            vendorExtensions: vendorExtensions
         )
     }
 
@@ -265,7 +265,8 @@ extension JSONSchema.CoreContext {
             externalDocs: externalDocs,
             allowedValues: allowedValues,
             defaultValue: defaultValue,
-            example: example
+            examples: examples,
+            vendorExtensions: vendorExtensions
         )
     }
 
@@ -283,7 +284,8 @@ extension JSONSchema.CoreContext {
             externalDocs: externalDocs,
             allowedValues: allowedValues,
             defaultValue: defaultValue,
-            example: example
+            examples: examples,
+            vendorExtensions: vendorExtensions
         )
     }
 
@@ -301,7 +303,8 @@ extension JSONSchema.CoreContext {
             externalDocs: externalDocs,
             allowedValues: allowedValues,
             defaultValue: defaultValue,
-            example: example
+            examples: examples,
+            vendorExtensions: vendorExtensions
         )
     }
 
@@ -319,7 +322,8 @@ extension JSONSchema.CoreContext {
             externalDocs: externalDocs,
             allowedValues: allowedValues,
             defaultValue: defaultValue,
-            example: example
+            examples: examples,
+            vendorExtensions: vendorExtensions
         )
     }
 
@@ -337,7 +341,27 @@ extension JSONSchema.CoreContext {
             externalDocs: externalDocs,
             allowedValues: allowedValues,
             defaultValue: defaultValue,
-            example: example
+            examples: [example],
+            vendorExtensions: vendorExtensions
+        )
+    }
+
+    /// Return this context with the given examples
+    public func with(examples: [AnyCodable]) -> JSONSchema.CoreContext<Format> {
+        return .init(
+            format: format,
+            required: required,
+            nullable: nullable,
+            permissions: _permissions,
+            deprecated: _deprecated,
+            title: title,
+            description: description,
+            discriminator: discriminator,
+            externalDocs: externalDocs,
+            allowedValues: allowedValues,
+            defaultValue: defaultValue,
+            examples: examples,
+            vendorExtensions: vendorExtensions
         )
     }
 
@@ -355,7 +379,8 @@ extension JSONSchema.CoreContext {
             externalDocs: externalDocs,
             allowedValues: allowedValues,
             defaultValue: defaultValue,
-            example: example
+            examples: examples,
+            vendorExtensions: vendorExtensions
         )
     }
 
@@ -373,7 +398,27 @@ extension JSONSchema.CoreContext {
             externalDocs: externalDocs,
             allowedValues: allowedValues,
             defaultValue: defaultValue,
-            example: example
+            examples: examples,
+            vendorExtensions: vendorExtensions
+        )
+    }
+
+    /// Return this context with the given description
+    public func with(vendorExtensions: [String: AnyCodable]) -> JSONSchema.CoreContext<Format> {
+        return .init(
+            format: format,
+            required: required,
+            nullable: nullable,
+            permissions: _permissions,
+            deprecated: _deprecated,
+            title: title,
+            description: description,
+            discriminator: discriminator,
+            externalDocs: externalDocs,
+            allowedValues: allowedValues,
+            defaultValue: defaultValue,
+            examples: examples,
+            vendorExtensions: vendorExtensions
         )
     }
 }
@@ -509,29 +554,6 @@ extension JSONSchema {
         }
     }
 
-    /// The context that only applies to `.string` schemas.
-    public struct StringContext: Equatable {
-        public let maxLength: Int?
-        let _minLength: Int?
-
-        public var minLength: Int {
-            return _minLength ?? 0
-        }
-
-        /// Regular expression
-        public let pattern: String?
-
-        public init(
-            maxLength: Int? = nil,
-            minLength: Int? = nil,
-            pattern: String? = nil
-        ) {
-            self.maxLength = maxLength
-            self._minLength = minLength
-            self.pattern = pattern
-        }
-    }
-
     /// The context that only applies to `.array` schemas.
     public struct ArrayContext: Equatable {
         /// A JSON Type Node that describes
@@ -571,7 +593,7 @@ extension JSONSchema {
         /// is allowed to have.
         public let maxProperties: Int?
         let _minProperties: Int?
-        public let properties: [String: JSONSchema]
+        public let properties: OrderedDictionary<String, JSONSchema>
 
         /// Either a boolean or a schema defining or allowing
         /// additional properties on this object.
@@ -598,9 +620,7 @@ extension JSONSchema {
         ///     is determined by looking at its properties'
         ///     required Bool.
         public var requiredProperties: [String] {
-            return Array(properties.filter { (_, schemaObject) in
-                schemaObject.required
-            }.keys).sorted()
+            properties.filter { _, schema in schema.required }.map { $0.key }
         }
 
         /// The properties of this object that are optional.
@@ -609,9 +629,7 @@ extension JSONSchema {
         ///     is determined by looking at its properties'
         ///     required Bool.
         public var optionalProperties: [String] {
-            return Array(properties.filter { (_, schemaObject) in
-                !schemaObject.required
-            }.keys).sorted()
+            properties.filter { _, schema in !schema.required }.map { $0.key }
         }
 
         /// The minimum number of properties allowed.
@@ -624,7 +642,7 @@ extension JSONSchema {
         }
 
         public init(
-            properties: [String: JSONSchema],
+            properties: OrderedDictionary<String, JSONSchema>,
             additionalProperties: Either<Bool, JSONSchema>? = nil,
             maxProperties: Int? = nil,
             minProperties: Int? = nil
@@ -633,23 +651,6 @@ extension JSONSchema {
             self.additionalProperties = additionalProperties
             self.maxProperties = maxProperties
             self._minProperties = minProperties
-        }
-    }
-
-    /// The context that only applies to `.reference` schemas.
-    public struct ReferenceContext: Equatable {
-        public let required: Bool
-
-        public init(required: Bool = true) {
-            self.required = required
-        }
-
-        public func requiredContext() -> ReferenceContext {
-            return .init(required: true)
-        }
-
-        public func optionalContext() -> ReferenceContext {
-            return .init(required: false)
         }
     }
 }
@@ -666,8 +667,10 @@ extension JSONSchema {
         case discriminator
         case externalDocs
         case allowedValues = "enum"
+        case const
         case defaultValue = "default"
-        case example
+        case example // deprecated in favor of examples
+        case examples
         case readOnly
         case writeOnly
         case deprecated
@@ -686,13 +689,19 @@ extension JSONSchema.CoreContext: Encodable {
             try container.encode(format, forKey: .format)
         }
 
-        try container.encodeIfPresent(allowedValues, forKey: .allowedValues)
+        if (allowedValues?.count == 1) {
+            try container.encode(allowedValues?.first, forKey: .const)
+        } else {
+            try container.encodeIfPresent(allowedValues, forKey: .allowedValues)
+        }
         try container.encodeIfPresent(defaultValue, forKey: .defaultValue)
         try container.encodeIfPresent(title, forKey: .title)
         try container.encodeIfPresent(description, forKey: .description)
         try container.encodeIfPresent(discriminator, forKey: .discriminator)
         try container.encodeIfPresent(externalDocs, forKey: .externalDocs)
-        try container.encodeIfPresent(example, forKey: .example)
+        if !examples.isEmpty {
+            try container.encode(examples, forKey: .examples)
+        }
 
         // deprecated is false if omitted
         if deprecated {
@@ -737,7 +746,8 @@ extension JSONSchema.CoreContext: Decodable {
 
         format = try container.decodeIfPresent(Format.self, forKey: .format) ?? .unspecified
 
-        nullable = try Self.decodeNullable(from: container)
+        let nullable = try Self.decodeNullable(from: container)
+        self.nullable = nullable
 
         // default to `true` at decoding site.
         // It is the responsibility of decoders farther upstream
@@ -749,7 +759,15 @@ extension JSONSchema.CoreContext: Decodable {
         description = try container.decodeIfPresent(String.self, forKey: .description)
         discriminator = try container.decodeIfPresent(OpenAPI.Discriminator.self, forKey: .discriminator)
         externalDocs = try container.decodeIfPresent(OpenAPI.ExternalDocumentation.self, forKey: .externalDocs)
-        allowedValues = try container.decodeIfPresent([AnyCodable].self, forKey: .allowedValues)
+        if Format.self == JSONTypeFormat.StringFormat.self {
+            if nullable {
+                allowedValues = try Self.decodeAllowedValuesOrConst(String?.self, inContainer: container)?.map(AnyCodable.init)
+            } else {
+                allowedValues = try Self.decodeAllowedValuesOrConst(String.self, inContainer: container)?.map(AnyCodable.init)
+            }
+        } else {
+            allowedValues = try Self.decodeAllowedValuesOrConst(AnyCodable.self, inContainer: container)
+        }
         defaultValue = try container.decodeIfPresent(AnyCodable.self, forKey: .defaultValue)
 
         let readOnly = try container.decodeIfPresent(Bool.self, forKey: .readOnly)
@@ -778,7 +796,26 @@ extension JSONSchema.CoreContext: Decodable {
         }
 
         _deprecated = try container.decodeIfPresent(Bool.self, forKey: .deprecated)
-        example = try container.decodeIfPresent(AnyCodable.self, forKey: .example)
+        if container.contains(.example) {
+            examples = [try container.decode(AnyCodable.self, forKey: .example)]
+        } else {
+            examples = try container.decodeIfPresent([AnyCodable].self, forKey: .examples) ?? []
+        }
+        // vendor extensions get decoded by the JSONSchema because although vendor extensions
+        // apply to all schemas (core context) they are more accurately in the context of the
+        // full JSON Schema.
+        vendorExtensions = [:]
+    }
+
+    /// Support both `enum` and `const` when decoding allowed values for the schema.
+    private static func decodeAllowedValuesOrConst<To: Decodable>(_ type: To.Type, inContainer container: KeyedDecodingContainer<JSONSchema.ContextCodingKeys>) throws -> [To]? {
+        if let manyValues = try container.decodeIfPresent([To].self, forKey: .allowedValues) {
+            return manyValues
+        }
+        if let oneValue = try container.decodeIfPresent(To.self, forKey: .const) {
+            return [oneValue]
+        }
+        return nil
     }
 
     /// Decode whether or not this is a nullable JSONSchema.
@@ -889,9 +926,9 @@ extension JSONSchema.IntegerContext: Decodable {
 
         multipleOf = try container.decodeIfPresent(Int.self, forKey: .multipleOf)
 
-        // the following acrobatics thanks to some libraries (namely Yams) not
-        // being willing to decode floating point representations of whole numbers
-        // as integer values.
+            // the following acrobatics thanks to some libraries (namely Yams) not
+            // being willing to decode floating point representations of whole numbers
+            // as integer values.
         let exclusiveMaximumAttempt = try container.decodeIfPresent(Double.self, forKey: .exclusiveMaximum)
         let exclusiveMinimumAttempt = try container.decodeIfPresent(Double.self, forKey: .exclusiveMinimum)
 
@@ -912,38 +949,10 @@ extension JSONSchema.IntegerContext: Decodable {
         }
 
         maximum = try boundFromAttempt(exclusiveMaximumAttempt, max: true, exclusive: true)
-            ?? boundFromAttempt(maximumAttempt, max: true, exclusive: false)
+        ?? boundFromAttempt(maximumAttempt, max: true, exclusive: false)
 
         minimum = try boundFromAttempt(exclusiveMinimumAttempt, max: false, exclusive: true)
-            ?? boundFromAttempt(minimumAttempt, max: false, exclusive: false)
-    }
-}
-
-extension JSONSchema.StringContext {
-    internal enum CodingKeys: String, CodingKey {
-        case maxLength
-        case minLength
-        case pattern
-    }
-}
-
-extension JSONSchema.StringContext: Encodable {
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-
-        try container.encodeIfPresent(maxLength, forKey: .maxLength)
-        try container.encodeIfPresent(_minLength, forKey: .minLength)
-        try container.encodeIfPresent(pattern, forKey: .pattern)
-    }
-}
-
-extension JSONSchema.StringContext: Decodable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        maxLength = try container.decodeIfPresent(Int.self, forKey: .maxLength)
-        _minLength = try container.decodeIfPresent(Int.self, forKey: .minLength)
-        pattern = try container.decodeIfPresent(String.self, forKey: .pattern)
+        ?? boundFromAttempt(minimumAttempt, max: false, exclusive: false)
     }
 }
 
@@ -1018,7 +1027,7 @@ extension JSONSchema.ObjectContext: Decodable {
 
         let requiredArray = try container.decodeIfPresent([String].self, forKey: .required) ?? []
 
-        let decodedProperties = try container.decodeIfPresent([String: JSONSchema].self, forKey: .properties) ?? [:]
+        let decodedProperties = try container.decodeIfPresent(OrderedDictionary<String, JSONSchema>.self, forKey: .properties) ?? [:]
         properties = Self.properties(decodedProperties, takingRequirementsFrom: requiredArray)
     }
 
@@ -1036,9 +1045,9 @@ extension JSONSchema.ObjectContext: Decodable {
     ///     - properties: The properties before resolving optionality.
     ///     - required: The array of names of properties that should be required.
     internal static func properties(
-        _ properties: [String: JSONSchema],
+        _ properties: OrderedDictionary<String, JSONSchema>,
         takingRequirementsFrom required: [String]
-    ) -> [String: JSONSchema] {
+    ) -> OrderedDictionary<String, JSONSchema> {
         var properties = properties
 
         // mark any optional properties as optional.

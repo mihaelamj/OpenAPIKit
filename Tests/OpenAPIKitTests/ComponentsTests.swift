@@ -9,6 +9,22 @@ import XCTest
 import OpenAPIKit
 
 final class ComponentsTests: XCTestCase {
+    typealias Components = OpenAPI.Components
+
+    func test_isEmpty() {
+        let c1 = Components.noComponents
+        let c2 = Components()
+        let c3 = Components(
+            schemas: [
+                "s1": .string
+            ]
+        )
+        XCTAssertEqual(c1, c2)
+
+        XCTAssertTrue(c1.isEmpty)
+        XCTAssertFalse(c3.isEmpty)
+    }
+
     func test_referenceLookup() throws {
         let components = OpenAPI.Components(
             schemas: [
@@ -97,10 +113,16 @@ final class ComponentsTests: XCTestCase {
             securitySchemes: [
                 "seven": .apiKey(name: "hello", location: .cookie)
             ],
+            links: [
+                "eight": .init(operationId: "op1")
+            ],
             callbacks: [
-                "eight": [
+                "nine": [
                     OpenAPI.CallbackURL(rawValue: "{$url}")!: .pathItem(.init(post: .init(responses: [:])))
                 ]
+            ],
+            pathItems: [
+                "ten": .init(get: .init(responses: [:]))
             ]
         )
 
@@ -111,7 +133,9 @@ final class ComponentsTests: XCTestCase {
         let ref5 = try components.reference(named: "five", ofType: OpenAPI.Request.self)
         let ref6 = try components.reference(named: "six", ofType: OpenAPI.Header.self)
         let ref7 = try components.reference(named: "seven", ofType: OpenAPI.SecurityScheme.self)
-        let ref8 = try components.reference(named: "eight", ofType: OpenAPI.Callbacks.self)
+        let ref8 = try components.reference(named: "eight", ofType: OpenAPI.Link.self)
+        let ref9 = try components.reference(named: "nine", ofType: OpenAPI.Callbacks.self)
+        let ref10 = try components.reference(named: "ten", ofType: OpenAPI.PathItem.self)
 
         XCTAssertEqual(components[ref1], .string)
         XCTAssertEqual(components[ref2], .init(description: "hello", content: [:]))
@@ -120,12 +144,14 @@ final class ComponentsTests: XCTestCase {
         XCTAssertEqual(components[ref5], .init(content: [:]))
         XCTAssertEqual(components[ref6], .init(schema: .string))
         XCTAssertEqual(components[ref7], .apiKey(name: "hello", location: .cookie))
+        XCTAssertEqual(components[ref8], .init(operationId: "op1"))
         XCTAssertEqual(
-            components[ref8],
+            components[ref9],
             [
                 OpenAPI.CallbackURL(rawValue: "{$url}")!: .pathItem(.init(post: .init(responses: [:])))
             ]
         )
+        XCTAssertEqual(components[ref10], .init(get: .init(responses: [:])))
     }
 
     func test_subscriptLookup() throws {
@@ -156,6 +182,9 @@ final class ComponentsTests: XCTestCase {
         let components = OpenAPI.Components(
             schemas: [
                 "hello": .boolean
+            ],
+            links: [
+                "linky": .init(operationId: "op 1")
             ]
         )
 
@@ -176,6 +205,13 @@ final class ComponentsTests: XCTestCase {
 
         XCTAssertThrowsError(try components.lookup(schema3)) { error in
             XCTAssertEqual(error as? OpenAPI.Components.ReferenceError, .cannotLookupRemoteReference)
+        }
+
+        let link1: Either<OpenAPI.Reference<OpenAPI.Link>, OpenAPI.Link> = .reference(.component(named: "hello"))
+
+        XCTAssertThrowsError(try components.lookup(link1)) { error in
+            XCTAssertEqual(error as? OpenAPI.Components.ReferenceError, .missingOnLookup(name: "hello", key: "links"))
+            XCTAssertEqual((error as? OpenAPI.Components.ReferenceError)?.description, "Failed to look up a JSON Reference. 'hello' was not found in links.")
         }
 
         let reference1: JSONReference<JSONSchema> = .component(named: "hello")
@@ -262,8 +298,11 @@ extension ComponentsTests {
             securitySchemes: [
                 "seven": .http(scheme: "cool")
             ],
+            links: [
+                "eight": .init(operationId: "op1")
+            ],
             callbacks: [
-                "eight": [
+                "nine": [
                     OpenAPI.CallbackURL(rawValue: "{$request.query.queryUrl}")!: .pathItem(
                         .init(
                             post: .init(
@@ -277,6 +316,9 @@ extension ComponentsTests {
                     )
                 ]
             ],
+            pathItems: [
+                "ten": .init(get: .init(responses: [200: .response(description: "response")]))
+            ],
             vendorExtensions: ["x-specialFeature": ["hello", "world"]]
         )
 
@@ -287,7 +329,7 @@ extension ComponentsTests {
             """
             {
               "callbacks" : {
-                "eight" : {
+                "nine" : {
                   "{$request.query.queryUrl}" : {
                     "post" : {
                       "responses" : {
@@ -311,6 +353,11 @@ extension ComponentsTests {
                   }
                 }
               },
+              "links" : {
+                "eight" : {
+                  "operationId" : "op1"
+                }
+              },
               "parameters" : {
                 "three" : {
                   "content" : {
@@ -318,6 +365,17 @@ extension ComponentsTests {
                   },
                   "in" : "query",
                   "name" : "hi"
+                }
+              },
+              "pathItems" : {
+                "ten" : {
+                  "get" : {
+                    "responses" : {
+                      "200" : {
+                        "description" : "response"
+                      }
+                    }
+                  }
                 }
               },
               "requestBodies" : {
@@ -357,7 +415,7 @@ extension ComponentsTests {
         """
         {
           "callbacks" : {
-            "eight" : {
+            "nine" : {
               "{$request.query.queryUrl}" : {
                 "post" : {
                   "responses" : {
@@ -381,6 +439,11 @@ extension ComponentsTests {
               }
             }
           },
+          "links" : {
+            "eight" : {
+              "operationId" : "op1"
+            }
+          },
           "parameters" : {
             "three" : {
               "content" : {
@@ -388,6 +451,17 @@ extension ComponentsTests {
               },
               "in" : "query",
               "name" : "hi"
+            }
+          },
+          "pathItems" : {
+            "ten" : {
+              "get" : {
+                "responses" : {
+                  "200" : {
+                    "description" : "response"
+                  }
+                }
+              }
             }
           },
           "requestBodies" : {
@@ -446,8 +520,11 @@ extension ComponentsTests {
                 securitySchemes: [
                     "seven": .http(scheme: "cool")
                 ],
+                links: [
+                    "eight": .init(operationId: "op1")
+                ],
                 callbacks: [
-                    "eight": [
+                    "nine": [
                         OpenAPI.CallbackURL(rawValue: "{$request.query.queryUrl}")!: .pathItem(
                             .init(
                                 post: .init(
@@ -460,6 +537,9 @@ extension ComponentsTests {
                             )
                         )
                     ]
+                ],
+                pathItems: [
+                    "ten": .init(get: .init(responses: [200: .response(description: "response")]))
                 ],
                 vendorExtensions: ["x-specialFeature": ["hello", "world"]]
             )
@@ -515,44 +595,28 @@ extension ComponentsTests {
             "pathItems" : {
               "path-test" : {
                 "delete" : {
-                  "responses" : {
 
-                  }
                 },
                 "get" : {
-                  "responses" : {
 
-                  }
                 },
                 "head" : {
-                  "responses" : {
 
-                  }
                 },
                 "options" : {
-                  "responses" : {
 
-                  }
                 },
                 "patch" : {
-                  "responses" : {
 
-                  }
                 },
                 "post" : {
-                  "responses" : {
 
-                  }
                 },
                 "put" : {
-                  "responses" : {
 
-                  }
                 },
                 "trace" : {
-                  "responses" : {
 
-                  }
                 }
               }
             }
@@ -568,44 +632,20 @@ extension ComponentsTests {
             "pathItems" : {
               "path-test" : {
                 "delete" : {
-                  "responses" : {
-
-                  }
                 },
                 "get" : {
-                  "responses" : {
-
-                  }
                 },
                 "head" : {
-                  "responses" : {
-
-                  }
                 },
                 "options" : {
-                  "responses" : {
-
-                  }
                 },
                 "patch" : {
-                  "responses" : {
-
-                  }
                 },
                 "post" : {
-                  "responses" : {
-
-                  }
                 },
                 "put" : {
-                  "responses" : {
-
-                  }
                 },
                 "trace" : {
-                  "responses" : {
-
-                  }
                 }
               }
             }
