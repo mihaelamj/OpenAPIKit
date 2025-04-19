@@ -1,0 +1,62 @@
+type: object
+title: ExternalDemandEvent
+required:
+  - id
+  - subAccountId
+  - leadUuid
+  - eventType
+  - timestamp
+  - createdAt
+  - createdByUuid
+properties:
+  id:
+    title: Id
+    type: integer
+    format: int64
+  subAccountId:
+    title: Sub Account Id
+    type: integer
+    format: int64
+  leadUuid:
+    title: Lead Uuid
+    type: string
+    format: uuid
+  eventType:
+    title: Event Type
+    $ref: ./externalDemandEventType.yml
+  timestamp:
+    title: Timestamp
+    type: string
+    format: date-time
+  details:
+    oneOf:
+    - $ref: ./details/creditCardDetails.yml
+    - $ref: ./details/loanDetails.yml
+    - $ref: ./details/savingsDetails.yml
+    - $ref: ./details/specialOfferDetails.yml
+    discriminator:
+      propertyName: edeDetailsKey
+      mapping:
+        credit_card: ./details/creditCardDetails.yml
+        loan: ./details/loanDetails.yml
+        savings: ./details/savingsDetails.yml
+        other: ./details/specialOfferDetails.yml
+  partnerTrackingId:
+    title: Partner Tracking Id
+    type: string
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  createdByUuid:
+    title: Created By Uuid
+    type: string
+    format: uuid
+  deletedAt:
+    title: Deleted At
+    type: string
+    format: date-time
+  deletedByUuid:
+    title: Deleted By Uuid
+    type: string
+    format: uuid

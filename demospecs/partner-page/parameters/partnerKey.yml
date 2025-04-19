@@ -1,0 +1,7 @@
+name: partnerKey
+in: path
+schema:
+  type: string
+example: beaconTest
+description: The partner key associated with a partner
+required: true

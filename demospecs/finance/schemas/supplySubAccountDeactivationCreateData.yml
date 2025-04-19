@@ -1,0 +1,15 @@
+type: object
+required:
+  - supplySubAccountIds
+properties:
+  supplySubAccountIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+    description: |
+      Identifiers for the supply sub accounts that are deactivated.
+  deactivationReason:
+    type: string
+    description: |
+      Reason why the supply sub accounts were deactivated.

@@ -1,0 +1,80 @@
+type: object
+required:
+  - id
+  - uuid
+  - name
+  - billingSetup
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for this resource.
+  name:
+    type: string
+  email:
+    type: string
+  address1:
+    type: string
+  address2:
+    type: string
+  address3:
+    type: string
+  city:
+    type: string
+  state:
+    type: string
+  zipcode:
+    type: string
+  country:
+    type: string
+  phoneNumber:
+    type: string
+  billingName:
+    type: string
+  receivableBillingName:
+    type: string
+  billingSetup:
+    type: boolean
+  accountOwners:
+    $ref: ./accountOwners.yml
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this resource.
+  deactivatedAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the resource was deactivated.
+  deactivatedBy:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to deactivated this resource.
+

@@ -1,0 +1,34 @@
+type: string
+enum:
+  - credit_card/applied
+  - credit_card/approved
+  - credit_card/funded
+  - credit_card/issuer_pre_qualification_application
+  - credit_card/issuer_pre_qualification_application_approval
+  - credit_card/opened
+  - credit_card/rejected
+  - life_insurance/applied
+  - life_insurance/approved
+  - life_insurance/carrier_adjustment
+  - life_insurance/carrier_payment
+  - life_insurance/policy_adjustment
+  - life_insurance/policy_bonus_payment
+  - life_insurance/policy_charge_back
+  - life_insurance/policy_in_force
+  - life_insurance/policy_payment
+  - loan/applied
+  - loan/approved
+  - loan/funded
+  - loan/listed
+  - loan/listing_not_funded
+  - loan/rejected
+  - mortgage/applied
+  - mortgage/approved
+  - mortgage/funded
+  - mortgage/rejected
+  - savings/applied
+  - savings/funded
+  - savings/mobile_application_installed
+  - savings/mobile_application_bank_linked
+  - savings/offer_clicked
+  - savings/opened

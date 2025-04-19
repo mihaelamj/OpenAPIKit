@@ -1,0 +1,26 @@
+title: External Demand Event Type
+type: string
+enum:
+  - credit_card/applied
+  - credit_card/approved
+  - credit_card/funded
+  - credit_card/opened
+  - credit_card/rejected
+  - mortgage/applied
+  - mortgage/approved
+  - mortgage/funded
+  - mortgage/rejected
+  - loan/applied
+  - loan/approved
+  - loan/funded
+  - loan/listed
+  - loan/listing_not_funded
+  - loan/rejected
+  - savings/applied
+  - savings/funded
+  - savings/mobile_application_installed
+  - savings/mobile_application_bank_linked
+  - savings/offer_clicked
+  - savings/opened
+  - other/conversion
+  - other/Unknown

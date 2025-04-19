@@ -1,0 +1,48 @@
+type: object
+required:
+  - annualPercentYield
+  - compoundingMethod
+  - minimumDeposit
+  - monthlyFee
+  - createdAt
+  - createdByUuid
+properties:
+  name:
+    type: string
+  description:
+    type: string
+  details:
+    type: string
+  rate:
+    type: number
+    description: Annual interest rate
+  annualPercentYield:
+    type: number
+  compoundingMethod:
+    $ref: ./compoundingMethod.yml
+  introductoryPeriodMonths:
+    type: integer
+    format: int32
+  introductoryRate:
+    type: number
+  minimumDeposit:
+    type: number
+  minimumDepositWithFees:
+    type: number
+  monthlyFee:
+    type: number
+  checkWriting:
+    type: boolean
+    description: Whether the account allows checks
+  effectiveAsOf:
+    type: string
+    format: date-time
+    description: When the offer was last validated, formatted as yyyy-MM-ddTHH:mm:ss.SSSZZ
+  createdAt:
+    type: string
+    format: date-time
+  createdByUuid:
+    type: string
+    format: uuid
+allOf:
+  - $ref: ./offerDetailsRecord.yml

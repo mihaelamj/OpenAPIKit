@@ -1,0 +1,5 @@
+# TODO fix this re originator validator; mention field scrubs all non digits?
+type: string
+format: phone
+description: A 10 digit phone number, prefixed by an optional 1
+pattern: ^1?\d{10}$

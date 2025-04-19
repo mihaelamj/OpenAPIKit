@@ -1,0 +1,20 @@
+type: object
+required:
+  - uuid
+  - name
+properties:
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for the redemption type. This is used to reference
+      redemption types in `POST /offerAugmentation/rewardValueCalculations`.
+  parentUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the redemption type's parent redemption type.
+  name:
+    type: string
+    description: |
+      The name of the redemption type.

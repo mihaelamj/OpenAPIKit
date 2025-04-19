@@ -1,0 +1,8 @@
+type: string
+description: |
+  Unit of measure for offer term lengths, or open for a single term.
+enum:
+  - day
+  - month
+  - year
+  - open

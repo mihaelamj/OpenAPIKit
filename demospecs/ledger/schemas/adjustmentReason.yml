@@ -1,0 +1,13 @@
+title: Adjustment Reason
+type: string
+enum:
+  - monthly_ten_percent
+  - customer_reporting
+  - savings_revenue
+  - credit_card_revenue
+  - email_revenue
+  - pre_reported
+  - promotional
+  - lead_testing_adjustment
+  - other
+  - unknown

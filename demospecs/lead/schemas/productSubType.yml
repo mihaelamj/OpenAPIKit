@@ -1,0 +1,28 @@
+type: string
+description: A type of financial product
+enum:
+  # credit_card
+  - credit_card
+  - secured_card
+
+  # loan
+  - personal_loan
+  - student_loan_refinance
+  - co_applicant_loan
+  - line_of_credit
+
+  # mortgage
+  - purchase
+  - refinance
+
+  # savings
+  - savings_account
+  - money_market_account
+  - certificate_of_deposit
+  - individual_retirement_account
+  - cash_management_account
+  - high_interest_checking
+
+  # life_insurance
+  - accidental_death_benefits
+  - term_life

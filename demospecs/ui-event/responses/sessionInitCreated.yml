@@ -1,0 +1,5 @@
+description: Session initiated successfully
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/sessionInit.yml

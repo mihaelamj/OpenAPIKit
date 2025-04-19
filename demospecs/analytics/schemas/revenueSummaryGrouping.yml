@@ -1,0 +1,8 @@
+type: string
+enum:
+  - day
+  - week
+  - month
+  - creditRating
+  - loanPurpose
+  - referralUrl

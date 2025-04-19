@@ -1,0 +1,12 @@
+type: object
+title: Credit Card Details
+required:
+  - edeDetailsKey
+properties:
+  edeDetailsKey:
+    type: string
+  creditLimit:
+    type: number
+    format: double
+  cardProductName:
+    type: string

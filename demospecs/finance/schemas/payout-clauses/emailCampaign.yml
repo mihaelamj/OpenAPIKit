@@ -1,0 +1,16 @@
+type: object
+title: Email Campaign
+required:
+  - cost
+  - campaignDate
+properties:
+  cost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+  campaignDate:
+    type: string
+    format: date
+allOf:
+  - $ref: ../abstractPayoutClause.yml

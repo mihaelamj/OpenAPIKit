@@ -1,0 +1,75 @@
+type: object
+title: ledgerItem
+required:
+  - id
+  - accountId
+  - amount
+  - startDate
+  - endDate
+  - dueDate
+  - ledgerItemType
+  - billingCycleId
+  - details
+  - createdAt
+  - createdBy
+properties:
+  id:
+    title: Id
+    type: integer
+    format: int64
+  accountId:
+    title: Account Id
+    type: integer
+    format: int64
+  amount:
+    title: Amount
+    type: number
+    format: double
+  memo:
+    title: Memo
+    type: string
+  startDate:
+    title: Start Date
+    type: string
+    format: date
+  endDate:
+    title: End Date
+    type: string
+    format: date
+  dueDate:
+    title: Due Date
+    type: string
+    format: string
+  ledgerItemType:
+    title: Ledger Item Type
+    $ref: ./ledgerItemType.yml
+  reason:
+    $ref: ./ledgerItemReason.yml
+  previousLedgerItemId:
+    title: Previous Ledger Item Id
+    type: integer
+    format: int64
+  billingCycleId:
+    title: Billing Cycle Id
+    type: integer
+    format: int64
+  details:
+    type: array
+    items:
+      $ref: ./ledgerItemDetail.yml
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  createdBy:
+    title: Created By
+    type: string
+    format: uuid
+  deletedAt:
+    title: Deleted At
+    type: string
+    format: date-time
+  deletedBy:
+    title: Deleted By
+    type: string
+    format: uuid

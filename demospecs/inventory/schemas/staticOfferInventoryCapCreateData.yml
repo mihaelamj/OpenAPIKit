@@ -1,0 +1,27 @@
+type: object
+required:
+  - staticOfferId
+  - subAccountId
+  - startDate
+  - endDate
+properties:
+  staticOfferId:
+    type: integer
+    format: int64
+  subAccountId:
+    type: integer
+    format: int64
+  capType:
+    $ref: ./capType.yml
+  budgetCapAmount:
+    type: integer
+    format: int64
+  clickCapAmount:
+    type: integer
+    format: int64
+  startDate:
+    type: string
+    format: date
+  endDate:
+    type: string
+    format: date

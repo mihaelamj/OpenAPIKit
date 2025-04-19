@@ -1,0 +1,21 @@
+type: object
+required:
+  - groupBy
+  - groupKey
+  - totalPayout
+properties:
+  groupBy:
+    $ref: ./summaryGroupBy.yml
+    description: |
+      The requested bucketing criteria, for example "day".
+  groupKey:
+    type: string
+    description: |
+      The value of the bucketing criteria. For example, if "day" was
+      requested as a groupBy, groupKeys could be "2020-07-01" or "2020-07-02"
+  totalPayout:
+    type: number
+    format: double
+    description: |
+      Payout to the partner, in dollars, corresponding
+      to the actual "booked" payout time.

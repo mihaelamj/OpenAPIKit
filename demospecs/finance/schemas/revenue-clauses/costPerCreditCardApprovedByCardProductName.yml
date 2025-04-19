@@ -1,0 +1,29 @@
+type: object
+title: Cost Per Credit Card Approved by Card Product Name
+required:
+  - defaultCost
+  - costPerCardProductName
+properties:
+  defaultCost:
+    type: number
+    title: Amount (in $ USD)
+    multipleOf: 0.01
+    minimum: 0.01
+  costPerCardProductName:
+    type: array
+    items:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: string
+          title: Card Product Name
+        value:
+          type: number
+          title: Amount (in $ USD)
+          multipleOf: 0.01
+          minimum: 0
+allOf:
+  - $ref: ../abstractRevenueClause.yml

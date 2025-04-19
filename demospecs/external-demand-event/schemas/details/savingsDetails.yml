@@ -1,0 +1,10 @@
+type: object
+title: Savings Details
+required:
+  - edeDetailsKey
+properties:
+  edeDetailsKey:
+    type: string
+  fundedAmount:
+    type: number
+    format: double

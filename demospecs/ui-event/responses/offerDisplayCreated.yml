@@ -1,0 +1,5 @@
+description: Offer display event recorded successfully
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/offerDisplay.yml

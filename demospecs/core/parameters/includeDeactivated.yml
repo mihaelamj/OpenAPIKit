@@ -1,0 +1,6 @@
+name: includeDeactivated
+description: include deactivated items, default false
+in: query
+schema:
+  default: true
+  type: boolean

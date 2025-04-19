@@ -1,0 +1,7 @@
+title: Term Unit
+type: string
+enum:
+  - week
+  - bi_monthly
+  - month
+  - unkown

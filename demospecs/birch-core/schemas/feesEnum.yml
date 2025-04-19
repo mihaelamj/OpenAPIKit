@@ -1,0 +1,7 @@
+type: string
+enum:
+  - Annual Fee
+  - Foreign Transaction Fee
+  - Late Fee
+  - Other Fee
+  - Balance Transfer Fee

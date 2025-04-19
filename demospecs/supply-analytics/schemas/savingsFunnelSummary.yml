@@ -1,0 +1,40 @@
+type: object
+required:
+  - groupBy
+  - groupKey
+  - numLeads
+  - numClicks
+  - numOpened
+  - totalPayout
+properties:
+  groupBy:
+    $ref: ./summaryGroupBy.yml
+    description: |
+      The requested bucketing criteria, for example "day".
+  groupKey:
+    type: string
+    description: |
+      The value of the bucketing criteria. For example, if "day" was
+      requested as a groupBy, groupKeys could be "2020-07-01" or "2020-07-02"
+  numLeads:
+    type: integer
+    format: int32
+    description: |
+      Number of unique leads from a supply partner created
+      for a savings account.
+  numClicks:
+    type: integer
+    format: int32
+    description: |
+      Number of unique leads who clicked an offer
+  numOpened:
+    type: integer
+    format: int32
+    description: |
+      Number of unique leads who opened an account
+  totalPayout:
+    type: number
+    format: double
+    description: |
+      Payout to the partner, in dollars, attributable
+      to the leads that were created in this bucket.

@@ -1,0 +1,18 @@
+type: object
+properties:
+  adjustmentAmount:
+    type: number
+    format: float
+  coverageAmount:
+    type: number
+    format: float
+  termLength:
+    type: integer
+    format: int32
+  paymentAmount:
+    type: number
+    format: float
+  paymentFrequency:
+    $ref: ../lifeInsuranceTermUnit.yml
+allOf:
+  - $ref: '../externalDemandEventDetails.yml'

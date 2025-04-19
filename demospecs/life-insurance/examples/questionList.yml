@@ -1,0 +1,63 @@
+summary: A list of questions
+value:
+  {
+    questions: [
+      {
+        "uuid": "3c939507-2317-41ab-9546-7ca5fe8bea1d",
+        "questionType": "binary",
+        "leapLifeId": "LEAP_LIFE_ID_1",
+        "prompt": "This is a prompt",
+        "answerOptions": [
+          { "answerValue": "Yes", "answerLabel": "Yes" },
+          { "answerValue": "No", "answerLabel": "No" },
+        ]
+      },
+      {
+        "uuid": "2f04d037-e3ab-4b45-8f56-43511cc216ab",
+        "questionType": "select-multiple",
+        "leapLifeId": "LEAP_LIFE_ID_2",
+        "prompt": "This is a prompt",
+        "company": "leap",
+        "answerOptions": [
+          { "answerValue": "A", "answerLabel": "A" },
+          { "answerValue": "B", "answerLabel": "B" },
+          { "answerValue": "C", "answerLabel": "C" },
+        ],
+        "allowNoSelection": true,
+        "followupQuestions": [
+          { "triggeringValue": "A", "triggeredQuestionUuid": "ece530a3-9bad-436e-8261-37d37f732f94" },
+        ],
+      },
+      {
+        "uuid": "ece530a3-9bad-436e-8261-37d37f732f94",
+        "questionType": "binary",
+        "leapLifeId": "LEAP_LIFE_ID_3",
+        "prompt": "This is a prompt",
+        "answerOptions": [
+          { "answerValue": "Yes", "answerLabel": "Yes" },
+          { "answerValue": "No", "answerLabel": "No" },
+        ],
+        "followupQuestions": [
+          { "triggeringValue": "Yes", "triggeredQuestionUuid": "a350af7c-b176-4bb2-a942-7b5efab4e06b" }
+        ],
+      },
+      {
+        "uuid": "a350af7c-b176-4bb2-a942-7b5efab4e06b",
+        "prompt": "This is a prompt",
+        "leapLifeId": "LEAP_LIFE_ID_4",
+        "contextTitle": "Context Title",
+        "questionType": "freeform-multiple",
+        "company": "leap",
+      }
+    ],
+    groups: [
+      [
+        "3c939507-2317-41ab-9546-7ca5fe8bea1d",
+        "2f04d037-e3ab-4b45-8f56-43511cc216ab",
+      ],
+      [
+        "ece530a3-9bad-436e-8261-37d37f732f94",
+        "a350af7c-b176-4bb2-a942-7b5efab4e06b",
+      ]
+    ]
+  }

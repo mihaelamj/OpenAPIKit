@@ -1,0 +1,9 @@
+type: object
+title: billingCycleUpdateData
+required:
+  - endDate
+properties:
+  endDate:
+    title: End Date
+    type: string
+    format: date

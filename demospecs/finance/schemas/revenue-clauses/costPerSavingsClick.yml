@@ -1,0 +1,12 @@
+type: object
+title: Cost Per Savings Click
+required:
+  - cost
+properties:
+  cost:
+    type: number
+    title: Amount (in $ USD)
+    multipleOf: 0.01
+    minimum: 0.01
+allOf:
+  - $ref: ../abstractRevenueClause.yml  

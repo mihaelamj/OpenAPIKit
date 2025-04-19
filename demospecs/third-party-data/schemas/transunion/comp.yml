@@ -1,0 +1,40 @@
+type: object
+description: >
+  Information that must be returned with a service for compliance reasons when certain conditions exist on a consumer’s file.
+  (TU41 User Guide March 30, 2019 page 631/632).
+  Only one set of -Source, -Account, -Code will be populated at a time.
+properties:
+  tradeSource:
+    type: string
+    description: >
+      The name of the source of the information. For example, if the information is a trade account, 
+      the name of the reporting subscriber is returned.
+      (TU41 User Guide March 30, 2019 page 631/632).
+      This field is only set if the information type is a 'Trade Account'
+  tradeAccount:
+    type: string
+    description: >
+      The number of the account (TU41 User Guide March 30, 2019 page 631/632).
+      This field is only set if the information type is a 'Trade Account'
+  tradeCode:
+    type: string
+    description: >
+      The affiliate (consumer) remark code, refer to 'Appendix C: Account codes' (TU41 User Guide March 30, 2019 page 631/632).
+      This field is only set if the information type is a 'Trade Account'
+  pubRecordSource:
+    type: string
+    description: >
+      The name of the source of the information. For example, if the information is a trade account, 
+      the name of the reporting subscriber is returned.
+      (TU41 User Guide March 30, 2019 page 631/632).
+      This field is only set if the information type is a 'Public Record'
+  pubRecordAccount:
+    type: string
+    description: >
+      The public record docket number (TU41 User Guide March 30, 2019 page 631/632).
+      This field is only set if the information type is a 'Public Record'
+  pubRecordCode:
+    type: string
+    description: >
+      The public record type code, refer to 'Appendix C: Account codes' (TU41 User Guide March 30, 2019 page 631/632).
+      This field is only set if the information type is a 'Trade Account'

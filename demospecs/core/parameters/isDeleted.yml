@@ -1,0 +1,5 @@
+name: isDeleted
+description: ignored deleted items
+in: query
+schema:
+  type: boolean

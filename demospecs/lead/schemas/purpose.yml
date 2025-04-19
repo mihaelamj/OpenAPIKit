@@ -1,0 +1,32 @@
+type: string
+enum:
+  - auto_purchase
+  - auto_refinance
+  - baby
+  - boat
+  - business
+  - car_repair
+  - cosmetic
+  - credit_card_refi
+  - debt_consolidation
+  - emergency
+  - engagement
+  - green
+  - home_improvement
+  - home_purchase
+  - home_refi
+  - household_expenses
+  - large_purchases
+  - life_event
+  - medical_dental
+  - motorcycle
+  - moving_relocation
+  - rv
+  - special_occasion
+  - student_loan
+  - student_loan_refi
+  - taxes
+  - vacation
+  - wedding
+  - other
+  - unknown

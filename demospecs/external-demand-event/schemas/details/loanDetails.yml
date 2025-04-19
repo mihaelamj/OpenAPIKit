@@ -1,0 +1,37 @@
+type: object
+title: Loan Details
+required:
+  - edeDetailsKey
+properties:
+  edeDetailsKey:
+    type: string
+  amount:
+    type: number
+    format: double
+  originationFee:
+    type: number
+    format: double
+  approvedLoanTerm:
+    type: integer
+    format: int32
+  approvedLoanApr:
+    type: number
+    format: double
+  approvedLoanMinimum36MonthApr:
+    type: number
+    format: double
+  approvedLoanMinimum60MonthApr:
+    type: number
+    format: double
+  listedLoanTerm:
+    type: integer
+    format: int32
+  listedLoanApr:
+    type: number
+    format: double
+  fundedLoanTerm:
+    type: integer
+    format: int32
+  fundedLoanApr:
+    type: number
+    format: double

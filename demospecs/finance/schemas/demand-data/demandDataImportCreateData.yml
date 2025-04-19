@@ -1,0 +1,15 @@
+type: object
+required:
+  - fileId
+  - configurationId
+properties:
+  fileId:
+    type: integer
+    format: int64
+    description: |
+      A unique identifer for the file that is being imported
+  configurationId:
+    type: integer
+    format: int64
+    description: |
+      A unique identifier for the configuration details to be used on file import

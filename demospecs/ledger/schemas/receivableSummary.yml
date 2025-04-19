@@ -1,0 +1,55 @@
+type: object
+required:
+  - id
+  - accountId
+  - accountName
+  - startDate
+  - endDate
+  - calculatedPayout
+  - adjustment
+  - totalPayout
+  - dueDate
+  - reconciliationType
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+  accountId:
+    type: integer
+    format: int64
+  accountName:
+    type: string
+  startDate:
+    type: string
+    format: date
+  endDate:
+    type: string
+    format: date
+  calculatedPayout:
+    type: number
+    format: float
+  adjustment:
+    type: number
+    format: float
+  totalPayout:
+    type: number
+    format: float
+  dueDate:
+    type: string
+    format: date
+  reconciliationType:
+    $ref: ./reconciliationType.yml
+  createdAt:
+    type: string
+    format: date-time
+  createdBy:
+    type: string
+    format: uuid
+  deletedAt:
+    type: string
+    format: date-time
+  deletedBy:
+    type: string
+    format: uuid

@@ -1,0 +1,13 @@
+type: object
+required:
+  - uuid
+  - amount
+properties:
+  uuid:
+    description: A category, merchant or other spending group's uuid
+    type: string
+    format: uuid
+  amount:
+    description: A representation of how much (in value or relative) the user spent in this group
+    type: number
+    format: float

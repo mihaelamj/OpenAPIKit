@@ -1,0 +1,24 @@
+summary: Aggregated monthly revenue summary
+value:
+  [
+    {
+      "leadCreatedAtMin": "2020-01-01",
+      "leadCreatedAtMax": "2020-02-01",
+      "leadCount": 500,
+      "submittedApplicatonCount": 500,
+      "preApprovedApplicationCount": 300,
+      "offerClickCount": 100,
+      "fundedCount": 90,
+      "totalAttributedRevenue": 3000
+    },
+    {
+      "leadCreatedAtMin": "2020-02-01",
+      "leadCreatedAtMax": "2020-03-01",
+      "leadCount": 600,
+      "submittedApplicatonCount": 400,
+      "preApprovedApplicationCount": 200,
+      "offerClickCount": 100,
+      "fundedCount": 70,
+      "totalAttributedRevenue": 2000
+    }
+  ]

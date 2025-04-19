@@ -1,0 +1,9 @@
+type: object
+description: A representation of a user's spending, aggregated over a period of time
+properties:
+  aggregates:
+    type: array
+    items:
+      $ref: ./aggregates.yml
+  unit:
+    $ref: ./spendingAggregateUnit.yml

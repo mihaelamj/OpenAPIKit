@@ -1,0 +1,49 @@
+type: object
+title: Cost Per Lead by Life Insurance Approval Probability Score
+required:
+  - defaultCost
+  - oneCost
+  - twoCost
+  - threeCost
+  - fourCost
+  - fiveCost
+  - sixCost
+  - key
+properties:
+  defaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Default Amount (in $ USD)
+    minimum: 0.01
+  oneCost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+  twoCost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+  threeCost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+  fourCost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+  fiveCost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+  sixCost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+allOf:
+  - $ref: ../abstractPayoutClause.yml

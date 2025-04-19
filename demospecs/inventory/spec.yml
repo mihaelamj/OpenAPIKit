@@ -1,0 +1,535 @@
+openapi: 3.0.3
+info:
+  title: inventory
+  description: Manages inventory caps
+  version: 1.3.0
+  contact:
+    name: Finance Chapter
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/363167994/Finance+Chapter
+servers:
+  - url: 'https://api.evenfinancial.com/inventory'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/inventory'
+    description: Dev
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'inventory:read': Allows read access to inventory endpoints
+            'inventory:write': Allows write access to inventory endpoints
+  schemas:
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    CapEventReason:
+      $ref: ./schemas/capEventReason.yml
+    CapType:
+      $ref: ./schemas/capType.yml
+    CapTypeWrapper:
+      $ref: ./schemas/capTypeWrapper.yml
+    DemandSubAccountInventoryCap:
+      $ref: ./schemas/demandSubAccountInventoryCap.yml
+    DemandSubAccountInventoryCapEvent:
+      $ref: ./schemas/demandSubAccountInventoryCapEvent.yml
+    DemandSubAccountInventoryCapCreateData:
+      $ref: ./schemas/demandSubAccountInventoryCapCreateData.yml
+    DemandSubAccountInventoryCapUpdateData:
+      $ref: ./schemas/demandSubAccountInventoryCapUpdateData.yml
+    ProductType:
+      $ref: ../core/schemas/productType.yml
+    StaticOfferInventoryCap:
+      $ref: ./schemas/staticOfferInventoryCap.yml
+    StaticOfferInventoryCapUpdateData:
+      $ref: ./schemas/staticOfferInventoryCapUpdateData.yml
+    StaticOfferInventoryCapCreateData:
+      $ref: ./schemas/staticOfferInventoryCapCreateData.yml
+    StaticOfferInventoryCapStatus:
+      $ref: ./schemas/staticOfferInventoryCapStatus.yml
+    StaticOfferInventoryCapEvent:
+      $ref: ./schemas/staticOfferInventoryCapEvent.yml
+    VersionDiff:
+      $ref: ./schemas/versionDiff.yml
+tags:
+  - name: Demand Sub-Account Inventory Cap
+    description: >-
+      Inventory caps set against demand sub-accounts. A means to control the
+      amount of traffic going towards a specific demand sub-account
+  - name: Static Offer Inventory Cap
+    description: >-
+      Inventory caps set against static offers. Represents a static offer that
+      Partner Solutions does not want to have too high of an attributed revenue
+      or attributed clicks
+paths:
+  /staticOfferInventoryCaps:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get static offer inventory caps
+      description: >-
+        Return a list of StaticOfferInventoryCaps, filtered by search criteria
+        provided in the URL
+      operationId: getStaticOfferInventoryCaps
+      tags:
+        - Static Offer Inventory Cap
+      security:
+        - oauth:
+            - 'inventory:read'
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of StaticOfferInventoryCap ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 0
+          style: form
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+        - name: staticOfferId
+          in: query
+          description: A comma separated list of StaticOffer ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 0
+          style: form
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+        - name: subAccountId
+          in: query
+          description: A comma separated list of SubAccount ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+        - name: capType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: ./schemas/capType.yml
+        - name: productType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StaticOfferInventoryCap'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+    post:
+      summary: Create a static offer inventory cap
+      description: create a static offer inventory cap
+      operationId: createStaticOfferInventoryCap
+      security:
+        - oauth:
+            - 'inventory:write'
+      tags:
+        - Static Offer Inventory Cap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/staticOfferInventoryCapCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticOfferInventoryCap'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/staticOfferInventoryCaps/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a static offer inventory cap
+      description: Delete a static offer inventory cap
+      operationId: deleteStaticOfferInventoryCap
+      security:
+        - oauth:
+            - 'inventory:write'
+      tags:
+        - Static Offer Inventory Cap
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticOfferInventoryCap'
+        '404':
+          description: Unknown ID
+    put:
+      summary: Update a static offer inventory cap
+      description: Update a static offer inventory cap
+      operationId: updateStaticOfferInventoryCap
+      security:
+        - oauth:
+            - 'inventory:write'
+      tags:
+        - Static Offer Inventory Cap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/staticOfferInventoryCapUpdateData.yml
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticOfferInventoryCap'
+        '400':
+          description: Invalid request
+    get:
+      summary: Get a static offer inventory cap
+      description: Get a static offer inventory cap
+      operationId: getStaticOfferInventoryCap
+      security:
+        - oauth:
+            - 'inventory:read'
+      tags:
+        - Static Offer Inventory Cap
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticOfferInventoryCap'
+        '404':
+          description: Unknown ID
+  '/staticOfferInventoryCaps/{id}/versionDiff':
+    x-lint-skip:
+      - path-resource-is-plural
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a version diff of a static offer inventory cap
+      description: Get a version diff of a static offer inventory cap
+      operationId: getStaticOfferInventoryCapVersionDiff
+      security:
+        - oauth:
+            - 'inventory:read'
+      tags:
+        - Static Offer Inventory Cap
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/versionDiff.yml
+        '404':
+          description: Unknown ID
+  /filterDemandSubAccounts:
+    get:
+      summary: Filter capped sub-account IDs
+      description: >
+        Return a filtered list of sub-account IDs that have not reached cap
+        limit,
+
+        given a list of sub-account IDs
+      operationId: filterCappedSubAccountIds
+      tags:
+        - Demand Sub-Account Inventory Cap
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: subAccountIds
+          in: query
+          description: A comma separated list of SubAccount IDs
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          required: true
+          deprecated: false
+          allowEmptyValue: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+  /calculateDemandSubAccountCaps:
+    post:
+      summary: Refresh demand sub-account inventory cache
+      description: |
+        Refresh `DemandSubAccountInventoryCaps` cache manually
+      operationId: refreshDemandSubAccountInventoryCache
+      tags:
+        - Demand Sub-Account Inventory Cap
+      responses:
+        '200':
+          description: Success
+  /demandSubAccountInventoryCaps:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get demand sub-account inventory caps
+      description: Return demand sub account inventory caps based upon request parameters
+      operationId: getDemandSubAccountInventoryCaps
+      security:
+        - oauth:
+            - 'inventory:read'
+      tags:
+        - Demand Sub-Account Inventory Cap
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: demandSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: capType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: ./schemas/capType.yml
+        - name: currentDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: productType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemandSubAccountInventoryCap'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a demand sub-account inventory cap
+      description: Create a demand-sub account inventory cap
+      operationId: createDemandSubAccountInventoryCap
+      security:
+        - oauth:
+            - 'inventory:write'
+      tags:
+        - Demand Sub-Account Inventory Cap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/demandSubAccountInventoryCapCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemandSubAccountInventoryCap'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/demandSubAccountInventoryCaps/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a demand sub-account inventory cap
+      description: Delete a demand sub-account inventory cap
+      operationId: deleteDemandSubAccountInventoryCap
+      security:
+        - oauth:
+            - 'inventory:write'
+      tags:
+        - Demand Sub-Account Inventory Cap
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemandSubAccountInventoryCap'
+        '404':
+          description: Unknown ID
+    put:
+      summary: Update a demand sub-account inventory cap
+      description: Update a demand sub0-account inventory cap
+      operationId: updateDemandSubAccountInventoryCap
+      security:
+        - oauth:
+            - 'inventory:write'
+      tags:
+        - Demand Sub-Account Inventory Cap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/demandSubAccountInventoryCapUpdateData.yml
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemandSubAccountInventoryCap'
+        '400':
+          description: Invalid request
+    get:
+      summary: Get a demand sub-account inventory cap
+      description: Get a demand sub-account inventory cap
+      operationId: getDemandSubAccountInventoryCap
+      security:
+        - oauth:
+            - 'inventory:read'
+      tags:
+        - Demand Sub-Account Inventory Cap
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemandSubAccountInventoryCap'
+        '404':
+          description: Unknown ID
+  /staticOfferInvetoryCapsStatuses:
+    get:
+      summary: Get static offer inventory cap statuses
+      description: Get static offer inventory cap statuses
+      operationId: getStaticOfferInventoryCapStatuses
+      security:
+        - oauth:
+            - 'inventory:read'
+      tags:
+        - Static Offer Inventory Cap
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StaticOfferInventoryCapStatus'
+        '402':
+          description: Payment required
+  '/staticOfferInventoryCapsStatus/{id}':
+    x-lint-skip:
+      - path-resource-is-plural
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get the status of a static offer invetory cap
+      description: Get the status of a static offer invetory cap
+      operationId: getStaticOfferInventoryCapStatus
+      security:
+        - oauth:
+            - 'inventory:read'
+      tags:
+        - Static Offer Inventory Cap
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StaticOfferInventoryCapStatus'
+        '402':
+          description: Payment required

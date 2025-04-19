@@ -1,0 +1,9 @@
+type: object
+required:
+  - accountIds
+properties:
+  accountIds:
+    type: array
+    items:
+      type: integer
+      format: int64

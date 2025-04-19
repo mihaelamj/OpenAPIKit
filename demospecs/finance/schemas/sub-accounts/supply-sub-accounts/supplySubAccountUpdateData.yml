@@ -1,0 +1,19 @@
+type: object
+allOf:
+  - $ref: ../subAccountUpdateData.yml
+  - type: object
+    properties:
+      integrationType: 
+        $ref: ./integrationType.yml
+      dataShare:
+        type: string
+      coBrand:
+        title: Can Co-Brand
+        type: boolean
+      productType:
+        type: string
+        description: Product type exclusive to supply sub accounts
+      subAccountOwners:
+        type: array
+        items:
+          $ref: ./supplySubAccountOwnerCreateData.yml

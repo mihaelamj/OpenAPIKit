@@ -1,0 +1,27 @@
+type: object
+title: preSelectRule
+required:
+  - offerId
+properties:
+  offerId:
+    type: integer
+    format: int64
+  nonPreSelectOfferId:
+    type: integer
+    format: int64
+  vantageScoreCeiling:
+    type: integer
+    format: int64
+  vantageScoreFloor:
+    type: integer
+    format: int64
+  approvedScores:
+    type: array
+    items:
+      type: number
+      format: int64
+  filters:
+    type: array
+    items:
+      type: object
+      $ref: ./preSelectRuleFilter.yml

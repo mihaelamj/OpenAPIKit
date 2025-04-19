@@ -1,0 +1,35 @@
+type: object
+required:
+  - id
+  - uuid
+  - leadUuid
+  - rateTableUuid
+  - offerUuid
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    readOnly: true
+  uuid:
+    type: string
+    format: uuid
+    readOnly: true
+  leadUuid:
+    type: string
+    format: uuid
+  rateTableUuid:
+    type: string
+    format: uuid
+  offerUuid:
+    type: string
+    format: uuid
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+  createdBy:
+    type: string
+    format: uuid
+    readOnly: true

@@ -1,0 +1,12 @@
+type: object
+title: Cost Per Unique Funded Loan
+required:
+  - cost
+properties:
+  cost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+allOf:
+  - $ref: ../abstractPayoutClause.yml

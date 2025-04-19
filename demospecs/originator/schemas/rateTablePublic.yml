@@ -1,0 +1,57 @@
+type: object
+description: A `RateTable` customized to a `Lead` input
+required:
+  - uuid
+  - leadUuid
+  - loanAmount
+  - creditCardOffers
+  - loanOffers
+  - mortgageOffers
+  - savingsOffers
+  - specialOffers
+  - pendingOriginators
+  - pendingResponses
+properties:
+  uuid:
+    type: string
+    format: uuid
+    description: Primary UUID for a `RateTable`
+  leadUuid:
+    type: string
+    format: uuid
+    description: UUID of the associated `Lead`
+  loanAmount:
+    type: integer
+    format: int32
+    description: "`Lead`'s provided loan amount at the time of `RateTable` creation"
+  creditCardOffers:
+    type: array
+    items:
+      $ref: ./creditCardOffer.yml
+  loanOffers:
+    type: array
+    items:
+      $ref: ./loanOfferPublic.yml
+  mortgageOffers:
+    type: array
+    items:
+      $ref: ./mortgageOffer.yml
+  savingsOffers:
+    type: array
+    items:
+      $ref: ./savingsOffer.yml
+  specialOffers:
+    type: array
+    items:
+      $ref: ./specialOfferPublic.yml
+  pendingOriginators:
+    type: array
+    description: List of originators which have been queried, but have not responded yet. This list only contains loan originators, and should no longer be used
+    deprecated: true
+    items:
+      $ref: ./originator.yml
+  pendingResponses:
+    type: array
+    description: List of demand partners which have been queried, but have not responded yet. It is a guarantee that no offers will be added to the rate table after this list is empty
+    items:
+      $ref: ./pendingResponse.yml

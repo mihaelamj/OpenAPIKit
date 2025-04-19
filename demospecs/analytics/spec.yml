@@ -1,0 +1,84 @@
+openapi: 3.0.3
+info:
+  title: analytics
+  description: |
+    Querying for data and making sense of it
+  version: 1.0.0
+  contact:
+    name: Knowledge Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/268238916/Knowledge+Team
+servers:
+  - url: 'https://api.evenfinancial.com/analytics'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/analytics'
+    description: Dev
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'analytics:report:read': Allows read access to analytics reporting resources
+            'analytics:report:readAll': Allows read access to all analytics reporting resources
+            'analytics:revenue:read': Allows read access to analytics revenue resources
+            'analytics:revenue:readAll': Allows read access to all analytics revenue resources
+  schemas:
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    EventType:
+      $ref: ./schemas/eventType.yml
+    LeadEvent:
+      $ref: ./schemas/leadEvent.yml
+    OfferProductType:
+      $ref: ./schemas/offerProductType.yml
+    RevenueSummary:
+      $ref: ./schemas/revenueSummary.yml
+    StaticOfferAttributionSummary:
+      $ref: ./schemas/staticOfferAttributionSummary.yml
+    StaticOfferAttributionSummaryRequest:
+      $ref: ./schemas/staticOfferAttributionSummaryRequest.yml
+tags:
+  - name: Analytics
+paths:
+  /staticOfferAttributionSummaries:
+    post:
+      summary: Retrieve attribution summaries for a list of unique static offers
+      tags:
+        - Analytics
+      operationId: StaticOfferAttributionSummariesController.getViaPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/staticOfferAttributionSummaryRequest.yml
+      responses:
+        '200':
+          description: Attribution summaries retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/staticOfferAttributionSummary.yml
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  $ref: ../core/examples/error/missingAccessToken.yml

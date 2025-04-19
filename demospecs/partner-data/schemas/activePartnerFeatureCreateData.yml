@@ -1,0 +1,14 @@
+type: object
+required:
+  - subAccountId
+  - feature
+properties:
+  subAccountId:
+    type: integer
+    format: int64
+    description: |
+      The id belonging to the associated Sub Account
+  feature:
+    $ref: ./partnerFeature.yml
+    description: |
+      The name of the feature

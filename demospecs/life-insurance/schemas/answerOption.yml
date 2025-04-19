@@ -1,0 +1,9 @@
+type: object
+required:
+  - answerValue
+  - answerLabel
+properties:
+    answerValue:
+        type: string
+    answerLabel:
+        type: string

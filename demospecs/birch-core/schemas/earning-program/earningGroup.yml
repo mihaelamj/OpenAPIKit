@@ -1,0 +1,26 @@
+type: object
+description: A group of qualifiers which share the same default earn rate
+required:
+  - earnRate
+  - earnRateText
+  - items
+properties:
+  earnRate:
+    type: number
+    description: Numerical representation of the earn rate for this group
+  earnRateText:
+    type: string
+    description: Display text for what the group earns
+  items:
+    type: array
+    items:
+      oneOf:
+        - $ref: ./categoryEarningItem.yml
+        - $ref: ./merchantEarningItem.yml
+      discriminator:
+        propertyName: type
+        mapping:
+          category: './categoryEarningItem.yml'
+          merchant: './merchantEarningItem.yml'
+  personalization:
+    $ref: ./earningItemPersonalization.yml

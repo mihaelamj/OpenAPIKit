@@ -1,0 +1,147 @@
+type: object
+required:
+  - cardImageUrl
+  - preQualified
+  - preApproved
+  - createdAt
+properties:
+    cardName:
+      type: string
+      description: Display name of the card
+    cardImageUrl:
+      type: string
+      format: url
+    cardPurposes:
+      type: array
+      items:
+        $ref: ../../lead/schemas/cardPurposes.yml
+    ratesUrl:
+      type: string
+      format: url
+      description: External link to card rates, terms and conditions
+    maxPurchaseApr:
+      type: number
+    minPurchaseApr:
+      type: number
+    purchaseAprText:
+      type: string
+    maxPurchaseIntroApr:
+      type: number
+    minPurchaseIntroApr:
+      type: number
+    purchaseIntroAprTerm:
+      type: integer
+      format: int32
+    purchaseIntroAprTermUnit:
+      $ref: ./termUnit.yml
+    purchaseIntroAprText:
+      type: string
+    maxCashAdvanceApr:
+      type: number
+    minCashAdvanceApr:
+      type: number
+    cashAdvanceAprText:
+      type: string
+    maxCashAdvanceIntroApr:
+      type: number
+    minCashAdvanceIntroApr:
+      type: number
+    cashAdvanceIntroAprTerm:
+      type: integer
+      format: int32
+    cashAdvanceIntroAprTermUnit:
+      $ref: ./termUnit.yml
+    cashAdvanceIntroAprText:
+      type: string
+    maxBalanceTransferApr:
+      type: number
+    minBalanceTransferApr:
+      type: number
+    balanceTransferAprText:
+      type: string
+    maxBalanceTransferIntroApr:
+      type: number
+    minBalanceTransferIntroApr:
+      type: number
+    balanceTransferIntroAprTerm:
+      type: integer
+      format: int32
+    balanceTransferIntroAprTermUnit:
+      $ref: ./termUnit.yml
+    balanceTransferIntroAprText:
+      type: string
+    maxAnnualFee:
+      type: number
+    minAnnualFee:
+      type: number
+    annualIntroFee:
+      type: number
+    annualIntroFeeTerm:
+      type: integer
+      format: int32
+      description: Number of _years_ the introductory anual fee is in effect
+    introOfferAmount:
+      type: number
+    introOfferText:
+      type: string
+    introOfferType:
+      $ref: ./introOfferType.yml
+    details:
+      type: array
+      description: List of card features which must be prominently displayed with the offer
+      items:
+        type: string
+    additionalDetails:
+      type: array
+      description: List of card features which must be displayed with the offer
+      items:
+        type: string
+    cardType:
+      $ref: ./cardType.yml
+    minimumCreditLine:
+      type: number
+    minimumPenaltyApr:
+      type: number
+    maximumPenaltyApr:
+      type: number
+    balanceTransferFee:
+      type: number
+    cashAdvanceFee:
+      type: number
+    lateFee:
+      type: number
+    foreignExchangeFee:
+      type: number
+    accountOpeningFee:
+      type: number
+    returnPaymentFee:
+      type: number
+    monthlyServiceFee:
+      type: number
+    recommendedCreditRatings:
+      type: array
+      items:
+        $ref: ../../lead/schemas/providedCreditRating.yml
+    preQualified:
+      type: boolean
+    preApproved:
+      type: boolean
+    preSelected:
+      type: boolean
+      description: Indicates that Even has determined that the user has an increased likelihood of being approved for this card.
+    earningProgram:
+      description: JSON related to a cards earning program at the card and transaction level
+      $ref: ../../offer-augmentation/schemas/earningProgram.yml
+    foreignTransactionFee:
+      type: number
+      format: float
+      description: Percentage represented in decimal format added to all foreign transactions
+    cardBenefits:
+      type: array
+      items:
+        $ref: ../../lead/schemas/cardBenefits.yml
+    createdAt:
+        type: string
+        format: date-time
+allOf:
+  - $ref: ./offerDetailsRecord.yml

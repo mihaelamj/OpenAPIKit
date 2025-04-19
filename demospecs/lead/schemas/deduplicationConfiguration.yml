@@ -1,0 +1,49 @@
+type: object
+required:
+  - id
+  - supplySubAccountId
+  - supplySubAccountUuid
+  - durationMinutes
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  supplySubAccountId:
+    type: integer
+    format: int64
+    description: |
+      The ID of the supply sub-account for this configuration.
+  supplySubAccountUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the supply sub-account for this configuration.
+  durationMinutes:
+    type: integer
+    format: int32
+    description: |
+      The number of minutes to look back when looking for duplicate leads.
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this resource.

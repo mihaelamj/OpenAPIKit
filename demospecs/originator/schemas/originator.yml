@@ -1,0 +1,21 @@
+type: object
+required:
+  - key
+  - name
+  - images
+properties:
+  key:
+    type: string
+  name:
+    type: string
+  description:
+    type: string
+  images:
+    type: array
+    items:
+      $ref: ./originatorImage.yml
+  disclaimer:
+    type: string
+  companyUuid:
+    type: string
+    format: uuid

@@ -1,0 +1,15 @@
+type: object
+description: a group of cards that share branding, like the chase sapphire perferrec and reserve.
+properties:
+  uuid:
+    type: string
+    format: uuid
+  name:
+    type: string
+  issuer:
+    $ref: ./issuer.yml
+  cards:
+    type: array
+    items:
+      type: string
+

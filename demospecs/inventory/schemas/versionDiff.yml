@@ -1,0 +1,22 @@
+type: object
+required:
+  - jsonPatch
+  - createdAt
+  - createdByUuid
+properties:
+  jsonPatch:
+    type: array
+    items:
+      type: string
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the resource was created.
+  createdByUuid:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to create this resource.

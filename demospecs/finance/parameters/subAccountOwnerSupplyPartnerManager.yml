@@ -1,0 +1,10 @@
+name: subAccountOwnerSupplydPartnerManager
+description: comma separated list of supply partner manager uuids
+in: query
+style: form
+explode: false
+schema:
+  type: array
+  items:
+    type: string
+    format: uuid

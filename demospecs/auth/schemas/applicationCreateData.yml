@@ -1,0 +1,12 @@
+type: object
+required:
+  - name
+  - accountId
+properties:
+  name:
+    type: string
+  companyUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the company that this application belongs to

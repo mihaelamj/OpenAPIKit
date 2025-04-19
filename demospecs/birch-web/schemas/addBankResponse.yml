@@ -1,0 +1,12 @@
+type: object
+description: Added account info
+properties:
+  bankId:
+    description: Added BankAccount ID
+    type: string
+  accountIds:
+    description: Array of accountIDs
+    type: array
+    items:
+      type: string
+      description: Array of accountIDs

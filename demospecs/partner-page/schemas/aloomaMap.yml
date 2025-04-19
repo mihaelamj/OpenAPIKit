@@ -1,0 +1,13 @@
+type: object
+properties:
+  id:
+    type: string
+  version:
+    type: string
+  partner_key:
+    type: string
+  product:
+    type: string
+  companyUuid:
+    type: string
+    format: UUID

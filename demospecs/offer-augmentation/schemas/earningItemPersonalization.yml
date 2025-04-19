@@ -1,0 +1,12 @@
+type: object
+description: Personalized values calculated for a specific item, such as an earning group or bonus
+properties:
+  totalSpent:
+    type: number
+    description: The amount the user spent in dollars within a calendar year
+  totalEarned:
+    type: number
+    description: The amount of points/miles/dollars the user would have received within a calendar year
+  totalValue:
+    type: number
+    description: The value in USD of the totalEarned amount based on the user's custom point valuation

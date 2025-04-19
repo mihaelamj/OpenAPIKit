@@ -1,0 +1,4900 @@
+openapi: 3.0.3
+info:
+  title: finance
+  description: Home to various finance-related functions
+  version: 1.11.0
+  contact:
+    name: Finance Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/36044820/Finance+Team
+servers:
+  - url: 'https://api.evenfinancial.com/finance'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/finance'
+    description: Dev
+components:
+  parameters:
+    id:
+      $ref: ../core/parameters/id.yml
+    name:
+      $ref: ../core/parameters/name.yml
+    uuid:
+      $ref: ../core/parameters/uuid.yml
+    accountId:
+      $ref: ../core/parameters/accountId.yml
+    companyUuid:
+      $ref: ./parameters/companyUuid.yml
+    displayName:
+      $ref: ./parameters/displayName.yml
+    createdBy:
+      $ref: ../core/parameters/createdBy.yml
+    createdAt:
+      $ref: ../core/parameters/createdAt.yml
+    sortBy:
+      $ref: ../core/parameters/sortBy.yml
+    limit:
+      $ref: ../core/parameters/limit.yml
+    offset:
+      $ref: ../core/parameters/offset.yml
+    order:
+      $ref: ../core/parameters/order.yml
+    excludeDeleted:
+      $ref: ../core/parameters/excludeDeleted.yml
+    includeDeactivated:
+      $ref: ../core/parameters/includeDeactivated.yml
+    subAccountTypeKey:
+      $ref: ./parameters/subAccountTypeKey.yml
+    subAccountOwnerId:
+      $ref: ./parameters/subAccountOwnerId.yml
+    subAccountOwnerDemandPartnerManager:
+      $ref: ./parameters/subAccountOwnerDemandPartnerManager.yml
+    subAccountOwnerDemandYieldManager:
+      $ref: ./parameters/subAccountOwnerDemandYieldManager.yml
+    subAccountOwnerSupplyPartnerManager:
+      $ref: ./parameters/subAccountOwnerSupplyPartnerManager.yml
+    subAccountOwnerSupplyYieldManager:
+      $ref: ./parameters/subAccountOwnerSupplyYieldManager.yml
+    subAccountOwnerCreatedBy:
+      $ref: ./parameters/subAccountOwnerCreatedBy.yml
+    subAccountOwnerCreatedAtMin:
+      $ref: ./parameters/subAccountOwnerCreatedAtMin.yml
+    subAccountOwnerCreatedAtMax:
+      $ref: ./parameters/subAccountOwnerCreatedAtMax.yml
+    subAccountOwnerDeletedBy:
+      $ref: ./parameters/subAccountOwnerDeletedBy.yml
+    subAccountOwnerDeletedAtMin:
+      $ref: ./parameters/subAccountOwnerDeletedAtMin.yml
+    subAccountOwnerDeletedAtMax:
+      $ref: ./parameters/subAccountOwnerDeletedAtMax.yml
+    subAccountOwnerIsDeleted:
+      $ref: ./parameters/subAccountOwnerIsDeleted.yml
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'finance:read': Allows read access to svc-finance resources
+            'finance:write': Allows write access to svc-finance resources
+  schemas:
+    PayoutClause:
+      $ref: ./schemas/abstractPayoutClause.yml
+    RevenueClause:
+      $ref: ./schemas/abstractRevenueClause.yml
+    Account:
+      $ref: ./schemas/account.yml
+    AccountDeactivation:
+      $ref: ./schemas/accountDeactivation.yml
+    AccountDeactivationCreateData:
+      $ref: ./schemas/accountDeactivationCreateData.yml
+    AccountAdjustment:
+      $ref: ../ledger/schemas/accountAdjustment.yml
+    AccountAdjustmentCreateData:
+      $ref: ../ledger/schemas/accountAdjustmentCreateData.yml
+    AccountOwner:
+      $ref: ./schemas/accountOwners.yml
+    AccountOwnersWriteData:
+      $ref: ./schemas/accountOwnersWriteData.yml
+    AccountWriteData:
+      $ref: ./schemas/accountWriteData.yml
+    AdjustmentReason:
+      $ref: ../ledger/schemas/adjustmentReason.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    BillingCycle:
+      $ref: ../ledger/schemas/billingCycle.yml
+    BillingCycleCreateData:
+      $ref: ../ledger/schemas/billingCycleCreateData.yml
+    BillingCycleUpdateData:
+      $ref: ../ledger/schemas/billingCycleUpdateData.yml
+    CostPerCompletedApplicationPayoutClause:
+      $ref: ./schemas/payout-clauses/costPerCompletedApplication.yml
+    CostPerCompletedApplicationByCreditRatingPayoutClause:
+      $ref: ./schemas/payout-clauses/costPerCompletedApplicationByCreditRating.yml
+    CostPerCompletedApplicationBySubIdPayoutClause:
+      $ref: ./schemas/payout-clauses/costPerCompletedApplicationBySubId.yml
+    CostPerCreditCardApprovedRevenueClause:
+      $ref: ./schemas/revenue-clauses/costPerCreditCardApproved.yml
+    CostPerCreditCardOpenedRevenueClause:
+      $ref: ./schemas/revenue-clauses/costPerCreditCardOpened.yml
+    CostPerLeadPayoutClause:
+      $ref: ./schemas/payout-clauses/costPerLead.yml
+    CostPerLeadByCreditRatingPayoutClause:
+      $ref: ./schemas/payout-clauses/costPerLeadByCreditRating.yml
+    CostPerLeadBySubIdPayoutClause:
+      $ref: ./schemas/payout-clauses/costPerLeadBySubId.yml
+    CostPerLoanApprovedRevenueClause:
+      $ref: ./schemas/revenue-clauses/costPerLoanApproved.yml
+    CostPerLoanFundedRevenueClause:
+      $ref: ./schemas/revenue-clauses/costPerLoanFunded.yml
+    CostPerSavingsFundedRevenueClause:
+      $ref: ./schemas/revenue-clauses/costPerSavingsFunded.yml
+    CostPerSavingsOfferClickedRevenueClause:
+      $ref: ./schemas/revenue-clauses/costPerSavingsOfferClicked.yml
+    CostPerSavingsOpenedRevenueClause:
+      $ref: ./schemas/revenue-clauses/costPerSavingsOpened.yml
+    CostPerSubIdValue:
+      $ref: ./schemas/payout-clauses/costPerSubIdValue.yml
+    CreditCardImportConfigurationDetails:
+      $ref: ./schemas/demand-data/details/creditCardImportConfigurationDetails.yml
+    DemandContract:
+      type: object
+      title: DemandContract
+      required:
+        - id
+        - subAccountId
+        - effectiveAt
+        - revenueClauses
+        - createdAt
+        - createdBy
+      properties:
+        id:
+          title: Id
+          type: integer
+          format: int64
+        subAccountId:
+          title: Sub Account Id
+          type: integer
+          format: int64
+        effectiveAt:
+          title: Effective At
+          type: string
+          format: date
+        revenueClauses:
+          title: Revenue Clauses
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/RevenueClause'
+        createdAt:
+          title: Created At
+          type: string
+          format: date-time
+        createdBy:
+          title: Created By
+          type: string
+          format: uuid
+        deletedAt:
+          title: Deleted At
+          type: string
+          format: date-time
+        deletedBy:
+          title: Deleted By
+          type: string
+          format: uuid
+    DemandContractCreateData:
+      type: object
+      required:
+        - subAccountId
+        - effectiveAt
+        - revenueClauses
+      properties:
+        subAccountId:
+          title: Sub Account Id
+          type: integer
+          format: int64
+        effectiveAt:
+          title: Effective At
+          type: string
+          format: date
+        revenueClauses:
+          title: Revenue Clauses
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/RevenueClause'
+    DemandDataImport:
+      $ref: ./schemas/demand-data/demandDataImport.yml
+    DemandDataImportConfiguration:
+      $ref: ./schemas/demand-data/demandDataImportConfiguration.yml
+    DemandDataImportCreateData:
+      $ref: ./schemas/demand-data/demandDataImportCreateData.yml
+    DemandDataImportConfigurationCreateData:
+      $ref: ./schemas/demand-data/demandDataImportConfigurationCreateData.yml
+    DemandDataImportSource:
+      $ref: ./schemas/demand-data/demandDataImportSource.yml
+    DemandDataImportStatus:
+      $ref: ./schemas/demand-data/demandDataImportStatus.yml
+    DemandDataImportSummary:
+      $ref: ./schemas/demand-data/demandDataImportSummary.yml
+    DemandFeatureFlag:
+      $ref: ./schemas/sub-accounts/demand-sub-accounts/demandFeatureFlag.yml
+    DemandSubAccount:
+      $ref: ./schemas/sub-accounts/demand-sub-accounts/demandSubAccount.yml
+    DemandSubAccountCreateData:
+      $ref: >-
+        ./schemas/sub-accounts/demand-sub-accounts/demandSubAccountCreateData.yml
+    DemandSubAccountCriteria:
+      $ref: ./schemas/sub-accounts/demand-sub-accounts/demandSubAccountCriteria.yml
+    DemandSubAccountDeactivation:
+      $ref: ./schemas/demandSubAccountDeactivation.yml
+    DemandSubAccountDeactivationCreateData:
+      $ref: ./schemas/demandSubAccountDeactivationCreateData.yml
+    DemandSubAccountOwnerCreateData:
+      $ref: >-
+        ./schemas/sub-accounts/demand-sub-accounts/demandSubAccountOwnerCreateData.yml
+    DemandSubAccountUpdateData:
+      $ref: >-
+        ./schemas/sub-accounts/demand-sub-accounts/demandSubAccountUpdateData.yml
+    ExpectedEarningsShare:
+      $ref: ./schemas/expectedEarningsShare.yml
+    ExpectedEarningsShareCreateData:
+      $ref: ./schemas/expectedEarningsShareCreateData.yml
+    ExternalDemandEvent:
+      $ref: ./schemas/external-demand-event/externalDemandEvent.yml
+    ExternalDemandEventCreateData:
+      $ref: ./schemas/external-demand-event/externalDemandEventCreateData.yml
+    ExternalDemandEventDetails:
+      $ref: ./schemas/external-demand-event/externalDemandEventDetails.yml
+    ExternalDemandEventCreditCardDetails:
+      $ref: ./schemas/external-demand-event/details/creditCardDetails.yml
+    ExternalDemandEventLifeInsuranceDetails:
+      $ref: ./schemas/external-demand-event/details/lifeInsuranceDetails.yml
+    ExternalDemandEventLoanDetails:
+      $ref: ./schemas/external-demand-event/details/loanDetails.yml
+    ExternalDemandEventSavingsDetails:
+      $ref: ./schemas/external-demand-event/details/savingsDetails.yml
+    ExternalDemandEventSpecialOfferDetails:
+      $ref: ./schemas/external-demand-event/details/specialOfferDetails.yml
+    ExternalDemandEventType:
+      $ref: ./schemas/external-demand-event/externalDemandEventType.yml
+    ExtractorType:
+      $ref: ./schemas/demand-data/extractorType.yml
+    FileType:
+      $ref: ./schemas/demand-data/fileType.yml
+    GenericImportConfigurationDetails:
+      $ref: ./schemas/demand-data/details/genericImportConfigurationDetails.yml
+    ImportConfigurationDetails:
+      $ref: ./schemas/demand-data/details/importConfigurationDetails.yml
+    ProcessorInformation:
+      $ref: ./schemas/demand-data/processorInformation.yml
+    LedgerItem:
+      $ref: ../ledger/schemas/ledgerItem.yml
+    LedgerItemCreateData:
+      $ref: ../ledger/schemas/ledgerItemCreateData.yml
+    LedgerItemDetail:
+      $ref: ../ledger/schemas/ledgerItemDetail.yml
+    LedgerItemReason:
+      $ref: ../ledger/schemas/ledgerItemReason.yml
+    LedgerItemRecreateData:
+      $ref: ../ledger/schemas/ledgerItemRecreateData.yml
+    LedgerItemReconciliation:
+      $ref: ../ledger/schemas/ledgerItemReconciliation.yml
+    LedgerItemReconciliationCreateData:
+      $ref: ../ledger/schemas/ledgerItemReconciliationCreateData.yml
+    LedgerItemRegenerationBatch:
+      $ref: ../ledger/schemas/ledgerItemRegenerationBatch.yml
+    LedgerItemRegenerationBatchCreateData:
+      $ref: ../ledger/schemas/ledgerItemRegenerationBatchCreateData.yml
+    LedgerItemType:
+      $ref: ../ledger/schemas/ledgerItemType.yml
+    LegacySubAccount:
+      $ref: ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccount.yml
+    LegacySubAccountCreateData:
+      $ref: >-
+        ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccountCreateData.yml
+    LegacySubAccountCriteria:
+      $ref: ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccountCriteria.yml
+    LegacySubAccountOwner:
+      $ref: ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccountOwner.yml
+    LegacySubAccountUpdateData:
+      $ref: >-
+        ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccountUpdateData.yml
+    LifeInsuranceTermUnit:
+      $ref: ./schemas/external-demand-event/lifeInsuranceTermUnit.yml
+    LoanImportConfigurationDetails:
+      $ref: ./schemas/demand-data/details/loanImportConfigurationDetails.yml
+    OneOffLedgerItemCreateData:
+      $ref: ./schemas/oneOffLedgerItemCreateData.yml
+    OneOffLedgerItemDetails:
+      $ref: ./schemas/oneOffLedgerItemDetails.yml
+    Order:
+      $ref: ../core/schemas/order.yml
+    OtherRevenueRevenueClause:
+      $ref: ./schemas/revenue-clauses/otherRevenue.yml
+    FooPayoutClause:
+      oneOf:
+        - $ref: '#/components/schemas/CostPerCompletedApplicationPayoutClause'
+        - $ref: >-
+            #/components/schemas/CostPerCompletedApplicationByCreditRatingPayoutClause
+        - $ref: '#/components/schemas/CostPerCompletedApplicationBySubIdPayoutClause'
+        - $ref: '#/components/schemas/CostPerLeadPayoutClause'
+        - $ref: '#/components/schemas/CostPerLeadByCreditRatingPayoutClause'
+        - $ref: '#/components/schemas/CostPerLeadBySubIdPayoutClause'
+        - $ref: '#/components/schemas/RevenueShareCreditCardPayoutClause'
+        - $ref: '#/components/schemas/RevenueShareInsurancePayoutClause'
+        - $ref: '#/components/schemas/RevenueShareLoanPayoutClause'
+        - $ref: '#/components/schemas/RevenueShareMortgagePayoutClause'
+        - $ref: '#/components/schemas/RevenueShareOtherPayoutClause'
+        - $ref: '#/components/schemas/RevenueShareSavingsPayoutClause'
+      discriminator:
+        propertyName: key
+        mapping:
+          cost_per_completed_application: '#/components/schemas/CostPerCompletedApplicationPayoutClause'
+          cost_per_completed_application_by_credit_rating: >-
+            #/components/schemas/CostPerCompletedApplicationByCreditRatingPayoutClause
+          cost_per_completed_application_by_sub_id: '#/components/schemas/CostPerCompletedApplicationBySubIdPayoutClause'
+          cost_per_lead: '#/components/schemas/CostPerLeadPayoutClause'
+          cost_per_lead_by_credit_rating: '#/components/schemas/CostPerLeadByCreditRatingPayoutClause'
+          cost_per_lead_by_sub_id: '#/components/schemas/CostPerLeadBySubIdPayoutClause'
+          revenue_share_credit_card: '#/components/schemas/RevenueShareCreditCardPayoutClause'
+          revenue_share_insurance: '#/components/schemas/RevenueShareInsurancePayoutClause'
+          revenue_share_loan: '#/components/schemas/RevenueShareLoanPayoutClause'
+          revenue_share_mortgage: '#/components/schemas/RevenueShareMortgagePayoutClause'
+          revenue_share_other: '#/components/schemas/RevenueShareOtherPayoutClause'
+          revenue_share_savings: '#/components/schemas/RevenueShareSavingsPayoutClause'
+    PayableSummary:
+      $ref: ../ledger/schemas/payableSummary.yml
+    PercentGrossFundedLoanAmountRevenueClause:
+      $ref: ./schemas/revenue-clauses/percentGrossFundedLoanAmount.yml
+    PercentOriginationFeeRevenueClause:
+      $ref: ./schemas/revenue-clauses/percentOriginationFee.yml
+    ProductSubType:
+      $ref: ../lead/schemas/productSubType.yml
+    ProductType:
+      $ref: ../core/schemas/productType.yml
+    ReceivableSummary:
+      $ref: ../ledger/schemas/receivableSummary.yml
+    FooRevenueClause:
+      oneOf:
+        - $ref: '#/components/schemas/CostPerCreditCardApprovedRevenueClause'
+        - $ref: '#/components/schemas/CostPerCreditCardOpenedRevenueClause'
+        - $ref: '#/components/schemas/CostPerLoanApprovedRevenueClause'
+        - $ref: '#/components/schemas/CostPerLoanFundedRevenueClause'
+        - $ref: '#/components/schemas/CostPerSavingsFundedRevenueClause'
+        - $ref: '#/components/schemas/CostPerSavingsOfferClickedRevenueClause'
+        - $ref: '#/components/schemas/CostPerSavingsOpenedRevenueClause'
+        - $ref: '#/components/schemas/OtherRevenueRevenueClause'
+        - $ref: '#/components/schemas/PercentGrossFundedLoanAmountRevenueClause'
+        - $ref: '#/components/schemas/PercentOriginationFeeRevenueClause'
+      discriminator:
+        propertyName: key
+        mapping:
+          cost_per_credit_card/approved: '#/components/schemas/CostPerCreditCardApprovedRevenueClause'
+          cost_per_credit_card/opened: '#/components/schemas/CostPerCreditCardOpenedRevenueClause'
+          cost_per_loan/approved: '#/components/schemas/CostPerLoanApprovedRevenueClause'
+          cost_per_loan/funded: '#/components/schemas/CostPerLoanFundedRevenueClause'
+          cost_per_savings/funded: '#/components/schemas/CostPerSavingsFundedRevenueClause'
+          cost_per_savings/offer_clicked: '#/components/schemas/CostPerSavingsOfferClickedRevenueClause'
+          cost_per_savings/opened: '#/components/schemas/CostPerSavingsOpenedRevenueClause'
+          other_revenue: '#/components/schemas/OtherRevenueRevenueClause'
+          percent_gross_funded_loan_amount: '#/components/schemas/PercentGrossFundedLoanAmountRevenueClause'
+          percent_origination_fee: '#/components/schemas/PercentOriginationFeeRevenueClause'
+    RevenueShareCreditCardPayoutClause:
+      $ref: ./schemas/payout-clauses/revenueShareCreditCard.yml
+    RevenueShareInsurancePayoutClause:
+      $ref: ./schemas/payout-clauses/revenueShareInsurance.yml
+    RevenueShareLoanPayoutClause:
+      $ref: ./schemas/payout-clauses/revenueShareLoan.yml
+    RevenueShareMortgagePayoutClause:
+      $ref: ./schemas/payout-clauses/revenueShareMortgage.yml
+    RevenueShareOtherPayoutClause:
+      $ref: ./schemas/payout-clauses/revenueShareOther.yml
+    RevenueShareSavingsPayoutClause:
+      $ref: ./schemas/payout-clauses/revenueShareSavings.yml
+    SavingsImportConfigurationDetails:
+      $ref: ./schemas/demand-data/details/savingsImportConfigurationDetails.yml
+    SubAccount:
+      $ref: ./schemas/sub-accounts/subAccount.yml
+    SubAccountCreateData:
+      $ref: ./schemas/sub-accounts/subAccountCreateData.yml
+    SubAccountCriteria:
+      $ref: ./schemas/sub-accounts/subAccountCriteria.yml
+    SubAccountExternalDemandEvent:
+      $ref: ./schemas/external-demand-event/subAccountExternalDemandEvent.yml
+    SubAccountExternalDemandEventCreateData:
+      $ref: >-
+        ./schemas/external-demand-event/subAccountExternalDemandEventCreateData.yml
+    SubAccountFeatureFlag:
+      $ref: ./schemas/sub-accounts/subAccountFeatureFlag.yml
+    SubAccountOwner:
+      $ref: ./schemas/sub-accounts/subAccountOwner.yml
+    SubAccountOwnerCriteria:
+      $ref: ./schemas/sub-accounts/subAccountOwnerCriteria.yml
+    SubAccountType:
+      $ref: ./schemas/sub-accounts/subAccountType.yml
+    SubAccountUpdateData:
+      $ref: ./schemas/sub-accounts/subAccountUpdateData.yml
+    SupplyContract:
+      type: object
+      title: SupplyContract
+      required:
+        - id
+        - subAccountId
+        - effectiveAt
+        - payoutClauses
+        - createdAt
+        - createdBy
+      properties:
+        id:
+          title: Id
+          type: integer
+          format: int64
+        subAccountId:
+          title: Sub Account Id
+          type: integer
+          format: int64
+        effectiveAt:
+          title: Effective At
+          type: string
+          format: date
+        payoutClauses:
+          title: Payout Clauses
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PayoutClause'
+        createdAt:
+          title: Created At
+          type: string
+          format: date-time
+        createdBy:
+          title: Created By
+          type: string
+          format: uuid
+        deletedAt:
+          title: Deleted At
+          type: string
+          format: date-time
+        deletedBy:
+          title: Deleted By
+          type: string
+          format: uuid
+    SupplyContractCreateData:
+      type: object
+      title: SupplyContract
+      required:
+        - subAccountId
+        - effectiveAt
+        - payoutClauses
+      properties:
+        subAccountId:
+          title: Sub Account Id
+          type: integer
+          format: int64
+        effectiveAt:
+          title: Effective At
+          type: string
+          format: date
+        payoutClauses:
+          title: Payout Clauses
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/PayoutClause'
+    SupplyFeatureFlag:
+      $ref: ./schemas/sub-accounts/supply-sub-accounts/supplyFeatureFlag.yml
+    SupplySubAccount:
+      $ref: ./schemas/sub-accounts/supply-sub-accounts/supplySubAccount.yml
+    SupplySubAccountCreateData:
+      $ref: >-
+        ./schemas/sub-accounts/supply-sub-accounts/supplySubAccountCreateData.yml
+    SupplySubAccountCriteria:
+      $ref: ./schemas/sub-accounts/supply-sub-accounts/supplySubAccountCriteria.yml
+    SupplySubAccountDeactivation:
+      $ref: ./schemas/supplySubAccountDeactivation.yml
+    SupplySubAccountDeactivationCreateData:
+      $ref: ./schemas/supplySubAccountDeactivationCreateData.yml
+    SupplySubAccountIntegrationType:
+      $ref: ./schemas/sub-accounts/supply-sub-accounts/integrationType.yml
+    SupplySubAccountOwnerCreateData:
+      $ref: >-
+        ./schemas/sub-accounts/supply-sub-accounts/supplySubAccountOwnerCreateData.yml
+    SupplySubAccountUpdateData:
+      $ref: >-
+        ./schemas/sub-accounts/supply-sub-accounts/supplySubAccountUpdateData.yml
+    ReconciliationType:
+      $ref: ../ledger/schemas/reconciliationType.yml
+    TermUnit:
+      $ref: ../ledger/schemas/termUnit.yml
+    TransformerType:
+      $ref: ./schemas/demand-data/transformerType.yml
+    LedgerItemSettlement:
+      $ref: ./schemas/ledgerItemSettlement.yml
+    LedgerItemSettlementCreateData:
+      $ref: ./schemas/ledgerItemSettlementCreateData.yml
+    LedgerItemSettlementSort:
+      $ref: ./schemas/ledgerItemSettlementSort.yml
+    LedgerItemSettlementStatus:
+      $ref: ./schemas/ledgerItemSettlementStatus.yml
+  responses:
+    InvalidRequest:
+      $ref: ../core/responses/invalidRequest.yml
+    MalformedRequest:
+      $ref: ../core/responses/malformedRequest.yml
+    UnauthorizedRequest:
+      $ref: ../core/responses/unauthorizedRequest.yml
+    UnknownId:
+      $ref: ../core/responses/unknownId.yml
+tags:
+  - name: Account
+    description: >-
+      Accounts are representations of our supply and demand partners. Each
+      account contains identifying information about the partner including
+      billing related requirements.
+  - name: Account Adjustment
+    description: >-
+      Adjustments are applied to a payable or receivable to reconcile any
+      monetary differences not captured in our system.
+  - name: Account Deactivation
+  - name: Billing Cycle
+    description: >-
+      Billing cycles are a schedyle, length, and payment-due agreement of a
+      recurring pay period for invoicing.
+  - name: Contract
+    description: >-
+      Contracts are used to calculate how we expect to be paid by demand
+      partners, and how we pay supply partners.
+  - name: Demand Data Import
+    description: >-
+      Partner provided information that is imported into our systems and
+      transformed into external demand events.
+  - name: Demand Data Import Configuration
+    description: A defined set of standards and processes that can be applied to DDI files
+  - name: Demand Sub-Account
+    description: >-
+      Demand Sub Accounts are child accounts associated with a parent Account
+      and represent our demand partners. They can be created per vertical or
+      integration type. A demand sub-account represents a single integration
+      with a financial institution.
+  - name: Demand Sub-Account Deactivation
+  - name: Expected Earnings Share
+    description: >-
+      A representation of the amount of margin we make based off of payout for
+      clicks
+  - name: External Demand Event
+    description: >-
+      Events that happen on the demand partner side that contribute to our
+      financials and / or modelling.
+  - name: Ledger Item
+    description: >-
+      Ledger items are used to capture and calculate financial informations for
+      our partners.
+  - name: Ledger Item Reconciliation
+    description: >-
+      A manual resolving of a Ledger Item -- this is how business will indicate
+      that they have either paid, ignored, or otherwise resolved the amount of
+      money owed to the Account referenced by the Ledger Item. This, in
+      combination with the due date indicated on the invoice will show if we are
+      past due on any payable or receivable.
+  - name: Ledger Item Settlement
+  - name: Sub-Account
+    description: A unified view of demand and supply sub-accounts
+  - name: Sub-Account External Demand Event
+    description: >-
+      Events that happen on the demand partner side that contribute to our
+      financials and / or modelling and are specifically tied to a sub-account.
+  - name: Supply Sub-Account
+    description: >-
+      Supply Sub Accounts are child accounts associated with a parent Account
+      and represent our supply partners. They can be created per vertical or
+      integration type A supply sub-account represents a single supply channel
+  - name: Supply Sub-Account Deactivation
+paths:
+  /demandContracts:
+    get:
+      summary: Get demand contracts
+      description: Return demand contracts based on request parameters
+      operationId: getDemandContracts
+      tags:
+        - Contract
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of demand contract IDs
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: subAccountId
+          in: query
+          description: A comma separated list of sub-account IDs
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: productType
+          in: query
+          description: Product types associated with the contract's sub-account.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductType'
+        - name: effectiveAt
+          in: query
+          description: contract effective at date
+          schema:
+            type: string
+            format: date
+        - name: effectiveAtMax
+          in: query
+          description: max effective at date for contract
+          schema:
+            type: string
+            format: date
+        - name: effectiveAtMin
+          in: query
+          description: min effective at date for contract
+          schema:
+            type: string
+            format: date
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemandContract'
+    post:
+      summary: Create a demand contract
+      description: Create a demand contract
+      operationId: createDemandContract
+      tags:
+        - Contract
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: A demand contract object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DemandContractCreateData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemandContract'
+  '/demandContracts/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a demand contract
+      description: Delete a demand contract
+      operationId: deleteDemandContract
+      tags:
+        - Contract
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+        '404':
+          $ref: '#/components/responses/UnknownId'
+  /supplyContracts:
+    get:
+      summary: Get supply contracts
+      description: Return supply contracts based on request parameters
+      operationId: getSupplyContracts
+      tags:
+        - Contract
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of demand contract IDs
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: subAccountId
+          in: query
+          description: A comma separated list of sub-account IDs
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: effectiveAt
+          in: query
+          description: contract effective at date
+          schema:
+            type: string
+            format: date
+        - name: effectiveAtMax
+          in: query
+          description: max effective at date for contract
+          schema:
+            type: string
+            format: date
+        - name: effectiveAtMin
+          in: query
+          description: min effective at date for contract
+          schema:
+            type: string
+            format: date
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplyContract'
+    post:
+      summary: Create a supply contract
+      description: Create a supply contract based on the request
+      operationId: createSupplyContract
+      tags:
+        - Contract
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: A supply contract object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplyContractCreateData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplyContract'
+  '/supplyContracts/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a supply contract
+      description: Delete a supply contract
+      operationId: deleteSupplyContract
+      tags:
+        - Contract
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+        '404':
+          $ref: '#/components/responses/UnknownId'
+  /demandSubAccounts:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get demand sub-accounts
+      description: Get a list of demand sub-accounts filtered by relevant query parameters
+      operationId: getDemandSubAccounts
+      tags:
+        - Demand Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/uuid'
+        - $ref: '#/components/parameters/accountId'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/companyUuid'
+        - $ref: '#/components/parameters/displayName'
+        - name: productType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductType'
+        - $ref: '#/components/parameters/createdBy'
+        - $ref: '#/components/parameters/createdAt'
+        - $ref: '#/components/parameters/excludeDeleted'
+        - $ref: '#/components/parameters/includeDeactivated'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sortBy'
+        - $ref: '#/components/parameters/order'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: >-
+                    ./schemas/sub-accounts/demand-sub-accounts/demandSubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a demand sub-account
+      description: Create a demand sub-account based on the request
+      operationId: createDemandSubAccount
+      tags:
+        - Demand Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: Demand sub-account creation fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/demand-sub-accounts/demandSubAccountCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  ./schemas/sub-accounts/demand-sub-accounts/demandSubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccountId:
+                  summary: The request body did not include 'accountId'
+                  value:
+                    - attribute: accountId
+                      type: missing
+                      message: accountId must be specified
+                missingName:
+                  summary: The request body did not include 'name'
+                  value:
+                    - attribute: name
+                      type: missing
+                      message: name must be specified
+                missingDisplayName:
+                  summary: The request body did not include 'displayName'
+                  value:
+                    - attribute: displayName
+                      type: missing
+                      message: displayName must be specified
+                missingRoles:
+                  summary: The request body did not include 'roles'
+                  value:
+                    - attribute: roles
+                      type: missing
+                      message: roles must be specified
+  '/demandSubAccounts/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    put:
+      summary: Update a demand sub-account
+      description: >
+        Updates the fields of a demand sub-account that corresponds to the ID in
+        the URL path, if on exists
+      operationId: updateDemandSubAccount
+      tags:
+        - Demand Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: Update fields for demand sub-account
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/demand-sub-accounts/demandSubAccountUpdateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  ./schemas/sub-accounts/demand-sub-accounts/demandSubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingName:
+                  summary: The request body did not include 'name'
+                  value:
+                    - attribute: name
+                      type: missing
+                      message: name must be specified
+                missingDisplayName:
+                  summary: The request body did not include 'displayName'
+                  value:
+                    - attribute: displayName
+                      type: missing
+                      message: displayName must be specified
+    delete:
+      summary: Delete a demand sub-account
+      description: >
+        Soft delete the demand sub-account corresponding to the ID in URL path,
+        if one exists
+      operationId: deleteDemandSubAccount
+      tags:
+        - Demand Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /demandSubAccounts/owners:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get a demand sub-account owner
+      description: Get a list of Sub Account Owners filtered by relevant query parameters
+      operationId: getDemandSubAccountOwners
+      tags:
+        - Demand Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/subAccountOwnerId'
+        - $ref: '#/components/parameters/subAccountOwnerDemandPartnerManager'
+        - $ref: '#/components/parameters/subAccountOwnerDemandYieldManager'
+        - $ref: '#/components/parameters/subAccountOwnerSupplyPartnerManager'
+        - $ref: '#/components/parameters/subAccountOwnerSupplyYieldManager'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedBy'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedAtMin'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedAtMax'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedBy'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedAtMin'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedAtMax'
+        - $ref: '#/components/parameters/subAccountOwnerIsDeleted'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/sub-accounts/subAccountOwner.yml
+  /demandSubAccounts/searches:
+    post:
+      summary: Search for demand sub-accounts
+      description: >-
+        Get a list of Demand sub-accounts based off search parameters sent in
+        request body
+      operationId: searchDemandSubAccounts
+      tags:
+        - Demand Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/demand-sub-accounts/demandSubAccountCriteria.yml
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: >-
+                    ./schemas/sub-accounts/demand-sub-accounts/demandSubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /externalDemandEvents:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get external demand events
+      description: Get external demand events
+      operationId: getExternalDemandEvents
+      tags:
+        - External Demand Event
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - name: leadUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: subAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: eventType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ExternalDemandEventType'
+        - name: partnerTrackingId
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdByUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: minId
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: timestampFrom
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: timestampTo
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - $ref: '#/components/parameters/excludeDeleted'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sortBy'
+        - $ref: '#/components/parameters/order'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalDemandEvent'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+    post:
+      summary: Create external demand event
+      description: Create external demand event
+      operationId: createExternalDemandEvent
+      tags:
+        - External Demand Event
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalDemandEventCreateData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccount.yml
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '409':
+          $ref: '#/components/responses/InvalidRequest'
+  '/externalDemandEvents/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete an external demand event
+      description: Delete an external demand event
+      operationId: deleteExternalDemandEvent
+      tags:
+        - External Demand Event
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '404':
+          description: Unknown ID
+  /subAccounts:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get sub-accounts
+      description: Get sub-accounts
+      operationId: getSubAccounts
+      tags:
+        - Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/uuid'
+        - $ref: '#/components/parameters/accountId'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/companyUuid'
+        - $ref: '#/components/parameters/displayName'
+        - $ref: '#/components/parameters/subAccountTypeKey'
+        - $ref: '#/components/parameters/createdBy'
+        - $ref: '#/components/parameters/createdAt'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sortBy'
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/excludeDeleted'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: >-
+                    ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccount.yml
+        '400':
+          description: Malformed request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a sub-account
+      description: Create a sub-account based on the request
+      operationId: createSubAccount
+      tags:
+        - Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: Sub-account creation fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccountCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccountId:
+                  summary: The request body did not include 'accountId'
+                  value:
+                    - attribute: accountId
+                      type: missing
+                      message: accountId must be specified
+                missingSubAccountType:
+                  summary: The request body did not include 'subAccountType'
+                  value:
+                    - attribute: subAccountType
+                      type: missing
+                      message: subAccountType must be specified
+                missingName:
+                  summary: The request body did not include 'name'
+                  value:
+                    - attribute: name
+                      type: missing
+                      message: name must be specified
+                missingDisplayName:
+                  summary: The request body did not include 'displayName'
+                  value:
+                    - attribute: displayName
+                      type: missing
+                      message: displayName must be specified
+                missingRoles:
+                  summary: The request body did not include 'roles'
+                  value:
+                    - attribute: roles
+                      type: missing
+                      message: roles must be specified
+  '/subAccounts/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    put:
+      summary: Update a sub-account
+      description: >
+        Updates the fields of a sub-account that corresponds to the ID in the
+        URL path, if on exists
+      operationId: updateSubAccount
+      tags:
+        - Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: Update fields for sub-account
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccountUpdateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingName:
+                  summary: The request body did not include 'name'
+                  value:
+                    - attribute: name
+                      type: missing
+                      message: name must be specified
+                missingDisplayName:
+                  summary: The request body did not include 'displayName'
+                  value:
+                    - attribute: displayName
+                      type: missing
+                      message: displayName must be specified
+    delete:
+      summary: Delete a sub-account
+      description: >
+        Soft delete the sub-account corresponding to the ID in URL path, if one
+        exists
+      operationId: deleteSubAccount
+      tags:
+        - Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /subAccounts/owners:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get sub-account owners
+      description: Get a list of sub-account owners filtered by relevant query parameters
+      operationId: getSubAccountOwners
+      tags:
+        - Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/subAccountOwnerId'
+        - $ref: '#/components/parameters/subAccountOwnerDemandPartnerManager'
+        - $ref: '#/components/parameters/subAccountOwnerDemandYieldManager'
+        - $ref: '#/components/parameters/subAccountOwnerSupplyPartnerManager'
+        - $ref: '#/components/parameters/subAccountOwnerSupplyYieldManager'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedBy'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedAtMin'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedAtMax'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedBy'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedAtMin'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedAtMax'
+        - $ref: '#/components/parameters/subAccountOwnerIsDeleted'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: >-
+                    ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccountOwner.yml
+  /subAccounts/search:
+    x-lint-skip:
+      - path-resource-is-plural
+    post:
+      summary: Search for sub-accounts
+      description: >-
+        Get a list of sub-accounts based off search parameters sent in request
+        body
+      operationId: searchSubAccounts
+      tags:
+        - Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccountCriteria.yml
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: >-
+                    ./schemas/sub-accounts/legacy-sub-accounts/legacySubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /subAccounts/types:
+    get:
+      summary: Get sub-account types
+      operationId: getSubAccountTypes
+      tags:
+        - Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/sub-accounts/subAccountType.yml
+  /supplySubAccounts:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get supply sub-accounts
+      description: Get a list of supply sub-accounts filtered by relevant query parameters
+      operationId: getSupplySubAccounts
+      tags:
+        - Supply Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/uuid'
+        - $ref: '#/components/parameters/accountId'
+        - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/companyUuid'
+        - $ref: '#/components/parameters/displayName'
+        - $ref: '#/components/parameters/createdBy'
+        - $ref: '#/components/parameters/createdAt'
+        - $ref: '#/components/parameters/excludeDeleted'
+        - $ref: '#/components/parameters/includeDeactivated'
+        - $ref: '#/components/parameters/limit'
+        - $ref: '#/components/parameters/offset'
+        - $ref: '#/components/parameters/sortBy'
+        - $ref: '#/components/parameters/order'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: >-
+                    ./schemas/sub-accounts/supply-sub-accounts/supplySubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a supply sub-account
+      description: Create a supply sub-account
+      operationId: createSupplySubAccount
+      tags:
+        - Supply Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: Supply sub-account creation fields
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/supply-sub-accounts/supplySubAccountCreateData.yml
+      responses:
+        '201':
+          description: The supply sub-account was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  ./schemas/sub-accounts/supply-sub-accounts/supplySubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccountId:
+                  summary: The request body did not include 'accountId'
+                  value:
+                    - attribute: accountId
+                      type: missing
+                      message: accountId must be specified
+                missingName:
+                  summary: The request body did not include 'name'
+                  value:
+                    - attribute: name
+                      type: missing
+                      message: name must be specified
+                missingDisplayName:
+                  summary: The request body did not include 'displayName'
+                  value:
+                    - attribute: displayName
+                      type: missing
+                      message: displayName must be specified
+                missingRoles:
+                  summary: The request body did not include 'roles'
+                  value:
+                    - attribute: roles
+                      type: missing
+                      message: roles must be specified
+  '/supplySubAccounts/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    put:
+      summary: Update a supply sub-account
+      description: >
+        Updates the fields of a supply sub-account that corresponds to the ID in
+        the URL path, if on exists
+      operationId: updateSupplySubAccount
+      tags:
+        - Supply Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: Update fields for supply sub-account
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/supply-sub-accounts/supplySubAccountUpdateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  ./schemas/sub-accounts/supply-sub-accounts/supplySubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingName:
+                  summary: The request body did not include 'name'
+                  value:
+                    - attribute: name
+                      type: missing
+                      message: name must be specified
+                missingDisplayName:
+                  summary: The request body did not include 'displayName'
+                  value:
+                    - attribute: displayName
+                      type: missing
+                      message: displayName must be specified
+    delete:
+      summary: Delete a supply sub-account
+      description: >
+        Soft delete the supply sub-account corresponding to the Id in URL path,
+        if one exists
+      operationId: deleteSupplySubAccount
+      tags:
+        - Supply Sub-Account
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /supplySubAccounts/owners:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: get a supply sub-account owner
+      description: Get a list of Sub Account Owners filtered by relevant query parameters
+      operationId: getSupplySubAccountOwners
+      tags:
+        - Supply Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/subAccountOwnerId'
+        - $ref: '#/components/parameters/subAccountOwnerDemandPartnerManager'
+        - $ref: '#/components/parameters/subAccountOwnerDemandYieldManager'
+        - $ref: '#/components/parameters/subAccountOwnerSupplyPartnerManager'
+        - $ref: '#/components/parameters/subAccountOwnerSupplyYieldManager'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedBy'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedAtMin'
+        - $ref: '#/components/parameters/subAccountOwnerCreatedAtMax'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedBy'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedAtMin'
+        - $ref: '#/components/parameters/subAccountOwnerDeletedAtMax'
+        - $ref: '#/components/parameters/subAccountOwnerIsDeleted'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/sub-accounts/subAccountOwner.yml
+  /supplySubAccounts/searches:
+    post:
+      summary: Search for supply sub-accounts
+      description: >-
+        Get a list of supply sub-accounts based off search parameters sent in
+        request body
+      operationId: searchSupplySubAccounts
+      tags:
+        - Supply Sub-Account
+      security:
+        - oauth:
+            - 'finance:read'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/sub-accounts/supply-sub-accounts/supplySubAccountCriteria.yml
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: >-
+                    ./schemas/sub-accounts/supply-sub-accounts/supplySubAccount.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /accounts:
+    get:
+      summary: Get accounts
+      description: Return accounts based upon request parameters
+      operationId: getAccounts
+      tags:
+        - Account
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: uuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: name
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: email
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: address1
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: address2
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: address3
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: city
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: state
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: zipcode
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: country
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: phoneNumber
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: billingName
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: receivableBillingName
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: billingSetup
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - $ref: '#/components/parameters/includeDeactivated'
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/account.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a account
+      description: Create a account
+      operationId: createAccount
+      tags:
+        - Account
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountWriteData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/account.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/accounts/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: Supply Sub Account id
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete an account
+      description: Delete an account
+      operationId: deleteAccount
+      tags:
+        - Account
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Unknown ID
+    put:
+      summary: Update an account
+      description: >
+        Updates the fields of an Account that corresponds to the id in the URL
+        path, if on exists
+      operationId: updateAccount
+      tags:
+        - Account
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        description: Update fields for Account
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountWriteData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/account.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingName:
+                  summary: The request body did not include 'name'
+                  value:
+                    - attribute: name
+                      type: missing
+                      message: name must be specified
+  /accounts/owners:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get account owners
+      description: |
+        Return a list of account owners based on request parameters
+      operationId: getAccountOwners
+      tags:
+        - Account
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: accountOwnerId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: accountOwnerAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: accountOwnerSupplyPartnerManager
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: accountOwnerDemandPartnerManager
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: accountOwnerSupplyYieldManager
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: accountOwnerDemandYieldManager
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: accountOwnerCreatedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: accountOwnerCreatedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: accountOwnerCreatedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: accountOwnerDeletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: accountOwnerDeletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: accountOwnerIsDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: accountOwnerDeletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/accountOwners.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/accounts/owners/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: Account Owner id
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete an account owner
+      description: Delete an account owner
+      operationId: deleteAccountOwner
+      tags:
+        - Account
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Unknown ID
+  /accountAdjustments:
+    get:
+      summary: Get account adjustments
+      description: |
+        Returns a list of account adjustments that match the specified criteria
+      operationId: getAccountAdjustments
+      tags:
+        - Account Adjustment
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of adjustment ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: accountId
+          in: query
+          description: A comma separated list of Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: ledgerItemIds
+          in: query
+          description: A comma separated list of Ledger Item ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: adjustmentReason
+          in: query
+          description: Reason for account adjustment based on a defined enum
+          schema:
+            type: array
+            items:
+              $ref: ../ledger/schemas/adjustmentReason.yml
+        - name: q
+          in: query
+          description: Fuzzy search parameter
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdAtStart
+          in: query
+          description: beginning of the createdAt range
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtEnd
+          in: query
+          description: end of the createdAt range
+          schema:
+            type: string
+            format: date-time
+        - name: createdByUuids
+          in: query
+          description: comma separated list of uuids
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtStart
+          in: query
+          description: beginning of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtEnd
+          in: query
+          description: end of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedByUuids
+          in: query
+          description: comma separated list of uuids
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          description: 'limit the results, default 100'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: 'at what offset do you want to start looking at, default 0'
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          description: 'how do you want to sort, default created_at'
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          schema:
+            $ref: ../core/schemas/order.yml
+        - name: excludeDeleted
+          description: 'ignored deleted items, default true'
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../ledger/schemas/accountAdjustment.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value:
+                    - message: Query parameter 'limit' must be defined
+                missingOffset:
+                  summary: The request did not include an 'offset' query parameter
+                  value:
+                    - message: Query parameter 'offset' must be defined
+    post:
+      summary: Create an account adjustment
+      operationId: createAccountAdjustment
+      tags:
+        - Account Adjustment
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../ledger/schemas/accountAdjustmentCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../ledger/schemas/accountAdjustment.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccountId:
+                  summary: The request body did not include 'accountId'
+                  value:
+                    - attribute: accountId
+                      type: missing
+                      message: accountId must be specified
+                missingAmount:
+                  summary: The request body did not include 'amount'
+                  value:
+                    - attribute: amount
+                      type: missing
+                      message: amount must be specified
+                missingAdjustmentReason:
+                  summary: The request body did not include 'adjustmentReason'
+                  value:
+                    - attribute: adjustmentReason
+                      type: missing
+                      message: adjustmentReason must be specified
+  '/accountAdjustments/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: account adjustment id
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete an account adjustment
+      description: >
+        Soft delete the account adjustment corresponding to the specified ID in
+        URL path, if one exists
+      operationId: deleteAccountAdjustment
+      tags:
+        - Account Adjustment
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /adjustmentsReasons:
+    get:
+      summary: Get valid account adjustment reasons
+      operationId: getAdjustmentReasons
+      tags:
+        - Account Adjustment
+      security:
+        - oauth:
+            - 'finance:read'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../ledger/schemas/adjustmentReason.yml
+  /billingCycles:
+    get:
+      summary: Get billing cycles
+      description: |
+        Return a list of billing cycles that match the specified criteria
+      operationId: getBillingCycles
+      tags:
+        - Billing Cycle
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of Ledger Item ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: accountIds
+          in: query
+          description: A comma separated list of Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: ledgerItemType
+          in: query
+          description: 'Ledger Item Type, either payable or receivable'
+          schema:
+            type: array
+            items:
+              type: string
+        - name: effectiveAtStart
+          in: query
+          description: beginning of effectiveAt range
+          schema:
+            type: array
+            items:
+              type: string
+              format: date
+        - name: effectiveAtEnd
+          in: query
+          description: end of effectiveAt range
+          schema:
+            type: string
+            format: date
+        - name: netD
+          in: query
+          description: The amount of time allowed between cycle end and payment due
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdAtStart
+          in: query
+          description: start of createdAtStart range
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtEnd
+          in: query
+          description: end of createdAtStart range
+          schema:
+            type: string
+            format: date-time
+        - name: createdByUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtStart
+          in: query
+          description: start of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtEnd
+          in: query
+          description: end of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedByUuid
+          in: query
+          description: comma separated list of uuid
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          description: 'limit the results, default 100'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: default 0
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: default asc
+          schema:
+            $ref: ../core/schemas/order.yml
+        - name: excludeDeleted
+          in: query
+          description: 'ignore deleted items, default true'
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../ledger/schemas/billingCycle.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value:
+                    - message: Query parameter 'limit' must be specified
+    post:
+      summary: Record a billing cycle
+      operationId: createBillingCycle
+      tags:
+        - Billing Cycle
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../ledger/schemas/billingCycleCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../ledger/schemas/billingCycle.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccountId:
+                  summary: The request body did not include 'accountId'
+                  value:
+                    - attribute: accountId
+                      type: missing
+                      message: accountId must be specified
+                missingLedgerItemType:
+                  summary: The request body did not include 'ledgerItemType'
+                  value:
+                    - attribute: ledgerItemType
+                      type: missing
+                      message: ledgerItemType must be specified
+                missingEffectiveAt:
+                  summary: The request body did not include 'effectiveAt'
+                  value:
+                    - attribute: effectiveAt
+                      type: missing
+                      message: effectiveAt must be specified
+                missingTermUnit:
+                  summary: The request body did not include 'termUnit'
+                  value:
+                    - attribute: termUnit
+                      type: missing
+                      message: termUnit must be specified
+                missingNetD:
+                  summary: The request body did not include 'netD'
+                  value:
+                    - attribute: netD
+                      type: missing
+                      message: netD must be specified
+  '/billingCycles/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    put:
+      summary: Update a billing cycle
+      description: >
+        Updates the memo field of the ledger item corresponding to the specified
+        ID in URL path, if one exists
+      operationId: updateBillingCycle
+      tags:
+        - Billing Cycle
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../ledger/schemas/billingCycleUpdateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../ledger/schemas/billingCycle.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingEndDate:
+                  summary: The request body did not include 'endDate'
+                  value:
+                    - attribute: endDate
+                      type: missing
+                      message: endDate must be specified
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    delete:
+      summary: Delete a billing cycle
+      description: >
+        Soft delete the billing cycle corresponding to the specified ID in URL
+        path, if one exists
+      operationId: deleteBillingCycle
+      tags:
+        - Billing Cycle
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /billingCycles/generateLedgerItems:
+    post:
+      summary: Generate ledger items
+      description: |
+        Generate a list of ledger items based on a specifed date
+      operationId: generateLedgerItemsForDate
+      tags:
+        - Billing Cycle
+      security:
+        - oauth:
+            - 'finance:write'
+      parameters:
+        - name: generateForDate
+          in: query
+          description: A date you want to generate the ledger items for
+          schema:
+            type: string
+            format: date
+      responses:
+        '204':
+          description: Success
+        '422':
+          description: Invalid request
+  /ledgerItems:
+    get:
+      summary: Get ledger items
+      description: |
+        Returns a list of ledger items that match the specified criteria.
+      operationId: getLedgerItems
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of Ledger Item ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: accountIds
+          in: query
+          description: A comma separated list of Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: startDate
+          in: query
+          description: ledger item start date
+          schema:
+            type: array
+            items:
+              type: string
+              format: date
+        - name: endDate
+          in: query
+          description: ledger item end date
+          schema:
+            type: string
+            format: date
+        - name: dueDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: ledgerItemType
+          in: query
+          description: 'Ledger Item Type, either payable or receivable'
+          schema:
+            type: array
+            items:
+              type: string
+        - name: reconciliationType
+          in: query
+          description: 'Reconciliation type, either paid or ignored'
+          schema:
+            type: array
+            items:
+              type: string
+        - name: reason
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/LedgerItemReason'
+          x-implementation-state: none
+        - name: netD
+          in: query
+          description: The amount of time allowed between cycle end and payment due
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: q
+          in: query
+          description: Fuzzy search parameter
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdAtStart
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtEnd
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtStart
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtEnd
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          schema:
+            $ref: ../core/schemas/order.yml
+        - name: excludeDeleted
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../ledger/schemas/ledgerItem.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value:
+                    - message: Query parameter 'limit' must be defined
+                missingOffset:
+                  summary: The request did not include an 'offset' query parameter
+                  value:
+                    - message: Query parameter 'offset' must be defined
+    post:
+      summary: Create ledger item
+      operationId: createLedgerItem
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../ledger/schemas/ledgerItemCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../ledger/schemas/ledgerItem.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingBillingCycleId:
+                  summary: The request body did not include 'billingCycleId'
+                  value:
+                    - attribute: billingCycleId
+                      type: missing
+                      message: billingCycleId must be specified
+                missingTargetDate:
+                  summary: The request body did not include 'targetDate'
+                  value:
+                    - attribute: targetDate
+                      type: missing
+                      message: targetDate must be specified
+  '/ledgerItems/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: id of ledger item to find
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a ledger item
+      description: >
+        Returns the ledger item corresponding to the specified ID in the URL
+        path, if one exists.
+      operationId: getLedgerItem
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:read'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../ledger/schemas/ledgerItem.yml
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    put:
+      summary: Update a ledger item
+      description: >
+        Updates the memo field of the ledger item corresponding to the specified
+        ID in URL path, if one exists
+      operationId: updateLedgerItem
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: Memo
+              type: string
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    delete:
+      summary: Delete a ledger item
+      description: >
+        Soft delete the ledger item corresponding to the specified ID in URL
+        path, if one exists
+      operationId: deleteLedgerItem
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/ledgerItems/{id}/recreate':
+    x-lint-skip:
+      - path-resource-is-plural
+    parameters:
+      - name: id
+        description: id of item to recreate
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    post:
+      summary: Recreate a ledger item
+      operationId: recreateLedgerItem
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../ledger/schemas/ledgerItemRecreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../ledger/schemas/ledgerItem.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingCopyAdjustments:
+                  summary: The request body did not include 'copyAdjustments'
+                  value:
+                    - attribute: copyAdjustments
+                      type: missing
+                      message: copyAdjustments must be specified
+  /ledgerItems/oneOffs:
+    post:
+      x-implementation-state: none
+      summary: Create a one off ledger item
+      operationId: createOneOffLedgerItem
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OneOffLedgerItemCreateData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LedgerItem'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+  /ledgerItemRegenerationBatches:
+    post:
+      summary: Regenerate multiple ledger items
+      operationId: createLedgerItemRegenerationBatch
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LedgerItemRegenerationBatchCreateData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LedgerItemRegenerationBatch'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  /payableSummaries:
+    get:
+      summary: Get payable summaries
+      description: |
+        Returns a list of payable summaries that match the specified criteria.
+      operationId: getPayableSummaries
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - name: accountIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: reason
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/LedgerItemReason'
+        - name: reconciliationType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReconciliationType'
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - $ref: '#/components/parameters/offset'
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/excludeDeleted'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PayableSummary'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+  /receivableSummaries:
+    get:
+      summary: Get receivable summaries
+      description: >
+        Returns a list of receivable summaries that match the specified
+        criteria.
+      operationId: getReceivableSummaries
+      tags:
+        - Ledger Item
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - name: accountIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: reconciliationType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReconciliationType'
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - $ref: '#/components/parameters/offset'
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/excludeDeleted'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReceivableSummary'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+  /ledgerItemReconciliations:
+    get:
+      summary: Get ledger item reconiliations
+      description: >
+        Returns a list of ledger item reconciliations that match the specified
+        criteria.
+      operationId: getLedgerItemReconciliations
+      tags:
+        - Ledger Item Reconciliation
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of Ledger Item ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: ledgerItemIds
+          in: query
+          description: A comma separated list of Ledger Item ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: reconciliationType
+          in: query
+          description: Ledger Item reconciliation type
+          schema:
+            $ref: ../ledger/schemas/reconciliationType.yml
+        - name: createdAtStart
+          in: query
+          description: beginning of range createdAt
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtEnd
+          in: query
+          description: end of range createdAt
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          description: comma separated list of uuids
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtStart
+          in: query
+          description: beginning of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtEnd
+          in: query
+          description: end of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedBy
+          in: query
+          description: comma separated list of uuids
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          description: default 100
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: default is 0
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          in: query
+          description: default is created_at
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: default case is asc
+          schema:
+            $ref: ../core/schemas/order.yml
+        - name: excludeDeleted
+          in: query
+          description: default case is true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../ledger/schemas/ledgerItemReconciliation.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value:
+                    - message: Query parameter 'limit' must be defined
+    post:
+      summary: Create a ledger item reconciliation
+      operationId: createLedgerItemReconciliation
+      tags:
+        - Ledger Item Reconciliation
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ../ledger/schemas/ledgerItemReconciliationCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../ledger/schemas/ledgerItemReconciliation.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLedgerItemIds:
+                  summary: The request body did not include 'ledgerItemIds'
+                  value:
+                    - attribute: ledgerItemIds
+                      type: missing
+                      message: ledgerItemIds must be specified
+                missingReconciliationType:
+                  summary: The request body did not include 'reconciliationType'
+                  value:
+                    - attribute: reconciliationType
+                      type: missing
+                      message: reconciliationType must be specified
+                missingMemo:
+                  summary: The request body did not include 'memo'
+                  value:
+                    - attribute: memo
+                      type: missing
+                      message: memo must be specified
+    delete:
+      summary: Delete multiple ledger item reconciliations
+      description: >
+        Soft delete multiple ledger item reconciliations that match the ids
+        provided in the URL path
+      operationId: deleteLedgerItemReconciliations
+      tags:
+        - Ledger Item Reconciliation
+      security:
+        - oauth:
+            - 'finance:write'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of Ledger Item id
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLedgerItemIds:
+                  summary: The request did not include a 'ids' query parameter
+                  value:
+                    - message: Query parameter 'ids' must be defined
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/ledgerItemReconciliations/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a ledger item reconciliation
+      description: >
+        Returns the ledger item reconciliation corresponding to the specified ID
+        in the URL path, if one exists.
+      operationId: getLedgerItemReconciliation
+      tags:
+        - Ledger Item Reconciliation
+      security:
+        - oauth:
+            - 'finance:read'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../ledger/schemas/ledgerItemReconciliation.yml
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /demandDataImports:
+    get:
+      summary: Get demand data imports
+      description: Return demand data imports based upon request parameters
+      operationId: getDemandDataImports
+      security:
+        - oauth:
+            - 'finance:read'
+      tags:
+        - Demand Data Import
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: fileId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: configurationId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: demandSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdByUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/demand-data/demandDataImport.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a demand data import
+      description: Create a demand data import
+      operationId: createDemandDataImport
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Demand Data Import
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/demand-data/demandDataImportCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/demand-data/demandDataImport.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/demandDataImports/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a demand data import
+      description: Delete a demand data import
+      operationId: deleteDemandDataImport
+      tags:
+        - Demand Data Import
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Unknown ID
+  /demandDataImportSummaries:
+    get:
+      summary: Get demand data import summaries
+      description: Return demand data import summaries based upon request parameters
+      operationId: getDemandDataImportSummaries
+      security:
+        - oauth:
+            - 'finance:read'
+      tags:
+        - Demand Data Import
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - name: fileId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: configurationId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: demandSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdByUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - $ref: '#/components/parameters/offset'
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/order'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemandDataImportSummary'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+  /demandDataImportConfigurations:
+    get:
+      summary: Get demand data import configurations
+      description: Return demand data import configurations based upon request parameters
+      operationId: getDemandDataImportConfigurations
+      tags:
+        - Demand Data Import Configuration
+      security:
+        - oauth:
+            - 'finance:read'
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: demandSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: includeDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/demand-data/demandDataImportConfiguration.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a demand data import configuration
+      description: Create a demand data import configuration
+      operationId: createDemandDataImportConfiguration
+      tags:
+        - Demand Data Import Configuration
+      security:
+        - oauth:
+            - 'finance:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/demand-data/demandDataImportConfigurationCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/demand-data/demandDataImportConfiguration.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/demandDataImportConfigurations/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a demand data import configuration
+      description: Delete a demand data import configuration
+      operationId: deleteDemandDataImportConfiguration
+      tags:
+        - Demand Data Import Configuration
+      security:
+        - oauth:
+            - 'finance:write'
+      responses:
+        '204':
+          description: Success
+        '404':
+          description: Unknown ID
+  /subAccountExternalDemandEvents:
+    get:
+      summary: Get sub-account external demand events
+      description: Get sub-account external demand events.
+      operationId: getSubAccountExternalDemandEvents
+      security:
+        - oauth:
+            - 'finance:read'
+      tags:
+        - Sub-Account External Demand Event
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: supplySubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: demandSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: >-
+                    ./schemas/external-demand-event/subAccountExternalDemandEvent.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a sub-account external demand event
+      description: Create a sub account external demand event
+      operationId: createSubAccountExternalDemandEvent
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Sub-Account External Demand Event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: >-
+                ./schemas/external-demand-event/subAccountExternalDemandEventCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: >-
+                  ./schemas/external-demand-event/subAccountExternalDemandEvent.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/subAccountExternalDemandEvents/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a sub-account external demand event
+      description: Delete a sub-account external demand event
+      operationId: deleteSubAccountExternalDemandEvent
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Sub-Account External Demand Event
+      responses:
+        '204':
+          description: Succes
+        '404':
+          description: Unknown ID
+  /expectedEarningsShare:
+    x-lint-skip:
+      - path-resource-is-plural
+    get:
+      summary: Get expected earnings shares
+      description: Get expected earnings shares
+      operationId: getExpectedEarningsShares
+      security:
+        - oauth:
+            - 'finance:read'
+      tags:
+        - Expected Earnings Share
+      parameters:
+        - name: company
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/expectedEarningsShare.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create an expected earnings share
+      description: Create an expected earnings share
+      operationId: createExpectedEarningsShare
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Expected Earnings Share
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/expectedEarningsShareCreateData.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/expectedEarningsShare.yml
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /expectedEarningsShare/active:
+    x-lint-skip:
+      - path-resource-is-plural
+    get:
+      summary: Return the a list of active expected earnings shares
+      operationId: getActiveExpectedEarningsShares
+      tags:
+        - Expected Earnings Share
+      security:
+        - oauth:
+            - 'finance:read'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/expectedEarningsShare.yml
+  /expectedEarningsShare/default:
+    x-lint-skip:
+      - path-resource-is-plural
+    get:
+      summary: Return default expected earnings shares
+      operationId: getDefaultExpectedEarningsShares
+      tags:
+        - Expected Earnings Share
+      security:
+        - oauth:
+            - 'finance:read'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/expectedEarningsShare.yml
+  /expectedEarningsShare/history:
+    x-lint-skip:
+      - path-resource-is-plural
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Return historical of expected earnings shares
+      operationId: getExpectedEarningsSharesHistory
+      tags:
+        - Expected Earnings Share
+      parameters:
+        - name: from
+          in: query
+          description: starting time to look at
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: date-time
+              minimum: 1
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      security:
+        - oauth:
+            - 'finance:read'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/expectedEarningsShare.yml
+  /accountDeactivations:
+    get:
+      summary: Get account deactivations
+      description: Return account deactivations based upon request parameters
+      operationId: getAccountDeactivations
+      security:
+        - oauth:
+            - 'finance:read'
+      tags:
+        - Account Deactivation
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: accountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDeactivation'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      summary: Create account deactivations
+      description: Create account deactivations
+      operationId: createAccountDeactivation
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Account Deactivation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountDeactivationCreateData'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDeactivation'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/accountDeactivations/{id}':
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      summary: Delete a account deactivation
+      description: Delete a account deactivation
+      operationId: deleteAccountDeactivation
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Account Deactivation
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDeactivation'
+        '404':
+          $ref: '#/components/responses/UnknownId'
+  /demandSubAccountDeactivations:
+    get:
+      summary: Get demand sub-account deactivations
+      description: Return demand sub-account deactivations based upon request parameters
+      operationId: getDemandSubAccountDeactivations
+      security:
+        - oauth:
+            - 'finance:read'
+      tags:
+        - Demand Sub-Account Deactivation
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: demandSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemandSubAccountDeactivation'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      summary: Create demand sub-account deactivations
+      description: Create demand sub-account deactivations
+      operationId: createDemandSubAccountDeactivation
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Demand Sub-Account Deactivation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DemandSubAccountDeactivationCreateData'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemandSubAccountDeactivation'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/demandSubAccountDeactivations/{id}':
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      summary: Delete a demand sub-account deactivation
+      description: Delete a demand sub-account deactivation
+      operationId: deleteDemandSubAccountDeactivation
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Demand Sub-Account Deactivation
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DemandSubAccountDeactivation'
+        '404':
+          $ref: '#/components/responses/UnknownId'
+  /supplySubAccountDeactivations:
+    get:
+      summary: Get supply sub-account deactivations
+      description: Return supply sub-account deactivations based upon request parameters
+      operationId: getSupplySubAccountDeactivations
+      security:
+        - oauth:
+            - 'finance:read'
+      tags:
+        - Supply Sub-Account Deactivation
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: supplySubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplySubAccountDeactivation'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      summary: Create supply sub-account deactivations
+      description: Create supply sub-account deactivations
+      operationId: createSupplySubAccountDeactivation
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Supply Sub-Account Deactivation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupplySubAccountDeactivationCreateData'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SupplySubAccountDeactivation'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/supplySubAccountDeactivations/{id}':
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      summary: Delete a supply sub-account deactivation
+      description: Delete a supply sub-account deactivation
+      operationId: deleteSupplySubAccountDeactivation
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Supply Sub-Account Deactivation
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupplySubAccountDeactivation'
+        '404':
+          $ref: '#/components/responses/UnknownId'
+  /ledgerItemSettlements:
+    get:
+      x-implementation-state: none
+      summary: Get ledger item settlements
+      description: Return ledger item settlements based upon request parameters
+      operationId: getLedgerItemSettlements
+      security:
+        - oauth:
+            - 'finance:read'
+      tags:
+        - Ledger Item Settlement
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: accountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: settlementLedgerItemId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: status
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/LedgerItemSettlementStatus'
+        - name: startedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: startedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: completedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: completedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            $ref: '#/components/schemas/LedgerItemSettlementSort'
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LedgerItemSettlement'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      x-implementation-state: none
+      summary: Create ledger item settlements
+      description: Create ledger item settlements
+      operationId: createLedgerItemSettlements
+      security:
+        - oauth:
+            - 'finance:write'
+      tags:
+        - Ledger Item Settlement
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LedgerItemSettlementCreateData'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LedgerItemSettlement'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'

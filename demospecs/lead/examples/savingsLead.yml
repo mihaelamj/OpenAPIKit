@@ -1,0 +1,27 @@
+summary: A savings lead request
+value:
+  {
+    "productTypes": [
+      "savings"
+    ],
+    "personalInformation": {
+      "state": "NY",
+      "zipcode": "10010",
+    },
+    "creditInformation": {
+      "providedCreditRating": "excellent",
+      "providedNumericCreditScore": 750
+    },
+    "savingsInformation": {
+      "minDepositAmount": 1000
+    },
+    "clientTags": {
+      "hello": [
+        "world",
+        "there"
+      ],
+      "something": [
+        "else"
+      ]
+    }
+  }

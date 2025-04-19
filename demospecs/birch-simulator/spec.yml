@@ -1,0 +1,108 @@
+openapi: 3.0.3
+info:
+  title: birch-simulator
+  description: Provide an interface for all credit card model related data
+  version: 1.0.0
+  contact:
+    name: Alex Whiteside
+    email: alex.whiteside@evenfinancial.com
+servers:
+  - url: 'https://api.onbirch.com/simulator'
+    description: Production
+  - url: 'https://dev.api.onbirch.com/simulator'
+    description: Development
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  schemas:
+    IsolatedCardSimulationResponse:
+      $ref: ./schemas/isolatedCardSimulationResponse.yml
+    IsolatedSimulationRequest:
+      $ref: ./schemas/isolatedSimulationRequest.yml
+    PlaidAssetReportDetail:
+      $ref: ./schemas/plaidAssetReportDetail.yml
+tags:
+  - name: Plaid
+  - name: Simulation
+paths:
+  /isolatedCardSimulations:
+    post:
+      summary: Simulate a card or group of cards in isolation from each other
+      tags:
+        - Credit Card
+      operationId: performAnIsolatedSimulation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/isolatedSimulationRequest.yml
+      responses:
+        '200':
+          description: A simulation result containing simulations of the requested cards
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/isolatedCardSimulationResponse.yml
+        '400':
+          description: There was an error creating a simuluation from the request
+  '/data/plaidAssetReportTokens/{plaid_asset_report_token}':
+    parameters:
+      - name: plaid_asset_report_token
+        description: 'A Plaid Asset Report Token (plaid.com/docs/#assets)'
+        in: path
+        required: true
+        schema:
+          type: string
+    put:
+      summary: Ingests and processes a Plaid Asset Report Token
+      tags:
+        - Plaid
+      operationId: putPlaidAssetReportToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/plaidAssetReportDetail.yml
+      responses:
+        '200':
+          description: Token Updated
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/plaidAssetReportDetail.yml
+        '201':
+          description: Plaid Asset Report Token Accepted
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/plaidAssetReportDetail.yml
+        '400':
+          description: Request could not be processed
+        '404':
+          description: Token not found
+    get:
+      summary: Returns details about a Plaid Asset Report Token
+      tags:
+        - Plaid
+      operationId: getPlaidAssetReportToken
+      responses:
+        '200':
+          description: Returns details about the token
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/plaidAssetReportDetail.yml
+        '404':
+          description: Token not found
+    delete:
+      summary: >-
+        Deletes the Asset Report Token and all linked data, simulations, and
+        history. Cannot be undone.
+      tags:
+        - Plaid
+      operationId: deletePlaidAssetReportToken
+      responses:
+        '200':
+          description: Token Deleted
+        '404':
+          description: Token not found

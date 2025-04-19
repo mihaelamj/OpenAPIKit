@@ -1,0 +1,7 @@
+type: object
+properties:
+  purpose:
+    $ref: ./purpose.yml
+  loanAmount:
+    type: integer
+    format: int32

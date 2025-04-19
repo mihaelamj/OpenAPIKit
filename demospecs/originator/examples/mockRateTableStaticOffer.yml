@@ -1,0 +1,6 @@
+summary: A mock rate table static offer object
+value:
+  {
+    "mockRateTableId": 12345,
+    "staticOfferId": 67890
+  }

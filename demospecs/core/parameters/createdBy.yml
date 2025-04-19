@@ -1,0 +1,10 @@
+name: createdBy
+in: query
+description: comma separated list of uuids
+style: form
+explode: false
+schema:
+  type: array
+  items:
+    type: string
+    format: uuid

@@ -1,0 +1,55 @@
+type: object
+required:
+  - id
+  - uuid
+  - resourceOwnerId
+  - createdAt
+  - createdById
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for this resource.
+  resourceOwnerId:
+    type: integer
+    format: int64
+    description: |
+      The account to whom any actions performed with this access token will be
+      attributed.
+  clientId:
+    type: integer
+    format: int64
+    description: |
+      An option account (usually an application) that is performing actions
+      on behalf of the resource owner.
+  expiresAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource expires.
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to delete this resource.

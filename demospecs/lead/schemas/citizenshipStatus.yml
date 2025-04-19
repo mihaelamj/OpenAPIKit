@@ -1,0 +1,7 @@
+type: string
+description: Citizenship status
+enum:
+  - citizen
+  - permanent_resident
+  - other
+  - unknown

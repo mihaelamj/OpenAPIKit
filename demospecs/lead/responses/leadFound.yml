@@ -1,0 +1,5 @@
+description: Lead found
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/leadResponseJson.yml

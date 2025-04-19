@@ -1,0 +1,12 @@
+type: object
+required:
+  - ledgerItemIds
+  - copyAdjustments
+properties:
+  ledgerItemIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+  copyAdjustments:
+    type: boolean

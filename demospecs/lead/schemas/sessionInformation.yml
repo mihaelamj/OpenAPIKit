@@ -1,0 +1,7 @@
+type: object
+description: Browsing session information accociated with a `Lead`
+properties:
+  ipAddress:
+    type: string
+  userAgent:
+    type: string

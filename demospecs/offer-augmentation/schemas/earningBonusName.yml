@@ -1,0 +1,6 @@
+type: string
+enum:
+  - Sign-Up Bonus
+  - Anniversary Bonus
+  - Annual Bonus
+  - Usage Bonus

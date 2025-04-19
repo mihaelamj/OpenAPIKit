@@ -18,6 +18,9 @@ let package = Package(
         .library(
             name: "OpenAPIKitCompat",
             targets: ["OpenAPIKitCompat"]),
+        .library(
+            name: "OpenAPIMerger",
+            targets: ["OpenAPIMerger"]),
     ],
     dependencies: [
         .package(url: "https://github.com/jpsim/Yams.git", "4.0.0"..<"6.0.0") // just for tests
@@ -70,7 +73,14 @@ let package = Package(
             dependencies: ["OpenAPIKit30", "OpenAPIKit"]),
         .testTarget(
             name: "OpenAPIKitCompatTests",
-            dependencies: ["OpenAPIKitCompat"])
+            dependencies: ["OpenAPIKitCompat"]),
+            
+        .target(
+            name: "OpenAPIMerger",
+            dependencies: ["OpenAPIKit", "Yams"]),
+        .testTarget(
+            name: "OpenAPIMergerTests",
+            dependencies: ["OpenAPIMerger", "Yams"])
     ],
     swiftLanguageVersions: [ .v5 ]
 )

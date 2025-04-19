@@ -1,0 +1,31 @@
+type: object
+title: Percent Gross Funded Loan Amount Tiered By Gross Funded Loan Amount Monthly Step Up
+required:
+  - basePercentage
+  - percentByTotalFundedAmount
+properties:
+  basePercentage:
+    type: number
+    title: base percentage
+    multipleOf: 0.01
+    minimum: 0.01
+  marginalPercentageTiers:
+    type: array
+    items:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: number
+          multipleOf: 0.01
+          minimum: 0
+          title: total funded amount
+        value:
+          type: number
+          title: Amount (in $ USD)
+          multipleOf: 0.01
+          minimum: 0
+allOf:
+  - $ref: ../abstractRevenueClause.yml  

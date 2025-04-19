@@ -1,0 +1,28 @@
+type: object
+description: |
+  The personal information of a co-applicant that may be considered in the
+  underwriting and approval of a loan.
+properties:
+  firstName:
+    type: string
+  lastName:
+    type: string
+  dateOfBirth:
+    type: string
+    format: date
+  annualIncome:
+    type: integer
+    format: int32
+  streetAddress1:
+    type: string
+    description: Street address (primary address line)
+  streetAddress2:
+    type: string
+    description: Secondary address line
+  city:
+    type: string
+  state:
+    $ref: ../../core/schemas/state-lead.yml
+  zipCode:
+    type: string
+    pattern: ^\d{5}([-\s]\d{4})?$

@@ -1,0 +1,18 @@
+type: object
+description: Overall rating of the card, with sub categories
+properties:
+  overallRating:
+    description: Overall rating of the card, out of 5
+    type: number
+  ratingComponents:
+    description: individual ratings of the card
+    type: array
+    items:
+      type: object
+      properties:
+        name:
+          description: Component Name
+          type: string
+        rating:
+          description: Component Rating, out of 5
+          type: number

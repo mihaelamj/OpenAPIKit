@@ -1,0 +1,14 @@
+type: object
+description: A representation of an amount of time
+properties:
+  length:
+    description: How long is the period in units
+    type: integer
+  unit:
+    type: string
+    enum:
+      - day
+      - week
+      - month
+      - quarter
+      - year

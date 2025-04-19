@@ -1,0 +1,54 @@
+type: object
+required:
+  - id
+  - supplySubAccountId
+  - demandSubAccountId
+  - demandSubAccountLogoUrl
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    readOnly: true
+    description: |
+      A unique, internal identifier for this resource.
+  supplySubAccountId:
+    type: integer
+    format: int64
+    description: |
+      The id belonging to the associated Supply Sub Account
+  demandSubAccountId:
+    type: integer
+    format: int64
+    description: |
+      The id belonging to the associated Demand Sub Account
+  demandSubAccountLogoUrl:
+    type: string
+    format: url
+    description: |
+      An image url pointing to the logo of the Featured Demand Partner
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the resource was created.
+  createdBy:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the resource was deleted.
+  deletedBy:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to delete this resource.

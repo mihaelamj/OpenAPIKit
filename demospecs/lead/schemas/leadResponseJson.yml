@@ -1,0 +1,87 @@
+type: object
+required:
+  - leadProviderName
+  - uuid
+  - companyUUID
+  - isTest
+  - status
+  - createdAt
+  - updatedAt
+properties:
+  leadProviderName:
+    type: string
+    description: Name of company which provided the lead
+  personalInformation:
+    $ref: ./personalInformation.yml
+  personalReferenceInformation:
+    $ref: ./personalReferenceInformation.yml
+  loanInformation:
+    $ref: ./loanInformation.yml
+  mortgageInformation:
+    $ref: ./mortgageInformation.yml
+  creditCardInformation:
+    $ref: ./creditCardInformation.yml
+  savingsInformation:
+    $ref: ./savingsInformation.yml
+  creditInformation:
+    $ref: ./creditInformation.yml
+  financialInformation:
+    $ref: ./financialInformation.yml
+  employmentInformation:
+    $ref: ./employmentInformation.yml
+  legalInformation:
+    $ref: ./legalInformation.yml
+  educationInformation:
+    $ref: ./educationInformation.yml
+  coApplicantInformation:
+    $ref: ./coApplicantInformation.yml
+  healthInformation:
+    $ref: ./healthInformation.yml
+  identificationInformation:
+    $ref: ./identificationInformation.yml
+  lifeInsuranceInformation:
+    $ref: ./lifeInsuranceInformation.yml
+  refinanceLoans:
+    type: array
+    items:
+      $ref: ./refinanceLoanInformation.yml
+  clientTags:
+    $ref: ./clientTags.yml
+  sessionInformation:
+    $ref: ./sessionInformation.yml
+  leadActions:
+    type: array
+    items:
+      $ref: ./leadActionResponse.yml
+  uuid:
+    type: string
+    format: uuid
+    description: Primary UUID for a `Lead`
+  companyUUID:
+    type: string
+    format: uuid
+    description: UUID for a company which created the `Lead`
+  sessionUuid:
+    type: string
+    format: uuid
+    description: UUID used to link leads across verticals, unique per user per supply sub-account
+  referralCompanyUuid:
+    type: string
+    format: uuid
+    deprecated: true
+  trackingUuid:
+    type: string
+    format: uuid
+  isTest:
+    type: boolean
+    description: Whether a `Lead` was created using a test access token
+  status:
+    description: The furthest step of the funnel a `Lead` has reached
+    allOf:
+      - $ref: ./leadActionType.yml
+  createdAt:
+    type: string
+    format: date-time
+  updatedAt:
+    type: string
+    format: date-time

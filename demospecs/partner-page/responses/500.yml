@@ -1,0 +1,8 @@
+description: Unknown Error
+content:
+  application/json:
+    schema:
+      $ref: ./../schemas/error.yml
+    example:
+      message: Database "partnerpage_dev" does not exist.
+      type: UnknownError

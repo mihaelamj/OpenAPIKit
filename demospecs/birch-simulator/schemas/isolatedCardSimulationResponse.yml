@@ -1,0 +1,10 @@
+type: object
+description: Result of an isolated card simulation
+properties:
+  uuid:
+    type: string
+    format: uuid
+  cards:
+    type: array
+    items:
+      $ref: ../../birch-core/schemas/credit-card/fullCreditCard.yml

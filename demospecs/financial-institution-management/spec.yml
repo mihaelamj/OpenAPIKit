@@ -1,0 +1,25 @@
+openapi: 3.0.3
+info:
+  title: Financial Institution Management API
+  version: 0.1.0
+servers:
+  - url: 'https://api.evenfinancial.com'
+security:
+  - default: []
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+tags:
+  - name: Temp
+paths:
+  /temps:
+    get:
+      description: Temporary endpoint to make lint pass
+      operationId: temp
+      tags:
+        - Temp
+      responses:
+        '200':
+          description: temp

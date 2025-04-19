@@ -1,0 +1,24 @@
+type: object
+required:
+  - uuid
+  - name
+  - logoUrl
+properties:
+  uuid:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      A unique identifier for the financial institution.
+  name:
+    type: string
+    readOnly: true
+    description: |
+      The name of the financial institution. This value is subject to
+      change, so `financialInstitutionUuid` should be used for grouping.
+  logoUrl:
+    type: string
+    format: url
+    readOnly: true
+    description: |
+      The URL of an image logo for the associated financial institution.

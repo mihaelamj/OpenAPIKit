@@ -1,0 +1,8 @@
+type: object
+description: A request to add new plaid bank
+required:
+  - publicToken
+properties:
+  publicToken:
+    description: User account (item) token received from Plaid
+    type: string

@@ -1,0 +1,11 @@
+type: object
+properties:
+  demandSubAccountId:
+    type: integer
+    format: int64
+  demandManager:
+    type: string
+    format: uuid
+  demandYieldManager:
+    type: string
+    format: uuid

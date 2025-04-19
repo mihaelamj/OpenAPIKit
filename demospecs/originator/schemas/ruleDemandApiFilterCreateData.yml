@@ -1,0 +1,17 @@
+type: object
+required:
+  - demandSubAccountId
+  - leadFilterRules
+properties:
+  demandSubAccountId:
+    type: integer
+    format: int64
+  supplySubAccountIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+  leadFilterRules:
+    type: array
+    items:
+      $ref: './leadFilterRules/leadFilterRule.yml'

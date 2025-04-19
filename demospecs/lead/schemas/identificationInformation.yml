@@ -1,0 +1,11 @@
+type: object
+properties:
+  idNumber:
+    type: string
+    description: The ID number supplied by the lead
+  idState:
+    type: string
+    description: The state of issue of the supplied ID
+  idType:
+    $ref: ./idType.yml
+    description: The form of the ID number supplied by the lead

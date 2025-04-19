@@ -1,0 +1,9 @@
+type: object
+properties:
+  allowAnnualFee:
+    type: boolean
+  cardPurposes:
+    type: array
+    items:
+      $ref: ./cardPurposes.yml
+    description: A list of card purposes in which the lead is interested

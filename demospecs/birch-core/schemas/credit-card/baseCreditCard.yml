@@ -1,0 +1,11 @@
+type: object
+description: The root credit card object with all descriminators
+properties:
+  uuid:
+    type: string
+    format: uuid
+  type:
+    $ref: ./creditCardRepresentations.yml
+  personlizationLevel:
+    $ref: ../personalizationLevels.yml
+

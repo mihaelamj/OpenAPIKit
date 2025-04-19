@@ -1,0 +1,448 @@
+openapi: 3.0.3
+info:
+  title: external-demand-event
+  description: description
+  version: 1.0.0
+  contact:
+    name: Finance Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/36044820/Finance+Team
+servers:
+  - url: 'https://api.evenfinancial.com/externalDemandEvent'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/externalDemandEvent'
+    description: Dev
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'external-demand-event:read': Allows read access to svc-finance resources
+            'external-demand-event:write': Allows write access to svc-finance resources
+  schemas:
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    ExternalDemandEvent:
+      $ref: ./schemas/externalDemandEvent.yml
+    ExternalDemandEventCreate:
+      $ref: ./schemas/externalDemandEventCreate.yml
+    SubAccountExternalDemandEvent:
+      $ref: ./schemas/subAccountExternalDemandEvent.yml
+    SubAccountExternalDemandEventCreate:
+      $ref: ./schemas/subAccountExternalDemandEventCreate.yml
+tags:
+  - name: Lead External Demand Event
+    description: TODO description
+  - name: Sub Account External Demand Event
+    description: TODO description
+paths:
+  /leadExternalDemandEvents:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get External Demand Events
+      description: Return External Demand Events based on request parameters
+      operationId: ExternalDemandEventController.index
+      tags:
+        - Lead External Demand Event
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of External Demand Events ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+        - name: leadUuid
+          in: query
+          description: A comma separated list of Lead Uuids
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              minimum: 1
+          style: form
+        - name: subAccountId
+          in: query
+          description: A comma separated list of Sub Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+        - name: eventType
+          in: query
+          description: A comma separated list of Event Types
+          schema:
+            type: array
+            items:
+              type: string
+              minimum: 1
+          style: form
+        - name: partnerTrackingId
+          in: query
+          description: A comma separated list of Partner Tracking Ids
+          schema:
+            type: array
+            items:
+              type: string
+              minimum: 1
+          style: form
+        - name: createdByUuid
+          in: query
+          description: A comma separated list of Uuids of users that created records
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              minimum: 1
+          style: form
+        - name: minId
+          in: query
+          description: 'The smallest Id to include, inclusive'
+          schema:
+            type: integer
+            format: int64
+          style: form
+        - name: timestampFrom
+          in: query
+          description: The earliest Timestamp for which to include records from
+          schema:
+            type: string
+            format: date-time
+          style: form
+        - name: timestampTo
+          in: query
+          description: The latest Timestamp for which to include records to
+          schema:
+            type: string
+            format: date-time
+          style: form
+        - name: excludeDeleted
+          in: query
+          description: >-
+            Boolean denoting whether deleted records should be included in the
+            returned response
+          schema:
+            type: boolean
+          style: form
+        - name: offset
+          in: query
+          description: query offset
+          schema:
+            type: integer
+            format: int64
+          style: form
+        - name: limit
+          in: query
+          description: query limit
+          schema:
+            type: integer
+            format: int64
+          style: form
+        - name: sortBy
+          in: query
+          description: Column name to use to sort the returned response by
+          schema:
+            type: string
+          style: form
+        - name: orderAscending
+          in: query
+          description: >-
+            String that denotes whetheer the response should be ordered in terms
+            of ascending or descending creation order
+          schema:
+            type: string
+          style: form
+      responses:
+        '200':
+          description: The External Demand Events matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/externalDemandEvent.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - oauth:
+            - 'external-demand-event:read'
+    post:
+      summary: Create an External Demand Event
+      description: Create an External Demand Event based on the request
+      operationId: createExternalDemandEvent
+      tags:
+        - Lead External Demand Event
+      requestBody:
+        description: An External Demand Event Create Data object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/externalDemandEventCreate.yml
+      responses:
+        '201':
+          description: The External Demand Event was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/externalDemandEvent.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - oauth:
+            - 'external-demand-event:write'
+  '/leadExternalDemandEvents/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete an external demand event
+      description: Perform a soft delete on the external demand event with the specified id
+      operationId: deleteExternalDemandEvent
+      tags:
+        - Lead External Demand Event
+      responses:
+        '204':
+          description: The External Demand Event was deleted successfully
+        '404':
+          description: No External Demand Event matching the id was found
+      security:
+        - oauth:
+            - 'external-demand-event:write'
+  /subAccountExternalDemandEvents:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get Sub Account External Demand Events
+      description: Return Sub Account External Demand Events based on request parameters
+      operationId: SubAccountExternalDemandEventController.index
+      tags:
+        - Sub Account External Demand Event
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of External Demand Events ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+        - name: supplySubAccountId
+          in: query
+          description: A comma separated list of Supply Sub Account Ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+        - name: demandSubAccountId
+          in: query
+          description: A comma separated list of Demand Sub Account Ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+        - name: createdByUuid
+          in: query
+          description: A comma separated list of Uuids of users that created records
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              minimum: 1
+          style: form
+        - name: createdAtMax
+          in: query
+          description: The latest time that a record returned should have been created at
+          schema:
+            type: array
+            items:
+              type: string
+              format: date-time
+              minimum: 1
+          style: form
+        - name: createdAtMin
+          in: query
+          description: The earliest time that a record returned should have been created at
+          schema:
+            type: array
+            items:
+              type: string
+              format: date-time
+              minimum: 1
+          style: form
+        - name: deletedByUuid
+          in: query
+          description: >-
+            A comma separated list of Uuids of users that deleted the desired
+            record(s)
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              minimum: 1
+          style: form
+        - name: deletedAtMax
+          in: query
+          description: The latest time that a record returned should have been deleted at
+          schema:
+            type: string
+            format: date-time
+          style: form
+        - name: deletedAtMin
+          in: query
+          description: The earliest time that a record returned should have been created at
+          schema:
+            type: string
+            format: date-time
+          style: form
+        - name: excludeDeleted
+          in: query
+          description: >-
+            Boolean denoting whether deleted records should be included in the
+            returned response
+          schema:
+            type: boolean
+          style: form
+        - name: offset
+          in: query
+          description: query offset
+          schema:
+            type: integer
+            format: int64
+          style: form
+        - name: limit
+          in: query
+          description: query limit
+          schema:
+            type: integer
+            format: int64
+          style: form
+        - name: sortBy
+          in: query
+          description: Column name to use to sort the returned response by
+          schema:
+            type: string
+          style: form
+        - name: order
+          in: query
+          description: >-
+            String that denotes whether the response should be ordered in terms
+            of ascending or descending creation order
+          schema:
+            type: string
+          style: form
+      responses:
+        '200':
+          description: The Sub Account External Demand Events matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/subAccountExternalDemandEvent.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - oauth:
+            - 'external-demand-event:read'
+    post:
+      summary: Create a Sub Account External Demand Event
+      description: Create a Sub Account External Demand Event based on the request
+      operationId: createSubAccountExternalDemandEvent
+      tags:
+        - Sub Account External Demand Event
+      requestBody:
+        description: A Sub Account External Demand Event Create Data object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/subAccountExternalDemandEventCreate.yml
+      responses:
+        '201':
+          description: The Sub Account External Demand Event was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/subAccountExternalDemandEvent.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - oauth:
+            - 'external-demand-event:write'
+  '/subAccountExternalDemandEvents/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a Sub Account External Demand Event
+      description: >-
+        Perform a soft delete on the sub account external demand event with the
+        specified id
+      operationId: deleteSubAccountExternalDemandEvent
+      tags:
+        - Sub Account External Demand Event
+      responses:
+        '204':
+          description: The Sub Account External Demand Event was deleted successfully
+        '404':
+          description: No External Demand Event matching the id was found
+      security:
+        - oauth:
+            - 'external-demand-event:write'

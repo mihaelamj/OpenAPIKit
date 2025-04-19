@@ -1,0 +1,30 @@
+type: string
+enum:
+  - doctor_of_medicine
+  - doctor_of_osteopathic_medicine
+  - doctor_of_optometry
+  - doctor_of_dental_medicine
+  - dentariae_medicinae_doctoris
+  - doctor_of_dental_surgery
+  - doctor_of_veterinary_medicine
+  - doctor_of_pharmacy
+  - veterinariae_medicinae_doctoris
+  - master_of_arts
+  - master_of_science
+  - master_of_research
+  - master_of_research_project
+  - master_of_studies
+  - master_of_business_administration
+  - master_of_library_science
+  - master_of_public_administration
+  - master_of_public_health
+  - master_of_laws
+  - master_of_arts_liberal_studies
+  - master_of_fine_arts
+  - master_of_music
+  - master_of_education
+  - master_of_engineering
+  - master_of_architecture
+  - juris_doctor
+  - other
+  - unknown

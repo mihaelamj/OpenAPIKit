@@ -1,0 +1,37 @@
+type: object
+required:
+  - groupBy
+  - groupKey
+  - numLeads
+  - numLeadsSubmittedApp
+  - numLeadsCompletedApp
+  - numLeadsPreapproved
+  - numLeadsClicked
+  - numLeadsFunded
+  - totalPayout
+properties:
+  groupBy:
+    $ref: ./summaryGroupBy.yml
+  groupKey:
+    type: string
+  numLeads:
+    type: integer
+    format: int32
+  numLeadsSubmittedApp:
+    type: integer
+    format: int32
+  numLeadsCompletedApp:
+    type: integer
+    format: int32
+  numLeadsPreapproved:
+    type: integer
+    format: int32
+  numLeadsClicked:
+    type: integer
+    format: int32
+  numLeadsFunded:
+    type: integer
+    format: int32
+  totalPayout:
+    type: number
+    format: double

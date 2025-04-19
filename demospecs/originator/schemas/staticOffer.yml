@@ -1,0 +1,60 @@
+type: object
+required:
+  - id
+  - offerId
+  - offerRules
+  - isAutoUpdating
+  - enableRewardValue
+  - createdAt
+  - createdByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+  offerId:
+    type: integer
+    format: int64
+  offerUuid:
+    type: string
+    format: uuid
+  name:
+    type: string
+  memo:
+    type: string
+  offerRules:
+    type: array
+    items:
+      $ref: ./offerRule.yml
+  isAutoUpdating:
+    type: boolean
+    description: Indicates if this static offer gets automatically updated via aggregator APIs
+  partnerProductId:
+    type: string
+    description: demand partner's unique identifier for the offer
+  birchUuid:
+    type: string
+    format: uuid
+    description: birch's unique identifier for the offer
+  enableRewardValue:
+    type: boolean
+  monetizable:
+    type: boolean
+    description: Indicates this static offer is monetizable (financial institution is directly represented)
+  createdAt:
+    type: string
+    format: date-time
+  createdByUuid:
+    type: string
+    format: uuid
+  deletedAt:
+    type: string
+    format: date-time
+  deletedByUuid:
+    type: string
+    format: uuid
+  deactivqtedAt:
+    type: string
+    format: date-time
+  deactivqtedBy:
+    type: string
+    format: uuid

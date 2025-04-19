@@ -1,0 +1,72 @@
+type: object
+required:
+  - id
+  - rootId
+  - staticOfferId
+  - demandSubAccountId
+  - supplySubAccountIds
+  - createdAt
+  - createdByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+  rootId:
+    type: integer
+    format: int64
+  staticOfferId:
+    type: integer
+    format: int64
+  offer:
+    $ref: ./dbOffer.yml
+  demandSubAccountId:
+    type: integer
+    format: int64
+  loanAmountRange:
+    $ref: ./loanAmountRange.yml
+  loanPurposeKeys:
+    type: array
+    items:
+      $ref: ../../lead/schemas/purpose.yml
+  selfAssessedCreditScoreKeys:
+    type: array
+    items:
+      $ref: ../../lead/schemas/providedCreditRating.yml
+  annualIncomeRange:
+    $ref: ./annualIncomeRange.yml
+  supplySubAccountIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+  stateAbbreviations:
+    type: array
+    items:
+      type: string
+  militaryStatusKeys:
+    type: array
+    items:
+      type: string
+  memo:
+    type: string
+  reason:
+    $ref: ./offerRuleReason.yml
+  cardPurposes:
+    type: array
+    items:
+      $ref: ../../lead/schemas/cardPurposes.yml
+  minDepositAmount:
+    type: integer
+    format: int32
+  createdAt:
+    type: string
+    format: date-time
+  createdByUuid:
+    type: string
+    format: uuid
+  deletedAt:
+    type: string
+    format: date-time
+  deletedByUuid:
+    type: string
+    format: uuid

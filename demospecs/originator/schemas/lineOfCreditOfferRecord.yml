@@ -1,0 +1,79 @@
+type: object
+required:
+  - allowPrepayment
+  - apr
+  - aprType
+  - details
+  - displayName
+  - maxAmount
+  - preApproved
+  - preQualified
+  - preSelected
+  - termLength
+  - termUnit
+  - createdAt
+  - createdBy
+properties:
+  allowPrepayment:
+    type: boolean
+  annualIntroFee:
+    type: number
+    format: double
+  apr:
+    type: number
+    format: double
+  aprType:
+    $ref: ./aprType.yml
+  cardBenefits:
+    type: array
+    items:
+      type: string
+  cardImageUrl:
+    type: string
+  cardType:
+    $ref: ./cardType.yml
+  details:
+    type: array
+    items:
+      type: string
+  displayName:
+    type: string
+  maxAmount:
+    type: integer
+    format: int32
+  minAmount:
+    type: integer
+    format: int32
+  originationFee:
+    type: number
+    format: double
+  preApproved:
+    type: boolean
+  preQualified:
+    type: boolean
+  preSelected:
+    type: boolean
+  purchaseApr:
+    type: number
+    format: double
+  recommendedCreditRatings:
+    type: array
+    items:
+      type: string
+  secured:
+    type: boolean
+  supportsAutoPay:
+    type: boolean
+  termLength:
+    type: integer
+    format: int32
+  termUnit:
+    type: string
+  createdAt:
+    type: string
+    format: date-time
+  createdBy:
+    type: string
+    format: uuid
+allOf:
+  - $ref: ./offerDetailsRecord.yml

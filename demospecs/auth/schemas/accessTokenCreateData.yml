@@ -1,0 +1,17 @@
+type: object
+required:
+  - resourceOwnerUuid
+properties:
+  resourceOwnerUuid:
+    type: string
+    format: uuid
+  clientUuid:
+    type: string
+    format: uuid
+  scopes:
+    type: array
+    items:
+      type: string
+  expiresIn:
+    type: integer
+    format: int64

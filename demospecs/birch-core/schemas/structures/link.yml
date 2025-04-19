@@ -1,0 +1,25 @@
+type: object
+description: A hyperlink
+properties:
+  url:
+    type: string
+    format: url
+    description: The tracked redirect link flow
+  directUrl:
+    type: string
+    format: url
+    description: The raw url
+  type:
+    description: Where the link goes
+    type: string
+    enum:
+      - application
+      - terms
+      - profile
+  description:
+    description: More detail
+    type: string
+  primary:
+    description: Is this the converion link
+    type: boolean
+

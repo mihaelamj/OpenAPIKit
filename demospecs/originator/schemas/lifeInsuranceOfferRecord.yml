@@ -1,0 +1,46 @@
+type: object
+required:
+  - policyAmount
+  - termLength
+  - termUnit
+  - monthlyPremiumAmount
+  - createdAt
+  - createdBy
+properties:
+  policyAmount:
+    type: integer
+    format: int64
+    description: Policy amount, in dollars
+  termLength:
+    type: integer
+    format: int64
+  termUnit:
+    $ref: ./termUnit.yml
+  monthlyPremiumAmount:
+    type: number
+    description: Monthly premium amount, in dollars
+  annualPremiumAmount:
+    type: number
+    description: Annual premium amount, in dollars
+  semiAnnualPremiumAmount:
+    type: number
+    description: Semi-annual premium amount, in dollars
+  onlineAppAvailable:
+    type: boolean
+    description: Online application is available
+  noMedicalTest:
+    type: boolean
+    description: Can receive quote without medical test
+  packageType:
+    $ref: ./packageType.yml
+  recommended:
+    type: boolean
+    description: Policy is recommended
+  createdAt:
+    type: string
+    format: date-time
+  createdBy:
+    type: string
+    format: uuid
+allOf:
+  - $ref: ./offerDetailsRecord.yml

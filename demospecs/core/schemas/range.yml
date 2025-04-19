@@ -1,0 +1,8 @@
+type: object
+properties:
+  start:
+    type: integer
+    format: int64
+  end:
+    type: integer
+    format: int64

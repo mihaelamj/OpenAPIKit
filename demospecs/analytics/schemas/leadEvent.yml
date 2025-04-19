@@ -1,0 +1,78 @@
+type: object
+required:
+  - id
+  - leadUuid
+  - leadCreatedAt
+  - eventType
+  - eventCreatedAt
+properties:
+  id:
+    type: string
+    description: >
+      A unique identifier for the event.
+  leadUuid:
+    type: string
+    format: uuid
+    description: >
+      A unique identifier for the associated lead.
+  leadCreatedAt:
+    type: string
+    format: date-time
+    description: >
+      The time that the associated lead was created.
+  eventType:
+    $ref: ./eventType.yml
+  eventCreatedAt:
+    type: string
+    format: date-time
+    description: >
+      The time that the event occurred.
+  eventPayout:
+    type: integer
+    format: int32
+    description: >
+      The payout associated with the event, in cents. Only present for some
+      events.
+  eventDollarAmount:
+    type: integer
+    format: int32
+    description: >
+      The dollar amount associated with event, in cents. Only present for some
+      events.
+  financialInstitutionUuid:
+    type: string
+    format: uuid
+    description: >
+      A unique identifier for the associated financial institution. Only present
+      for event types associated with financial institutions.
+  financialInstitutionName:
+    type: string
+    description: >
+      The name of the associated financial institution. This value is subject to
+      change, so `financialInstitutionUuid` should be used for grouping. Only
+      present for event types associated with financial institutions.
+  rateTableUuid:
+    type: string
+    format: uuid
+    description: >
+      A unique identifier for the associated rate table. Only present for event
+      types associated with offers.
+  offerUuid:
+    type: string
+    format: uuid
+    description: >
+      A unique identifier for the associated offer. Only present for event types
+      associated with offers.
+  offerName:
+    type: string
+    description: >
+      A unique identifier for the associated offer. This value is subject to
+      change, so `offerUuid` should be used for grouping. Only present for event
+      types associated with offers.
+  offerProductType:
+    $ref: ./offerProductType.yml
+    description: >
+      The product type for the associated offer. Only present for event
+      types associated with offers.
+  offerFirmness:
+    $ref: ./offerFirmness.yml

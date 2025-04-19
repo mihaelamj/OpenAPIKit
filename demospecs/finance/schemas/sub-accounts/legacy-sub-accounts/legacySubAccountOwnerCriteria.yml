@@ -1,0 +1,29 @@
+type: object
+allOf:
+  - $ref: ../subAccountOwnerCriteria.yml
+  - type: object
+    properties:
+      subAccountOwnerDemandPartnerManager:
+        description: List of Uuids pertaining to a Demand Partner Manager
+        type: array
+        items:
+          type: string
+          format: uuid
+      subAccountOwnerDemandYieldManager:
+        description: List of Uuids pertaining to a Demand Yield Manager
+        type: array
+        items:
+          type: string
+          format: uuid
+      subAccountOwnerSupplyPartnerManager:
+        description: List of Uuids pertaining to a Supply Partner Manager
+        type: array
+        items:
+          type: string
+          format: uuid
+      subAccountOwnerSupplyYieldManager:
+        description: List of Uuids pertaining to a Supply Yield Manager
+        type: array
+        items:
+          type: string
+          format: uuid

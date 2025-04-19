@@ -1,0 +1,43 @@
+type: object
+description: Limited information about a credit card
+allOf:
+  - $ref: ./baseCreditCard.yml
+  - type: object
+    properties:
+      names:
+        description: Legal name, nickname, shortname, ext
+        type: array
+        items:
+          $ref: ../structures/name.yml
+      images:
+        description: full card image, square image, etc, other assets.
+        type: array
+        items:
+          $ref: ../structures/image.yml
+      issuer:
+        $ref: ../issuer.yml
+      network:
+        $ref: ../network.yml
+      family:
+        $ref: ../cardFamily.yml
+      links:
+        description: Apply and terms links
+        type: array
+        items:
+          $ref: ../structures/link.yml
+      source:
+        type: object
+        description: Explains where the credit card offer details were found, and how recently
+        properties:
+          integration:
+            type: string
+            description: Describes the mechanics of how card data is gathered
+          connection:
+            type: string
+            description: id of connector
+          lastModified:
+            type: string
+            description: the last time this record was changed
+          lastValidated:
+            type: string
+            description: the last time this record checked for compliance

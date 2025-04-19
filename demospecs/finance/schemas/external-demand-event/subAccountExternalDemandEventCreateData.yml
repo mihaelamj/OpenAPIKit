@@ -1,0 +1,36 @@
+type: object
+required:
+  - supplySubAccountId
+  - demandSubAccountId
+  - attributedStart
+  - attributedEnd
+  - booked
+  - eventType
+properties:
+  supplySubAccountId:
+    type: integer
+    format: int64
+  demandSubAccountId:
+    type: integer
+    format: int64
+  attributedStart:
+    type: string
+    format: date
+  attributedEnd:
+    type: string
+    format: date
+  booked:
+    type: string
+    format: date
+  eventType:
+    $ref: ./externalDemandEventType.yml
+  eventCount:
+    type: integer
+    format: int64
+  amount:
+    type: number
+    format: double
+  externalId:
+    type: string
+  details:
+    $ref: ./externalDemandEventDetails.yml

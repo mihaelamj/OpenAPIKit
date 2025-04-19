@@ -1,0 +1,10 @@
+name: subAccountOwnerDemandPartnerManager
+description: comma separated list of demand partner manager uuids
+in: query
+style: form
+explode: false
+schema:
+  type: array
+  items:
+    type: string
+    format: uuid

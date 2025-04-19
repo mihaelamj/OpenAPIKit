@@ -1,0 +1,6 @@
+summary: A supply demand inclusion deletion object
+value:
+  {
+    "deletedReason": "poor_performance",
+    "deletedMemo": "deleted due to poor performance by supply partner"
+  }

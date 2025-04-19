@@ -1,0 +1,23 @@
+type: object
+required:
+  - name
+  - displayName
+properties:
+  name:
+    type: string
+  displayName:
+    type: string
+  description:
+    type: string
+  disclaimer:
+    type: string
+  imageUrl:
+    type: string
+    format: url
+  notes:
+    type: string
+  productType:
+    type: string
+  subtextOverride:
+    type: string
+    description: Override the default auto-generated call to action subtext for issuers

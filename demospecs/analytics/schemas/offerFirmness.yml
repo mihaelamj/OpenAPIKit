@@ -1,0 +1,8 @@
+type: string
+description: >
+  The firmness of the associated offer. Only present for event types
+  associated with offers.
+enum:
+  - preSelected
+  - preQualified
+  - preApproved

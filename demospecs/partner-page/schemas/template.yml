@@ -1,0 +1,48 @@
+type: object
+allOf:
+  - type: object
+    required:
+      - id
+      - uuid
+    properties:
+      id:
+        type: integer
+        example: 707
+      uuid:
+        type: string
+        description: 'The UUID'
+        example: 00000000-0000-0000-0000-000000000000
+
+  - $ref: ./../schemas/templateCreateData.yml
+
+  - type: object
+    required:
+      - created_at
+      - created_by
+      - last_edited_at
+      - last_edited_by
+    properties:
+      created_at:
+        type: integer
+        description: The timestamp of when the template was created.
+        example: 1600190562
+      created_by:
+        type: string
+        description: The UUID of the user who created the template.
+        example: 00000000-0000-0000-0000-000000000000
+      deleted_at:
+        type: integer
+        description: The timestamp of when the template was deleted.
+        example: 1600190563
+      deleted_by:
+        type: string
+        description: The UUID of the user who deleted the template.
+        example: 00000000-0000-0000-0000-000000000000
+      last_edited_at:
+        type: integer
+        description: The timestamp of when the template was last edited.
+        example: 1600190563
+      last_edited_by:
+        type: string
+        description: The UUID of the last user to edit the template.
+        example: 00000000-0000-0000-0000-000000000000

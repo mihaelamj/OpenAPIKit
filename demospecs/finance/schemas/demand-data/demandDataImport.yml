@@ -1,0 +1,43 @@
+type: object
+required:
+  - id
+  - fileId
+  - configurationId
+  - createdAt
+  - createdByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  fileId:
+    type: integer
+    format: int64
+    description: |
+      A unique identifer for the file that is being imported
+  configurationId:
+    type: integer
+    format: int64
+    description: |
+      A unique identifier for the configuration details to be used on file import
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this resource.

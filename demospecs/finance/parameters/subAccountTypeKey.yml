@@ -1,0 +1,6 @@
+name: subAccountTypeKey
+in: query
+description: sub account type key
+style: form
+schema:
+  type: string

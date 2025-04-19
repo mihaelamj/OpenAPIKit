@@ -1,0 +1,69 @@
+type: object
+required:
+  - id
+  - subAccountId
+  - productType
+  - effectiveAt
+  - fieldNames
+  - fileType
+  - leadUuidProcessorInformation
+  - details
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  subAccountId:
+    type: integer
+    format: int64
+  productType:
+    $ref: ../../../core/schemas/productType.yml
+  effectiveAt:
+    type: string
+    format: date-time
+  sheetNumber:
+    type: string
+  headerRow:
+    type: string
+  fieldNames:
+    type: array
+    items:
+      type: string
+    description: |
+      A comma-separated list of field names that are standard for each file that uses this configuration
+  dataRow:
+    type: string
+  fileType:
+    $ref: ./fileType.yml
+  leadUuidProcessorInformation:
+    $ref: ./processorInformation.yml
+  offerIdProcessorInformation:
+    $ref: ./processorInformation.yml
+  productSubTypeProcessorInformation:
+    $ref: ./processorInformation.yml
+  details:
+    allOf:
+       - $ref: ./details/importConfigurationDetails.yml
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this resource.

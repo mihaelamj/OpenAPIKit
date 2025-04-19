@@ -1,0 +1,7 @@
+type: string
+enum:
+  - no_offer
+  - offer_accepted
+  - offer_pending
+  - under_contract
+  - unknown

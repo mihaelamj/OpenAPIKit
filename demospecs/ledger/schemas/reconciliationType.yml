@@ -1,0 +1,8 @@
+title: Reconciliation Type
+type: string
+enum:
+  - paid
+  - ignored
+  - unpaid
+  - overdue
+  - unknown

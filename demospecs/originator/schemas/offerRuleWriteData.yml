@@ -1,0 +1,48 @@
+type: object
+required:
+  - staticOfferId
+  - demandSubAccountId
+  - supplySubAccountIds
+properties:
+  staticOfferId:
+    type: integer
+    format: int64
+  demandSubAccountId:
+    type: integer
+    format: int64
+  loanAmountRange:
+    $ref: ./loanAmountRange.yml
+  loanPurposeKeys:
+    type: array
+    items:
+      $ref: ../../lead/schemas/purpose.yml
+  selfAssessedCreditScoreKeys:
+    type: array
+    items:
+      $ref: ../../lead/schemas/providedCreditRating.yml
+  annualIncomeRange:
+    $ref: ./annualIncomeRange.yml
+  supplySubAccountIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+  stateAbbreviations:
+    type: array
+    items:
+      type: string
+  militaryStatusKeys:
+    type: array
+    items:
+      type: string
+  memo:
+    type: string
+  reason:
+    $ref: ./offerRuleReason.yml
+  cardPurposes:
+    type: array
+    items:
+      $ref: ../../lead/schemas/cardPurposes.yml
+  minDepositAmount:
+    type: integer
+    format: int32

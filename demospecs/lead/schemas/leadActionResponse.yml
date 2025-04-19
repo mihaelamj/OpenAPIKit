@@ -1,0 +1,38 @@
+type: object
+required:
+  - uuid
+  - actionType
+  - actionDate
+  - demandSubAccountId
+  - createdAt
+properties:
+  uuid:
+    type: string
+    format: uuid
+  actionType:
+    $ref: ./leadActionType.yml
+  actionDate:
+    type: string
+    format: date-time
+  originatorKey:
+    type: string
+  demandSubAccountId:
+    type: integer
+    format: int64
+  rejectReason:
+    $ref: ./rejectReason.yml
+  amount:
+    type: integer
+    format: int32
+  originationFee:
+    type: integer
+    format: int32
+  offerClickId:
+    type: integer
+    format: int64
+  createdAt:
+    type: string
+    format: date-time
+  deletedAt:
+    type: string
+    format: date-time

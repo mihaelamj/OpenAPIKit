@@ -1,0 +1,51 @@
+type: object 
+required: 
+  - id
+  - subAccountId
+  - enableExcellentCreditBucket
+  - enableGoodCreditBucket
+  - enableFairCreditBucket
+  - enablePoorCreditBucket
+  - enableLimitedCreditBucket
+  - enableUnknownCreditBucket
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    readOnly: true
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+  createdBy: 
+    type: string
+    format: uuid
+    readOnly: true
+  enableExcellentCreditBucket: 
+    type: boolean
+    description: Boolean value indicating if transunion enhancement is enabled for leads for the supplier that have 'excellent' credit scores
+  enableGoodCreditBucket: 
+    type: boolean
+    description: Boolean value indicating if transunion enhancement is enabled for leads for the supplier that have 'good' credit scores
+  enableFairCreditBucket: 
+    type: boolean
+    description: Boolean value indicating if transunion enhancement is enabled for leads for the supplier that have 'fair' credit scores
+  enablePoorCreditBucket: 
+    type: boolean
+    description: Boolean value indicating if transunion enhancement is enabled for leads for the supplier that have 'poor' credit scores
+  enableLimitedCreditBucket: 
+    type: boolean
+    description: Boolean value indicating if transunion enhancement is enabled for leads for the supplier that have 'limited' credit scores
+  enableUnknownCreditBucket: 
+    type: boolean
+    description: Boolean value indicating if transunion enhancement is enabled for leads for the supplier that have 'unknown' credit scores
+  deletedAt: 
+    type: string 
+    format: date-time
+    readOnly: true
+  deletedBy:
+    type: string 
+    format: uuid
+    readOnly: true

@@ -1,0 +1,12 @@
+type: object
+title: Special Offer Details
+required:
+  - edeDetailsKey
+  - revenue
+properties:
+  edeDetailsKey:
+    type: string
+  revenue:
+    type: number
+    format: double
+

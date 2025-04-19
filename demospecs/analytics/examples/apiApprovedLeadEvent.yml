@@ -1,0 +1,11 @@
+summary: API approved
+value:
+  {
+    "id": "356a192b7913b04c54574d18c28d46e6395428ab",
+    "leadUuid": "39afdb4a-ef26-42ed-a313-e28288f95099",
+    "leadCreatedAt": "2019-10-10T20:42:06Z",
+    "eventType": "apiApproved",
+    "eventCreatedAt": "2019-10-10T20:44:28Z",
+    "financialInstitutionUuid": "da14e06b-0866-4f02-a3b2-9443501b25b9",
+    "financialInstitutionName": "LendingClub"
+  }

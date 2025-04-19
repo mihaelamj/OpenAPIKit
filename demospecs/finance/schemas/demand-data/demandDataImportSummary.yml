@@ -1,0 +1,68 @@
+type: object
+required:
+  - id
+  - subAccountId
+  - subAccountName
+  - fileId
+  - fileUrl
+  - productType
+  - source
+  - status
+  - newEventCount
+  - duplicateEventCount
+  - errorCount
+  - createdAt
+  - createdByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  subAccountId:
+    type: integer
+    format: int64
+  subAccountName:
+    type: string
+  fileId:
+    type: integer
+    format: int64
+    description: |
+      A unique identifer for the file that is being imported
+  fileUrl:
+    type: string
+  productType:
+    $ref: ../../../core/schemas/productType.yml
+  source:
+    $ref: ./demandDataImportSource.yml
+  status:
+    $ref: ./demandDataImportStatus.yml
+  newEventCount:
+    type: integer
+    format: int32
+  duplicateEventCount:
+    type: integer
+    format: int32
+  errorCount:
+    type: integer
+    format: int32
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the demand data import was created.
+  createdByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this demand data import.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the demand data import was deleted.
+  deletedByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this demand data import.

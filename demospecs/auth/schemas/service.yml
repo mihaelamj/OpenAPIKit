@@ -1,0 +1,18 @@
+type: object
+required:
+  - uuid
+  - accountUuid
+  - companyUuid
+  - name
+properties:
+  uuid:
+    type: string
+    format: uuid
+  accountUuid:
+    type: string
+    format: uuid
+  companyUuid:
+    type: string
+    format: uuid
+  name:
+    type: string

@@ -1,0 +1,7 @@
+type: object
+properties:
+  fundedAmount:
+    type: number
+    format: float
+allOf:
+  - $ref: '../externalDemandEventDetails.yml'

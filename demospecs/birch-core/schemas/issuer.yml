@@ -1,0 +1,29 @@
+type: object
+description: Private API will expose issuers (thats how we map to aggregators), this will return issuer name, logo and stuff, as well as rest reference to issuer API + UUID
+properties:
+  uuid:
+    type: string
+    format: uuid
+  name:
+    type: string
+  image:
+    $ref: ./structures/image.yml
+  additionalDetails:
+    description: Internal values that may be helpful
+    type: object
+    properties:
+      popular:
+        type: boolean
+        description: Whether an institution is common
+      nickname:
+        type: string
+        description: What some users refer to the bank as instead of the full name
+  externalIdentifiers:
+    type: object
+    properties:
+      plaidId:
+        type: string
+        description: Plaid's identifier for this institution
+      finicityId:
+        type: integer
+        description: Finicity's identifier for this institution

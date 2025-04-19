@@ -1,0 +1,7 @@
+summary: The token is already associated with the lead
+value:
+  - attribute: token
+    message: The token '514fd8c2' is already associated with the lead
+    type: alreadyAssociated
+    details:
+      specified: 514fd8c2

@@ -1,0 +1,8 @@
+type: object
+properties:
+  sessionUuid:
+    type: string
+    format: uuid
+    description: >
+      You may specify the session's UUID; if you don't, one will be generated
+      for you.

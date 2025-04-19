@@ -1,0 +1,14 @@
+type: object
+required:
+  - uuid
+  - roles
+properties:
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the account to update.
+  roles:
+    type: array
+    items:
+      type: string

@@ -1,0 +1,29 @@
+type: object
+required:
+  - accountId
+  - amount
+  - startDate
+  - endDate
+  - dueDate
+properties:
+  accountId:
+    type: integer
+    format: int64
+  amount:
+    type: number
+    format: double
+  memo:
+    type: string
+  startDate:
+    type: string
+    format: date
+  endDate:
+    type: string
+    format: date
+  dueDate:
+    type: string
+    format: date
+  details:
+    type: array
+    items:
+      $ref: ./oneOffLedgerItemDetails.yml

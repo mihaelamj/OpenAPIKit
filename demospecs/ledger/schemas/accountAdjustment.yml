@@ -1,0 +1,48 @@
+type: object
+title: accountAdjustment
+required:
+  - id
+  - accountId
+  - amount
+  - adjustmentReason
+  - createdAt
+  - createdBy
+properties:
+  id:
+    title: Id
+    type: integer
+    format: int64
+  accountId:
+    title: Account Id
+    type: integer
+    format: int64
+  amount:
+    title: Adjustment Amount
+    type: number
+    format: double
+  adjustmentReason:
+    title: Adjustment Reason
+    $ref: ./adjustmentReason.yml
+  memo:
+    title: Memo
+    type: string
+  ledgerItemId:
+    title: Ledger Item Id
+    type: integer
+    format: int64
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  createdBy:
+    title: Created By
+    type: string
+    format: uuid
+  deletedAt:
+    title: Deleted At
+    type: string
+    format: date-time
+  deletedBy:
+    title: Deleted By
+    type: string
+    format: uuid

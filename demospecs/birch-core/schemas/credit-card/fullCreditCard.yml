@@ -1,0 +1,41 @@
+type: object
+description: A Birch Representation of a Credit Card
+allOf:
+  - $ref: ./compactCreditCard.yml
+  - type: object
+    properties:
+      restrictions:
+        type: object
+        description: what stops you from getting it
+        properties:
+          student:
+            type: boolean
+            description: Denotes whether this card is only offered to students
+          military:
+            type: boolean
+            description: Denotes whether this card is only offered to active duty military personel
+          minCreditScore:
+            type: integer
+          maxCreditScore:
+            type: integer
+      rates:
+        $ref: ../rate.yml
+      fees:
+        description: annual, foreign transaction fees, late fees, etc.
+        type: array
+        items:
+          $ref: ../fee.yml
+      benefits:
+        type: array
+        items:
+          $ref: ../benefit.yml
+        description: Additional Benefits you recieve with this card
+      earningProgram:
+        $ref: ../earning-program/earningProgram.yml
+      ratings:
+        $ref: ../rating.yml
+      additionalDetails:
+        description: Additional Marketing Bullets
+        type: array
+        items:
+          type: string

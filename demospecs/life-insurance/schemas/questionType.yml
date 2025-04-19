@@ -1,0 +1,14 @@
+type: string
+enum: 
+  - binary
+  - select-multiple
+  - select-one
+  - freeform-multiple
+  - freeform-one
+description: >
+  The display and response behavior of the question
+    * `binary` : Select between two choices
+    * `select-multiple` : checkbox behavior
+    * `select-one` :  radio button behavior
+    * `freeform-multiple` : Multiple freeform text responses.
+    * `freeform-one` :  A single freeform text response.

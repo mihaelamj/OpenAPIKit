@@ -1,0 +1,8 @@
+type: object
+required:
+  - uuid
+properties:
+  uuid:
+    type: string
+    format: uuid
+    description: UUID corresponding to the created `Lead`

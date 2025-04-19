@@ -1,0 +1,7 @@
+type: string
+enum:
+  - fifteen_year_fixed
+  - thirty_year_fixed
+  - five_one_adjustable
+  - seven_one_adjustable
+  - ten_one_adjustable

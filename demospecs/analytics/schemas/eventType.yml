@@ -1,0 +1,13 @@
+type: string
+enum:
+  - leadCreated
+  - appSubmitted
+  - apiApproved
+  - apiRejected
+  - offerClicked
+  - applied
+  - approved
+  - listed
+  - opened
+  - funded
+  - conversion

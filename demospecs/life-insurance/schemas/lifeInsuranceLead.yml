@@ -1,0 +1,14 @@
+type: object
+required:
+  - lead
+  - lifeInsuranceResponses
+properties:
+  lead:
+    $ref: ../../lead/schemas/leadResponseJson.yml
+  lifeInsuranceResponses:
+    type: array
+    description: A list of responses
+    items:
+      $ref: ./answer.yml
+example:
+  $ref: ../examples/lifeInsuranceLead.yml

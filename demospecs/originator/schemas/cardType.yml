@@ -1,0 +1,6 @@
+type: string
+enum:
+  - visa
+  - mastercard
+  - american_express
+  - discover

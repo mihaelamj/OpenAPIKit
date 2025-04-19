@@ -1,0 +1,15 @@
+type: object
+required:
+  - demandSubAccountIds
+properties:
+  demandSubAccountIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+    description: |
+      Identifiers for the demand sub accounts that are deactivated.
+  deactivationReason:
+    type: string
+    description: |
+      Reason why the demand sub accounts were deactivated.

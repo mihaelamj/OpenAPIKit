@@ -1,0 +1,5 @@
+name: excludeDeleted
+description: ignored deleted items, default true
+in: query
+schema:
+  type: boolean

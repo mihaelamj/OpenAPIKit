@@ -1,0 +1,29 @@
+type: object
+properties:
+  subAccountId:
+    type: integer
+    format: int64
+    description: |
+      The id belonging to the associated Demand Sub Account
+  foundedYear:
+    type: integer
+    description: |
+      the founded year of the demand partner
+  amBestRating:
+    type: string
+    description: |
+      AM Best rating of the demand partner
+  headQuarters:
+    type: string
+    description: |
+      the location of the headquarters of the demand partner
+  assets:
+    type: string
+    description: |
+      assets of the demand partner
+  policies:
+    type: array
+    description: >
+      The policies belonging to the demand partner
+    items:
+      $ref: ./lifeInsurancePolicyDetail.yml

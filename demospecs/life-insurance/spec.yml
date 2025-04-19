@@ -1,0 +1,141 @@
+openapi: 3.0.3
+info:
+  title: life-insurance
+  description: ... TODO
+  version: 1.2.0
+  contact:
+    name: Life Insurance Team
+    url: 'https://evenfinancial.atlassian.net/wiki/spaces/ENG/TODO'
+servers:
+  - url: 'https://api.evenfinancial.com'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com'
+    description: Dev
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'svc-life-insurance:read': Allows access to read svc-life-insurance resources
+            'svc-life-insurance:write': Allows access to write svc-life-insurance resources
+  schemas:
+    QuestionList:
+      $ref: ./schemas/questionList.yml
+    RateTablePublic:
+      $ref: ../originator/schemas/rateTablePublic.yml
+    LeadResponseJson:
+      $ref: ../lead/schemas/leadResponseJson.yml
+    LifeInsuranceLead:
+      $ref: ./schemas/lifeInsuranceLead.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+tags:
+  - name: TODO ...
+    description: TODO ...
+paths:
+  /lifeInsurance/questions:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get all questions
+      description: Return all questions
+      operationId: QuestionsController.index
+      tags:
+        - Questions
+      responses:
+        '200':
+          description: A list of questions
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/questionList.yml
+      security:
+        - oauth:
+            - 'svc-life-insurance:read'
+  /lifeInsurance/rateTables:
+    post:
+      summary: Create a lead and generate a lifeInsurance rateTable in one operation
+      description: >-
+        A combined operation that does the following:
+          - `PATCH /leads/uuid`
+          - `POST` answers to leapLife
+          - `POST` /originator/rateTables`
+        The response `RateTable` must still be queried until there are no more
+        `pendingResponses`
+      operationId: RateTablesController.create
+      tags:
+        - Life Insurance Lead
+      requestBody:
+        description: A Lead object with lifeInsuranceAnswersInformation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/lifeInsuranceLead.yml
+      responses:
+        '200':
+          description: The generated `RateTable`
+          content:
+            application/json:
+              schema:
+                $ref: ../originator/schemas/rateTablePublic.yml
+              examples:
+                rateTable:
+                  value:
+                    $ref: ../originator/examples/rateTablePublic.yml
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - oauth:
+            - 'svc-life-insurance:write'
+  '/lifeInsurance/leads/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: The UUID of the lead
+        schema:
+          type: string
+          format: uuid
+    patch:
+      summary: Create a lead
+      description: A proxy to the `PATCH /leads/uuid` endpoint.
+      operationId: RateTablesController.createFromLead
+      tags:
+        - Life Insurance Lead
+      requestBody:
+        description: A Lead object with lifeInsuranceAnswersInformation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/lifeInsuranceLead.yml
+      responses:
+        '200':
+          description: The generated `Lead`
+          content:
+            application/json:
+              schema:
+                $ref: ../lead/schemas/leadResponseJson.yml
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - oauth:
+            - 'svc-life-insurance:write'

@@ -1,0 +1,6 @@
+name: deletedAt
+in: query
+description: deletion date of object
+schema:
+  type: string
+  format: date-time

@@ -1,0 +1,152 @@
+type: string
+description: Benefits or benefit categories related to a credit card
+enum:
+  - No Foreign Transaction Fees
+  - Purchase Protection
+  - Return Protection
+  - Price Protection
+  - Fraud Protection
+  - Extended Warranty
+  - Travel Accident Insurance
+  - Trip Interruption Insurance
+  - Car Rental Insurance
+  - Baggage Insurance
+  - Baggage Delay Insurance
+  - Hotel Burglary Insurance
+  - Travel & Emergency Assistance
+  - Roadside Assistance
+  - Concierge Service
+  - Lounge Access
+  - Identity Theft Assistance
+  - In-Flight Savings
+  - Free Checked Bag
+  - Priority Boarding
+  - No Blackout Dates
+  - Free Companion Ticket
+  - Discount Companion Ticket
+  - Global Entry or TSA PreCheck
+  - Private Jet Perks
+  - Lounge Access Discount
+  - 24/7 Cardholder Support
+  - Authorized User
+  - Entertainment Access
+  - Airline Fee Credit
+  - Late Fee Pass
+  - Credit Score Reporting
+  - No Flight Change Fees
+  - 24/7 Account Monitoring
+  - Amex Offers
+  - Visa Signature Offers
+  - MasterCard Offers
+  - Free Hotel Stay
+  - Extended Hotel Stay
+  - Dining Concierge
+  - 2 Lounge Passes
+  - Hilton Honors Silver Membership
+  - Hilton Honors Gold Membership
+  - World of Hyatt Discoverist Status
+  - SPG Gold Membership
+  - Marriott Rewards Silver Status
+  - Hertz Presidents Circle Elite Status
+  - 2 Free Checked Bags
+  - Auto Discounts
+  - InCircle Partnership
+  - ShopRunner
+  - WiFi Access
+  - ShopSafe
+  - BoA Preferred Rewards
+  - MasterCard Fuel Rewards Network
+  - Missed Event Ticket Protection
+  - Account Freezing
+  - Cell Phone Protection
+  - GPA Rewards
+  - In-Flight WiFi Credit
+  - Citi Private Pass
+  - Priceless Cities
+  - The Hotel Collection
+  - By Invitation Only
+  - Luxury Hotel Collection
+  - Expedia+ Silver Status
+  - Expedia+ Gold Status
+  - $100 American Airlines Discount
+  - Disney Parks Perks and Savings
+  - Ritz-Carlton Gold Elite Status
+  - Ritz-Carlton Club Level Upgrade
+  - Annual Travel Credit
+  - IHG Platinum Elite Status
+  - QuickBooks Connect
+  - ReceiptMatch
+  - Employee Spending Limits
+  - FX International Payments
+  - No Pre-Set Spending Limit
+  - Purchase Financing
+  - Amex Open Savings
+  - Amazon Special Financing
+  - $100 Ritz-Carlton Hotel Credit
+  - British Airways Companion Ticket
+  - Mercedes-Benz Gift Certificates
+  - Mercedes-Benz Excess Mileage Waiver
+  - JetBlue Annual Statement Credit
+  - 20% Discount on Delta Flights for Delta Private Jet Members
+  - Expense Report Features
+  - Business Cell Phone Protection
+  - Free Shipping on most Target.com orders
+  - 30 Extra Days for Returns
+  - Free clothing altertaions
+  - Personal shopping
+  - Shopmyway Savings
+  - Online Subscription Credit
+  - Uber Exclusive Access
+  - Airline Benefits
+  - Hotel Benefits
+  - Other Travel Benefits
+  - Emergency Assistance
+  - Experiences
+  - Shopping Benefits
+  - Cardholder Benefits
+  - Enhanced Security
+  - Business Benefits
+  - Other Benefits
+  - In-Flight Discounts
+  - Fee Coverage
+  - Flight Credits & Discounts
+  - Hotel Membership Status
+  - Hotel Credit & Free Stays
+  - Travel Credit
+  - Travel Experiences Programs
+  - Car Rental Membership Status
+  - Extra Gas Rewards
+  - Shopping Protection
+  - Shopping Discounts
+  - Free Shipping
+  - The Boingo American Express Preferred Plan
+  - AirSpace Lounge
+  - Uber Monthly Credit
+  - Ride Share Benefits
+  - Delta Sky Club
+  - Admirals Club Membership
+  - Priority Pass Select Membership (Prestige)
+  - Priority Pass Select Membership (Standard Plus)
+  - Daily Breakfast
+  - Early Check-in & Late Check-out
+  - Room Upgrades
+  - Complementary WiFi
+  - Amex Hotel Collection Credit
+  - Temporary Account Numbers
+  - One-Time 50% Discount on Companion Ticket
+  - Airline Travel Credit
+  - United Club Membership
+  - Chip Technology
+  - Earn More Miles for Sharing Travel Stories
+  - Mastercard World Elite Concierge and Luxury Travel Benefits
+  - 20% Savings on Delta In-Flight Purchases
+  - 25% Savings on United In-Flight Food and Drink Purchases
+  - $100 Hilton Properties Credit
+  - $250 Hilton Resort Credit
+  - Hilton Honors Diamond Membership
+  - Free Birthday Gift
+  - 2x Points During Your Birthday Month
+  - Car Rental VIP Perks
+  - Free shipping with the purchase of a bra
+  - Monthly Dining Credit
+  - Amazon Prime Student

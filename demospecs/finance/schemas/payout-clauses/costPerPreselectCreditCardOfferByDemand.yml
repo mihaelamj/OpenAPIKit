@@ -1,0 +1,30 @@
+type: object
+title: Cost Per Pre Selected Credit Card Offer By Demand
+required:
+  - defaultCost
+  - costPerDemandSubAccountId
+properties:
+  defaultCost:
+    type: number
+    title: Default Amount (in $ USD)
+    multipleOf: 0.01
+    minimum: 0.01
+  costPerDemandSubAccountId:
+    type: array
+    items:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: integer
+          format: int64
+          title: Demand Sub Account Id
+        value:
+          type: number
+          title: Amount (in $ USD)
+          multipleOf: 0.01
+          minimum: 0
+allOf:
+  - $ref: ../abstractPayoutClause.yml

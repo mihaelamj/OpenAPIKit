@@ -1,0 +1,19 @@
+type: object
+title: ledgerItemReconciliationCreateData
+required:
+  - ledgerItemIds
+  - reconciliationType
+  - memo
+properties:
+  ledgerItemIds:
+    title: Ledger Item Ids
+    type: array
+    items:
+      type: integer
+      format: int64
+  reconciliationType:
+    title: Reconciliation Type
+    $ref: ./reconciliationType.yml
+  memo:
+    title: Memo
+    type: string

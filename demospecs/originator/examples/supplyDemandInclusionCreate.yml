@@ -1,0 +1,8 @@
+summary: A supply demand inclusion creation object
+value:
+  {
+    "demandSubAccountId": 1,
+    "supplySubAccountId": 2,
+    "createdReason": "demand_onboarding",
+    "createdMemo": "created during onboarding process for so and so bank"
+  }

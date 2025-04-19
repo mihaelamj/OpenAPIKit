@@ -1,0 +1,23 @@
+type: object
+title: Cost Per Lead by Device Type
+required:
+  - defaultCost
+  - key
+properties:
+  defaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Default Amount (in $ USD)
+    minimum: 0.01
+  desktopCost:
+    type: number
+    multipleOf: 0.01
+    title: Amount for Desktop (in $ USD)
+    minimum: 0.01
+  mobileCost:
+    type: number
+    multipleOf: 0.01
+    title: Amount for Mobile (in $ USD)
+    minimum: 0.01
+allOf:
+  - $ref: ../abstractPayoutClause.yml

@@ -1,0 +1,17 @@
+type: object
+required:
+  - uuid
+  - scopes
+  - richAccount
+properties:
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for the access token.
+  scopes:
+    type: array
+    items:
+      type: string
+  richAccount:
+    $ref: ./richAccount.yml

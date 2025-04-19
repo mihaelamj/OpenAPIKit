@@ -1,0 +1,38 @@
+type: object
+description: Information about an asset report
+required:
+  - dateGenerated
+  - dateReceived
+  - personalizationLevel
+properties:
+  userUuid:
+    description: The uuid of a user to connect this token to
+    type: string
+    format: uuid
+    nullable: true
+  cardMatch:
+    type: array
+    items:
+      $ref: ../../birch-core/schemas/cardMatch.yml
+  status:
+    description: The current status of the asset report within Birch
+    readOnly: true
+    type: string
+    enum:
+      - syncing
+      - error
+      - ready
+  dateGenerated:
+    description: The date the asset report was created with Plaid
+    type: string
+    format: date
+    readOnly: true
+  dateReceived:
+    description: The date the asset report was submitted to Birch
+    type: string
+    format: date
+    readOnly: true
+  personalizationLevel:
+    description: The personlization level acheived by this access token
+    readOnly: true
+    $ref: ../../birch-core/schemas/personalizationLevels.yml

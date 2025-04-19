@@ -1,0 +1,2262 @@
+openapi: 3.0.3
+info:
+  title: originator
+  description: description
+  version: 1.10.0-rc.2
+  contact:
+    name: Offers Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/12124290/Offers+Team
+servers:
+  - url: 'https://api.evenfinancial.com/originator'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/originator'
+    description: Dev
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'originator:rateTables:read': Allows read access to `RateTables`
+            'originator:rate_table:read': 'Deprecated alias of `originator:rateTables:read`'
+            'originator:rateTables:create': Allows create access to `RateTables`
+            'originator:admin:read': Allows read access to all admin endpoints in originator
+            'originator:admin:write': Allows write access to all admin endpoints in originator
+  parameters:
+    excludeDeleted:
+      $ref: ../core/parameters/excludeDeleted.yml
+    includeDeactivated:
+      $ref: ../core/parameters/includeDeactivated.yml
+    id:
+      $ref: ../core/parameters/id.yml
+    uuid:
+      $ref: ../core/parameters/uuid.yml
+    limit:
+      $ref: ../core/parameters/limit.yml
+    offset:
+      $ref: ../core/parameters/offset.yml
+    sortBy:
+      $ref: ../core/parameters/sortBy.yml
+    order:
+      $ref: ../core/parameters/order.yml
+  schemas:
+    AdjustmentType:
+      $ref: ./schemas/adjustmentType.yml
+    AnnualIncomeRange:
+      $ref: ./schemas/annualIncomeRange.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    ApprovalBiasedRuleCombinator:
+      $ref: ./schemas/leadFilterRules/approvalBiasedRuleCombinator.yml
+    AprType:
+      $ref: ./schemas/aprType.yml
+    BankAccountType:
+      $ref: ../lead/schemas/bankAccountType.yml
+    BestTimeToCall:
+      $ref: ../lead/schemas/bestTimeToCall.yml
+    BonusPersonalization:
+      $ref: ../offer-augmentation/schemas/bonusPersonalization.yml
+    CardBenefits:
+      $ref: ../lead/schemas/cardBenefits.yml
+    CardPurpose:
+      $ref: ../lead/schemas/cardPurposes.yml
+    CardType:
+      $ref: ./schemas/cardType.yml
+    CitizenshipStatus:
+      $ref: ../lead/schemas/citizenshipStatus.yml
+    CreditCardOfferRecord:
+      $ref: ./schemas/creditCardOfferRecord.yml
+    EarningBonus:
+      $ref: ../offer-augmentation/schemas/earningBonus.yml
+    EarningBonusName:
+      $ref: ../offer-augmentation/schemas/earningBonusName.yml
+    EarningBonusType:
+      $ref: ../offer-augmentation/schemas/earningBonusType.yml
+    EarningContext:
+      $ref: ../offer-augmentation/schemas/earningContext.yml
+    EarningContextType:
+      $ref: ../offer-augmentation/schemas/earningContextType.yml
+    EarningGroup:
+      $ref: ../offer-augmentation/schemas/earningGroup.yml
+    EarningItem:
+      $ref: ../offer-augmentation/schemas/earningItem.yml
+    EarningItemPersonalization:
+      $ref: ../offer-augmentation/schemas/earningItemPersonalization.yml
+    EarningItemType:
+      $ref: ../offer-augmentation/schemas/earningItemType.yml
+    EarningProgram:
+      $ref: ../offer-augmentation/schemas/earningProgram.yml
+    EarningProgramPersonalization:
+      $ref: ../offer-augmentation/schemas/earningProgramPersonalization.yml
+    IdType:
+      $ref: ../lead/schemas/idType.yml
+    CreditCardOffer:
+      $ref: ./schemas/creditCardOffer.yml
+    CreditCardOfferDetails:
+      $ref: ./schemas/creditCardOfferDetails.yml
+    CreditCardIntroOfferType:
+      $ref: ./schemas/introOfferType.yml
+    CompoundingMethod:
+      $ref: ./schemas/compoundingMethod.yml
+    DbOffer:
+      $ref: ./schemas/dbOffer.yml
+    DemandApiFilter:
+      $ref: ./schemas/demandApiFilter.yml
+    DemandPartner:
+      $ref: ./schemas/demandPartner.yml
+    EducationLevel:
+      $ref: ../lead/schemas/educationLevel.yml
+    EmploymentPayFrequency:
+      $ref: ../lead/schemas/employmentPayFrequency.yml
+    EmploymentStatus:
+      $ref: ../lead/schemas/employmentStatus.yml
+    Gender:
+      $ref: ../lead/schemas/gender.yml
+    GraduateDegreeType:
+      $ref: ../lead/schemas/graduateDegreeType.yml
+    LeadAction:
+      $ref: ../lead/schemas/leadActionResponse.yml
+    LeadActionType:
+      $ref: ../lead/schemas/leadActionType.yml
+    LeadActionRejectReason:
+      $ref: ../lead/schemas/rejectReason.yml
+    LoanAmountRange:
+      $ref: ./schemas/loanAmountRange.yml
+    LeadAttribute:
+      $ref: ./schemas/leadFilterRules/leadAttribute.yml
+    LeadAttributeBoolean:
+      $ref: ./schemas/leadFilterRules/leadAttributeBoolean.yml
+    LeadAttributeNumeric:
+      $ref: ./schemas/leadFilterRules/leadAttributeNumeric.yml
+    LeadAttributeString:
+      $ref: ./schemas/leadFilterRules/leadAttributeString.yml
+    LeadCoApplicationInformation:
+      $ref: ../lead/schemas/coApplicantInformation.yml
+    LeadCreditInformation:
+      $ref: ../lead/schemas/creditInformation.yml
+    LeadCreditCardInformation:
+      $ref: ../lead/schemas/creditCardInformation.yml
+    LeadEducationInformation:
+      $ref: ../lead/schemas/educationInformation.yml
+    LeadEmploymentInformation:
+      $ref: ../lead/schemas/employmentInformation.yml
+    LeadFilterRule:
+      $ref: ./schemas/leadFilterRules/leadFilterRule.yml
+    LeadFinancialInformation:
+      $ref: ../lead/schemas/financialInformation.yml
+    LeadHealthInformation:
+      $ref: ../lead/schemas/healthInformation.yml
+    LeadIdentificationInformation:
+      $ref: ../lead/schemas/identificationInformation.yml
+    LeadLegalInformation:
+      $ref: ../lead/schemas/legalInformation.yml
+    LeadLifeInsuranceInformation:
+      $ref: ../lead/schemas/lifeInsuranceInformation.yml
+    LeadLoanInformation:
+      $ref: ../lead/schemas/loanInformation.yml
+    LeadMortgageInformation:
+      $ref: ../lead/schemas/mortgageInformation.yml
+    LeadPersonalInformation:
+      $ref: ../lead/schemas/personalInformation.yml
+    LeadResponseJson:
+      $ref: ../lead/schemas/leadResponseJson.yml
+    LeadSavingsInformation:
+      $ref: ../lead/schemas/savingsInformation.yml
+    LeadSessionInformation:
+      $ref: ../lead/schemas/sessionInformation.yml
+    LifeInsuranceOfferRecord:
+      $ref: ./schemas/lifeInsuranceOfferRecord.yml
+    LifeInsurancePackageType:
+      $ref: ./schemas/packageType.yml
+    LineOfCreditOfferRecord:
+      $ref: ./schemas/lineOfCreditOfferRecord.yml
+    LoanOfferPublic:
+      $ref: ./schemas/loanOfferPublic.yml
+    LoanOfferRecord:
+      $ref: ./schemas/loanOfferRecord.yml
+    LoanPurpose:
+      $ref: ../lead/schemas/purpose.yml
+    Merchant:
+      $ref: ../offer-augmentation/schemas/merchant.yml
+    MerchantCategory:
+      $ref: ../offer-augmentation/schemas/category.yml
+    MockRateTable:
+      $ref: ./schemas/mockRateTable.yml
+    MockRateTableStaticOffer:
+      $ref: ./schemas/mockRateTableStaticOffer.yml
+    MortgageLoanType:
+      $ref: ./schemas/mortgageLoanType.yml
+    MortgageOccupancyType:
+      $ref: ../lead/schemas/occupancyType.yml
+    MortgageOffer:
+      $ref: ./schemas/mortgageOffer.yml
+    MortgageOfferRecord:
+      $ref: ./schemas/mortgageOfferRecord.yml
+    MortgageOfferDetails:
+      $ref: ./schemas/mortgageOfferDetails.yml
+    MortgagePropertyType:
+      $ref: ../lead/schemas/propertyType.yml
+    MortgagePropertySearchStatus:
+      $ref: ../lead/schemas/propertySearchStatus.yml
+    MortgagePropertyStatus:
+      $ref: ../lead/schemas/propertyStatus.yml
+    MortgagePurchaseStatus:
+      $ref: ../lead/schemas/purchaseStatus.yml
+    MortgageRefinanceType:
+      $ref: ../lead/schemas/refinanceType.yml
+    MortgageType:
+      $ref: ../lead/schemas/mortgageType.yml
+    LifeInsuranceOfferDetails:
+      $ref: ./schemas/lifeInsuranceOfferDetails.yml
+    Offer:
+      $ref: ./schemas/offer.yml
+    OfferDeactivation:
+      $ref: ./schemas/offerDeactivation.yml
+    OfferDeactivationCreateData:
+      $ref: ./schemas/offerDeactivationCreateData.yml
+    OfferDetailsRecord:
+      $ref: ./schemas/offerDetailsRecord.yml
+    OfferRecord:
+      $ref: ./schemas/offerRecord.yml
+    OfferRule:
+      $ref: ./schemas/offerRule.yml
+    OfferRuleReason:
+      $ref: ./schemas/offerRuleReason.yml
+    OfferRuleWriteData:
+      $ref: ./schemas/offerRuleWriteData.yml
+    OfferVersionRecord:
+      $ref: ./schemas/offerVersionRecord.yml
+    Order:
+      $ref: ../core/schemas/order.yml
+    Originator:
+      $ref: ./schemas/originator.yml
+    OriginatorImage:
+      $ref: ./schemas/originatorImage.yml
+    PendingResponse:
+      $ref: ./schemas/pendingResponse.yml
+    PersonalReferenceInformation:
+      $ref: ../lead/schemas/personalReferenceInformation.yml
+    PersonalReferenceRelationType:
+      $ref: ../lead/schemas/personalReferenceRelationType.yml
+    PreSelectRule:
+      $ref: ./schemas/preSelectRule.yml
+    PreSelectRuleFilter:
+      $ref: ./schemas/preSelectRuleFilter.yml
+    PreSelectRuleFilterKey:
+      $ref: ./schemas/preSelectRuleFilterKey.yml
+    PreSelectRuleSummary:
+      $ref: ./schemas/preSelectRuleSummary.yml
+    PricingControlSummary:
+      $ref: ./schemas/pricingControlSummary.yml
+    ProductType:
+      $ref: ../core/schemas/productType.yml
+    ProductSubType:
+      $ref: ../lead/schemas/productSubType.yml
+    ProvidedCreditRating:
+      $ref: ../lead/schemas/providedCreditRating.yml
+    RateTableRecord:
+      $ref: ./schemas/rateTableRecord.yml
+    RateTableRecordCreateData:
+      $ref: ./schemas/rateTableRecordCreateData.yml
+    RateTable:
+      $ref: ./schemas/rateTable.yml
+    RateTablePublic:
+      $ref: ./schemas/rateTablePublic.yml
+    RefinanceLoanInformation:
+      $ref: ../lead/schemas/refinanceLoanInformation.yml
+    RefinanceLoanType:
+      $ref: ../lead/schemas/refinanceLoanType.yml
+    RejectIfBooleanMatches:
+      $ref: ./schemas/leadFilterRules/rejectIfBooleanMatches.yml
+    RejectIfGreaterThan:
+      $ref: ./schemas/leadFilterRules/rejectIfGreaterThan.yml
+    RejectIfInSet:
+      $ref: ./schemas/leadFilterRules/rejectIfInSet.yml
+    RejectIfLessThan:
+      $ref: ./schemas/leadFilterRules/rejectIfLessThan.yml
+    RejectIfNotInSet:
+      $ref: ./schemas/leadFilterRules/rejectIfNotInSet.yml
+    RejectionBiasedRuleCombinator:
+      $ref: ./schemas/leadFilterRules/rejectionBiasedRuleCombinator.yml
+    RuleDemandApiFilter:
+      $ref: ./schemas/ruleDemandApiFilter.yml
+    RuleDemandApiFilterCreateData:
+      $ref: ./schemas/ruleDemandApiFilterCreateData.yml
+    SavingsOffer:
+      $ref: ./schemas/savingsOffer.yml
+    SavingsOfferRecord:
+      $ref: ./schemas/savingsOfferRecord.yml
+    SavingsOfferDetails:
+      $ref: ./schemas/savingsOfferDetails.yml
+    SpecialOfferPublic:
+      $ref: ./schemas/specialOfferPublic.yml
+    SpecialOfferRecord:
+      $ref: ./schemas/specialOfferRecord.yml
+    State:
+      $ref: ../core/schemas/state-lead.yml
+    StaticOffer:
+      $ref: ./schemas/staticOffer.yml
+    SupplyDemandInclusion:
+      $ref: ./schemas/supplyDemandInclusion.yml
+    SupplyDemandInclusionCreate:
+      $ref: ./schemas/supplyDemandInclusionCreate.yml
+    SupplyDemandInclusionDelete:
+      $ref: ./schemas/supplyDemandInclusionDelete.yml
+    TermUnit:
+      $ref: ./schemas/termUnit.yml
+    PayoutCeiling:
+      $ref: ./schemas/payoutCeiling.yml
+  responses:
+    InvalidRequest:
+      $ref: ../core/responses/invalidRequest.yml
+    MalformedRequest:
+      $ref: ../core/responses/malformedRequest.yml
+    UnauthorizedRequest:
+      $ref: ../core/responses/unauthorizedRequest.yml
+tags:
+  - name: Demand API Filter
+  - name: Life Insurance
+  - name: Mock Rate Table
+  - name: Offer
+  - name: Offer Deactivation
+  - name: Offer Rule
+  - name: Payout Ceiling
+  - name: Pre-Select Rule
+  - name: Preview Offer
+  - name: Pricing Control
+  - name: Rate Table
+    description: >-
+      The `RateTable` object contains offers relating to one or more product
+      types customized for a specific `Lead`. It only contains offers for
+      product types set on the `Lead`.
+  - name: Rule Demand API Filter
+  - name: Static Offer
+  - name: Supply Demand Inclusion
+paths:
+  '/rateTables/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a rate table
+      description: Return a rate table for a UUID
+      operationId: getRateTable
+      tags:
+        - Rate Table
+      security:
+        - oauth:
+            - 'originator:rateTables:read'
+            - 'originator:rate_table:read'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/rateTablePublic.yml
+        '400':
+          description: Malformed UUID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              example:
+                - message: >-
+                    Cannot parse parameter uuid as UUID: Invalid UUID string:
+                    123
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '404':
+          description: Unknown UUID
+  /preview/creditCardOffers:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get credit card preview offers
+      description: Get credit card preview offers
+      operationId: getPreviewCreditCardOffers
+      tags:
+        - Preview Offer
+      security:
+        - oauth:
+            - 'originator:rateTables:read'
+      parameters:
+        - name: providedCreditRating
+          in: query
+          required: false
+          schema:
+            $ref: ../lead/schemas/providedCreditRating.yml
+        - name: zipCode
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: cardPurposes
+          in: query
+          required: false
+          schema:
+            $ref: ../lead/schemas/cardPurposes.yml
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/creditCardOffer.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  /preview/loanOffers:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get loan preview offers
+      description: Get loan preview offers
+      operationId: getPreviewLoanOffers
+      tags:
+        - Preview Offer
+      security:
+        - oauth:
+            - 'originator:rateTables:read'
+      parameters:
+        - name: loanAmount
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: providedCreditRating
+          in: query
+          required: false
+          schema:
+            $ref: ../lead/schemas/providedCreditRating.yml
+        - name: loanPurpose
+          in: query
+          required: false
+          schema:
+            $ref: ../lead/schemas/purpose.yml
+        - name: zipCode
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/loanOfferPublic.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  /preview/savingsOffers:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get savings preview offers
+      description: Get savings preview offers
+      operationId: getPreviewSavingsOffers
+      tags:
+        - Preview Offer
+      security:
+        - oauth:
+            - 'originator:rateTables:read'
+      parameters:
+        - name: maxDepositAmount
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: minDepositAmount
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: zipCode
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/savingsOffer.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  /admin/rateTables:
+    get:
+      summary: Get a rate table
+      description: get rate table
+      operationId: getAdminRateTable
+      tags:
+        - Rate Table
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - name: leadUuid
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: uuid
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offerId
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: minId
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: maxId
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: order
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: createdAtMin
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: snapshotAt
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: pendingNonBlockingResponses
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RateTable'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+    post:
+      summary: Create a rate table
+      description: Create a rate table
+      operationId: createRateTable
+      tags:
+        - Rate Table
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RateTableRecordCreateData'
+            example:
+              leadUuid: 5d057825-2db1-4fe8-b3f5-398ee115a517
+              supplySubAccountId: 286
+              offerIds:
+                - 299610
+                - 298111
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateTableRecord'
+              example:
+                id: 835193
+                uuid: b87a5163-f7b2-4668-a514-d7630669b00e
+                leadUuid: 5d057825-2db1-4fe8-b3f5-398ee115a517
+                createdAt: '2020-05-22T19:45:57Z'
+                createdBy: 268abb4c-539f-4da0-b464-458bf02982ae
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+              example:
+                - attribute: 'offerIds[1]'
+                  type: excluded
+                  details:
+                    offerId: 123
+                    subAccountId: 456
+                  message: |
+                    Offer 123 cannot be shown to supply sub-account 456
+                    because it is not turned on for the demand sub-account.
+  /admin/demandApiFilters:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get demand API filters
+      description: Get demand API filters
+      operationId: getDemandApiFilters
+      tags:
+        - Demand API Filter
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of ids
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          style: form
+          explode: false
+          allowReserved: false
+          schema:
+            title: id
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          examples:
+            one-id:
+              value: 3
+            multiple-ids:
+              value: '1,23,456,7'
+        - name: demandSubAccountId
+          in: query
+          description: A comma separated list of ids
+          required: false
+          deprecated: false
+          allowEmptyValue: true
+          style: form
+          explode: false
+          allowReserved: false
+          schema:
+            title: id schema
+            type: array
+            items:
+              type: integer
+              format: int64
+            minimum: 1
+          examples:
+            one-id:
+              value: 3
+            multiple-ids:
+              value: '1,23,456,7'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/demandApiFilter.yml
+              examples:
+                non-empty-response:
+                  summary: A list of `demandApiFilters`
+                  description: The results filtered by the provided parameters
+                  value:
+                    - id: 1
+                      demandSubAccountId: 132
+                    - id: 2
+                      demandSubAccountId: 135
+                empty-response:
+                  summary: An empty array
+                  description: There are no results matching the provided parameters
+                  value: []
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  /admin/ruleDemandApiFilters:
+    get:
+      summary: Get Rule Demand API Filters
+      description: Get Rule Demand API Filters based on request parameters
+      operationId: getRuleDemandApiFilters
+      tags:
+        - Rule Demand API Filter
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - name: demandSubAccountId
+          in: query
+          description: A comma seperated list of Demand Sub Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - $ref: '#/components/parameters/excludeDeleted'
+        - name: supplySubAccountId
+          in: query
+          description: A comma seperated list of Supply Sub Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: limit
+          in: query
+          description: limit results
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - $ref: '#/components/parameters/offset'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleDemandApiFilter'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+    post:
+      summary: Create rule demand API filters
+      description: Create rule demand API filters
+      operationId: createRuleDemandApiFilters
+      tags:
+        - Rule Demand API Filter
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleDemandApiFilterCreateData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RuleDemandApiFilter'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  /admin/supplyDemandInclusions:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get supply / demand inclusions
+      description: Return supply / demand inclusions based on request parameters
+      operationId: getSupplyDemandInclusions
+      tags:
+        - Supply Demand Inclusion
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of Supply Demand Inclusion ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: demandSubAccountId
+          in: query
+          description: A comma separated list of Demand Sub Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: supplySubAccountid
+          in: query
+          description: A comma separated list of Supply Sub Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/supplyDemandInclusion.yml
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+    post:
+      summary: Create a supply / demand inclusion
+      description: Create a supply / demand inclusion
+      operationId: createSupplyDemandInclusion
+      tags:
+        - Supply Demand Inclusion
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        description: A Supply Demand Inclusion object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/supplyDemandInclusionCreate.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/supplyDemandInclusion.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              example:
+                - message: SubAccount for ID 123 does not exist
+                  details:
+                    referenceType: SubAccount
+                    specified: 123
+  '/admin/supplyDemandInclusions/{id}':
+    delete:
+      summary: Delete a supply / demand inclusion
+      description: Delete a supply / demand inclusion
+      operationId: deleteSupplyDemandInclusion
+      tags:
+        - Supply Demand Inclusion
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      requestBody:
+        description: A Supply Demand Inclusion Delete object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/supplyDemandInclusionDelete.yml
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/supplyDemandInclusion.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              example:
+                - message: SupplyDemandInclusion for ID 2 does not exist
+                  attribute: id
+                  type: invalidIdReference
+                  details:
+                    referenceType: SupplyDemandInclusion
+                    specified: 2
+  /admin/offerRules:
+    post:
+      summary: Create an offer rule
+      description: Create an offer rule
+      operationId: createOfferRule
+      tags:
+        - Offer Rule
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferRuleWriteData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferRule'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get offer rules
+      description: Get offer rules
+      operationId: getOfferRules
+      tags:
+        - Offer Rule
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - name: rootId
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: productTypes
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductType'
+        - name: demandSubAccountId
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: loanAmountMin
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: loanAmountMax
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: loanPurposeKey
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: ../lead/schemas/purpose.yml
+        - name: selfAssessedCreditScoreKey
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: ../lead/schemas/providedCreditRating.yml
+        - name: annualIncomeMin
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: annualIncomeMax
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - name: supplySubAccountId
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: stateAbbreviation
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: militaryStatusKey
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: cardPurposes
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: ../lead/schemas/cardPurposes.yml
+        - name: offerId
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: staticOfferId
+          in: query
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfferRule'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  '/admin/offerRules/root/{rootId}':
+    x-lint-skip:
+      - path-resource-is-plural
+    parameters:
+      - name: rootId
+        description: The stable `rootId` of the offer rule.
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    patch:
+      summary: Update an offer rule
+      description: Update an offer rule
+      operationId: updateOfferRule
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      tags:
+        - Offer Rule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferRuleWriteData'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferRule'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+    delete:
+      summary: Delete an offer rule
+      description: Delete an offer rule
+      operationId: deleteOfferRule
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      tags:
+        - Offer Rule
+      responses:
+        '204':
+          description: Success
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '404':
+          description: Unknown ID
+  /admin/offers:
+    get:
+      summary: Get offers
+      description: Get offers
+      operationId: getOffers
+      tags:
+        - Offer
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - $ref: '#/components/parameters/uuid'
+        - name: loanOfferId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: mortgageOfferId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: savingsOfferId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: specialOfferId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: staticOfferId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: productType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductType'
+        - name: leadUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: rateTableId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: rateTableOfferId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: sourceSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: includedForSupplySubAccountId
+          in: query
+          description: |
+            Limits offers to those that belong to demand sub-accounts for which
+            there exists an active `SupplyDemandInclusion` for any of the
+            specified supply sub-account IDs.
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: static
+          in: query
+          schema:
+            type: boolean
+        - name: hasRule
+          in: query
+          schema:
+            type: boolean
+        - $ref: '#/components/parameters/includeDeactivated'
+        - name: minId
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/offset'
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - $ref: '#/components/parameters/order'
+        - $ref: '#/components/parameters/sortBy'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DbOffer'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  /admin/staticOffers:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get static offers
+      description: Get static offers
+      operationId: getStaticOffers
+      tags:
+        - Static Offer
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - name: id
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: name
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: offerId
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: offerRuleId
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: productType
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: subAccountId
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: rateTableUuid
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: string
+            format: uuid
+        - name: offset
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/staticOffer.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  /admin/mockRateTables:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get mock rate tables
+      description: Get mock rate tables
+      operationId: getMockRateTables
+      tags:
+        - Mock Rate Table
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          description: The maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          description: Offset for paginating through results when larger than the limit
+          schema:
+            type: integer
+            format: int64
+            default: 0
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/mockRateTable.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      summary: Create a mock rate table
+      description: Create a mock rate table
+      operationId: createMockRateTable
+      tags:
+        - Mock Rate Table
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        description: A mock rate table object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/mockRateTable.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/mockRateTable.yml
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/admin/mockRateTables/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a mock rate table
+      description: Delete a mock rate table
+      operationId: deleteMockRateTable
+      tags:
+        - Mock Rate Table
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      responses:
+        '204':
+          description: Success
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '404':
+          description: Unknown ID
+  /admin/mockRateTableStaticOffers:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get mock rate table static offers
+      description: Get mock rate table static offers
+      operationId: getMockRateTableStaticOffers
+      tags:
+        - Mock Rate Table
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - name: id
+          in: query
+          description: Mock rate table static offer record ID
+          schema:
+            type: integer
+            format: int64
+        - name: mockRateTableId
+          in: query
+          description: Mock rate table ID
+          schema:
+            type: integer
+            format: int64
+        - name: staticOfferId
+          in: query
+          description: Static offer ID
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/mockRateTableStaticOffer.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      summary: Create a mock rate table static offer
+      description: Create a mock rate table static offer
+      operationId: createMockRateTableStaticOffer
+      tags:
+        - Mock Rate Table
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        description: A mock rate table and static offer pair
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/mockRateTableStaticOffer.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/mockRateTableStaticOffer.yml
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/admin/mockRateTableStaticOffers/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a mock rate table static offer
+      description: Delete a mock rate table static offer
+      operationId: deleteMockRateTableStaticOffer
+      tags:
+        - Mock Rate Table
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      responses:
+        '204':
+          description: Success
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '404':
+          description: Unknown ID
+  /admin/preSelectRules:
+    get:
+      summary: Get pre-select rules
+      description: Get pre-select rules
+      operationId: getPreSelectRules
+      tags:
+        - Pre-Select Rule
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - name: id
+          in: query
+          description: Preselect Rule record IDs
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 0
+        - name: uuid
+          in: query
+          description: Preselect Rule Uuids
+          schema:
+            type: integer
+            format: int64
+        - name: offerId
+          in: query
+          description: Offer ID
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 0
+        - name: nonPreSelectOfferId
+          in: query
+          description: Non PreSelect Offer Ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 0
+        - name: limit
+          in: query
+          required: true
+          description: The maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/preSelectRule.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      summary: Create a pre-select rule
+      description: Create a pre-select rule
+      operationId: createPreSelectRule
+      tags:
+        - Pre-Select Rule
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        description: A preselect rule object
+        required: true
+        content:
+          application.json:
+            schema:
+              $ref: ./schemas/preSelectRule.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/preSelectRule.yml
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/admin/preSelectRules/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a pre-select rule
+      description: Delete a pre-select rule
+      operationId: deletePreSelectRule
+      tags:
+        - Pre-Select Rule
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      responses:
+        '204':
+          description: Success
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '404':
+          description: Unknown ID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              example:
+                - message: PreSelectRule for ID 2 does not exist
+                  attribute: id
+                  type: invalidIdReference
+                  details:
+                    referenceType: PreSelectRule
+                    specified: 2
+    put:
+      summary: Update a pre-select rule
+      description: Update a pre-select rule
+      operationId: updatePreSelectRule
+      tags:
+        - Pre-Select Rule
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        description: A preselect rule object
+        required: true
+        content:
+          application.json:
+            schema:
+              $ref: ./schemas/preSelectRule.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/preSelectRule.yml
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  /admin/preSelectRuleSummaries:
+    get:
+      summary: Get pre-select rule summaries
+      description: >
+        Returns a list of pre-select rule summaries that match the specified
+        criteria.
+      operationId: getPreselectRuleSummaries
+      tags:
+        - Pre-Select Rule
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - name: offerId
+          in: query
+          description: Offer ID
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 0
+        - name: nonPreSelectOfferId
+          in: query
+          description: Non PreSelect Offer Ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 0
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - $ref: '#/components/parameters/offset'
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/order'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PreSelectRuleSummary'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+  /lifeInsurance/searches:
+    post:
+      summary: Creates rate table with single life insurance offer
+      description: |-
+        - Call leap life API proxy
+        - Create rate table with single life insurance offer
+      operationId: createLifeInsuranceSearch
+      tags:
+        - Life Insurance
+      security:
+        - oauth:
+            - 'originator:rateTables:create'
+      requestBody:
+        description: A leadResponseJson object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../lead/schemas/leadResponseJson.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ../originator/schemas/rateTablePublic.yml
+              examples:
+                rateTable:
+                  value:
+                    $ref: ../originator/examples/rateTablePublic.yml
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+  /admin/payoutCeilings:
+    get:
+      summary: Get payout ceilings
+      description: Get payout ceilings
+      operationId: getPayoutCeilings
+      tags:
+        - Payout Ceiling
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: supplySubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: demandSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/payoutCeiling.yml
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      summary: Create a payout ceiling
+      description: Create a payout ceiling
+      operationId: createPayoutCeiling
+      tags:
+        - Payout Ceiling
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/payoutCeiling.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/payoutCeiling.yml
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/admin/payoutCeilings/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    put:
+      summary: Update a payout ceiling
+      description: Update a payout ceiling
+      operationId: updatePayoutCeiling
+      tags:
+        - Payout Ceiling
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/payoutCeiling.yml
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '404':
+          description: Unknown ID
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+    delete:
+      summary: Delete a payout ceiling
+      description: Delete a payout ceiling
+      operationId: deletePayoutCeiling
+      tags:
+        - Payout Ceiling
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      responses:
+        '204':
+          description: Success
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '404':
+          description: Unknown ID
+  /admin/offerDeactivations:
+    get:
+      summary: Get offer deactivations
+      description: Return offer deactivations based upon request parameters
+      operationId: getOfferDeactivations
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      tags:
+        - Offer Deactivation
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: offerId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int32
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfferDeactivation'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create offer deactivations
+      description: Create offer deactivations
+      operationId: createOfferDeactivation
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      tags:
+        - Offer Deactivation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferDeactivationCreateData'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfferDeactivation'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/admin/offerDeactivations/{id}':
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      summary: Delete a offer deactivation
+      description: Delete a offer deactivation
+      operationId: deleteOfferDeactivation
+      security:
+        - oauth:
+            - 'originator:admin:write'
+      tags:
+        - Offer Deactivation
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferDeactivation'
+        '404':
+          description: Unknown ID
+  /admin/pricingControlSummaries:
+    get:
+      summary: Get pricing control summaries
+      description: >
+        Returns a list of pricing control summaries summaries that match the
+        specified criteria.
+      operationId: getPricingControlSummaries
+      tags:
+        - Pricing Control
+      security:
+        - oauth:
+            - 'originator:admin:read'
+      parameters:
+        - $ref: '#/components/parameters/id'
+        - name: demandSubAccountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: productType
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProductType'
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - $ref: '#/components/parameters/offset'
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/order'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PricingControlSummary'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'

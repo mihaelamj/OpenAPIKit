@@ -1,0 +1,9 @@
+name: subAccountId
+in: query
+description: A comma separated list of sub account ids
+style: form
+schema:
+  type: array
+  items:
+    type: integer
+    format: int64m

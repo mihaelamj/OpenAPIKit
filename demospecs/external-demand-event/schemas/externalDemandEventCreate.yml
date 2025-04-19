@@ -1,0 +1,39 @@
+type: object
+title: ExternalDemandEventCreateData
+required:
+  - subAccountId
+  - leadUuid
+  - eventType
+  - timestamp
+properties:
+  subAccountId:
+    title: Sub Account Id
+    type: integer
+    format: int64
+  leadUuid:
+    title: Lead Uuid
+    type: string
+    format: uuid
+  eventType:
+    title: Event Type
+    $ref: ./externalDemandEventType.yml
+  timestamp:
+    title: Timestamp
+    type: string
+    format: date-time
+  details:
+    oneOf:
+    - $ref: ./details/creditCardDetails.yml
+    - $ref: ./details/loanDetails.yml
+    - $ref: ./details/savingsDetails.yml
+    - $ref: ./details/specialOfferDetails.yml
+    discriminator:
+      propertyName: edeDetailsKey
+      mapping:
+        credit_card: ./details/creditCardDetails.yml
+        loan: ./details/loanDetails.yml
+        savings: ./details/savingsDetails.yml
+        other: ./details/specialOfferDetails.yml
+  partnerTrackingId:
+    title: Partner Tracking Id
+    type: string

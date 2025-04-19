@@ -1,0 +1,9 @@
+type: object
+description: An offer for a credit card
+required:
+  - details
+properties:
+  details:
+    $ref: ./creditCardOfferDetails.yml
+allOf:
+  - $ref: ./offer.yml

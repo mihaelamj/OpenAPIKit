@@ -1,0 +1,10 @@
+type: string
+enum:
+  - credit_card
+  - insurance
+  - life_insurance
+  - loan
+  - mortgage
+  - savings
+  - other
+  - unknown

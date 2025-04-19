@@ -1,0 +1,7 @@
+type: string
+enum:
+  - weekly
+  - biweekly
+  - twice_monthly
+  - monthly
+  - unknown

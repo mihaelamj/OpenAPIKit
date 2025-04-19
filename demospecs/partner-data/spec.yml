@@ -1,0 +1,379 @@
+openapi: 3.0.3
+info:
+  title: partner-data
+  description: >-
+    For managing partner-related data such as lists of featured demand partners
+    for supply sub accounts, logos, etc.
+  version: 1.4.0-rc.0
+  contact:
+    name: Verticals Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/PE/pages/594542602/RFC+Customizable+and+Dynamic+Logos+for+Partner+Pages
+servers:
+  - url: 'https://api.evenfinancial.com/partnerData'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/partnerData'
+    description: Dev
+tags:
+  - name: Available Demand Partners
+    description: >
+      Indicates a list of demand partners available to be featured on supply
+      channel partner pages
+  - name: Featured Demand Partners
+    description: |
+      The actual list of featured demand partners
+  - name: Life Insurance Policy Details
+    description: |
+      Policy details of demand partners
+  - name: Active Partner Features
+    description: |
+      List of features active on a partner
+components:
+  securitySchemes:
+    internal:
+      type: http
+      scheme: bearer
+  schemas:
+    ActivePartnerFeature:
+      $ref: ./schemas/activePartnerFeature.yml
+    ActivePartnerFeatureCreateData:
+      $ref: ./schemas/activePartnerFeatureCreateData.yml
+    ActivePartnerFeatureSortBy:
+      $ref: ./schemas/activePartnerFeatureSortBy.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    AvailableDemandPartner:
+      $ref: ./schemas/availableDemandPartner.yml
+    FeaturedDemandPartner:
+      $ref: ./schemas/featuredDemandPartner.yml
+    FeaturedDemandPartnersCreate:
+      $ref: ./schemas/featuredDemandPartnersCreate.yml
+    FeaturedFinancialInstitution:
+      $ref: ./schemas/featuredFinancialInstitution.yml
+    LifeInsuranceCarrierDetail:
+      $ref: ./schemas/lifeInsuranceCarrierDetail.yml
+    LifeInsurancePolicyDetail:
+      $ref: ./schemas/lifeInsurancePolicyDetail.yml
+    LifeInsurancePolicyDeliveryMethod:
+      $ref: ./schemas/lifeInsurancePolicyDeliveryMethod.yml
+    PartnerFeature:
+      $ref: ./schemas/partnerFeature.yml
+    Order:
+      $ref: ../core/schemas/order.yml
+  responses:
+    InvalidRequest:
+      $ref: ../core/responses/invalidRequest.yml
+    UnknownId:
+      $ref: ../core/responses/unknownId.yml
+security:
+  - internal: []
+paths:
+  /availableDemandPartners:
+    get:
+      summary: Retrieve a list of available demand partners
+      description: >-
+        A list of partners whose offers can be served to leads from the given
+        supply sub account
+      operationId: getAvailableDemandPartners
+      tags:
+        - Available Demand Partners
+      parameters:
+        - name: supplySubAccountId
+          in: query
+          required: true
+          description: A comma separated list of Supply Sub Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+          style: form
+      responses:
+        '200':
+          description: Available demand providers found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/availableDemandPartner.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /featuredDemandPartners:
+    get:
+      summary: Get featured demand partners
+      operationId: getFeaturedDemandPartners
+      tags:
+        - Featured Demand Partners
+      parameters:
+        - name: supplySubAccountId
+          in: query
+          required: true
+          description: A comma separated list of Supply Sub Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+          style: form
+      responses:
+        '200':
+          description: The Featured Demand Partners matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/featuredDemandPartner.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Set a supply partner's list of featured demand partners
+      description: >
+        A supply partner's featuredDemandPartners list. Overwrites the existing
+        list if present.  The order will be preserved, with the first given id
+        being associated with the top 'ranked'  demand partner, and so on.
+      operationId: setFeaturedDemandPartners
+      tags:
+        - Featured Demand Partners
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/featuredDemandPartnersCreate.yml
+      responses:
+        '201':
+          description: The featured demand partner records were created successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/featuredDemandPartner.yml
+        '400':
+          description: Invalid Supply Featured Deamnd Partner Create Json
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/featuredDemandPartners/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          description: The id matching the featuredDemandPartner record to be deleted
+    delete:
+      summary: Delete featured demand partner
+      operationId: deleteFeaturedDemandPartner
+      tags:
+        - Featured Demand Partners
+      responses:
+        '204':
+          description: The Featured Demand Partner was deleted successfully
+        '404':
+          description: No Featured Demand Partner matching the id was found
+  /lifeInsurancePolicyDetails:
+    get:
+      summary: Get available life insurance policy details of demand partners
+      operationId: getLifeInsurancePolicyDetails
+      tags:
+        - Life Insurance Policy Details
+      parameters:
+        - name: subAccountId
+          in: query
+          required: true
+          description: A comma separated list of Demand Sub Account ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+          style: form
+      responses:
+        '200':
+          description: The life insurance policy details matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/lifeInsuranceCarrierDetail.yml
+  /activePartnerFeatures:
+    get:
+      summary: Get currently active features
+      operationId: getActivePartnerFeatures
+      tags:
+        - Active Partner Features
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: uuid
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: subAccountIds
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: feature
+          in: query
+          schema:
+            $ref: '#/components/schemas/PartnerFeature'
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int64
+            default: 0
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          schema:
+            $ref: '#/components/schemas/ActivePartnerFeatureSortBy'
+        - name: order
+          in: query
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivePartnerFeature'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+    post:
+      summary: Activate a feature for a partner
+      operationId: activatePartnerFeature
+      tags:
+        - Active Partner Features
+      requestBody:
+        description: A Partner Feature activation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivePartnerFeatureCreateData'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivePartnerFeature'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+  '/activePartnerFeatures/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Deactive a feature for a partner
+      operationId: deactivatePartnerFeature
+      tags:
+        - Active Partner Features
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivePartnerFeature'
+        '404':
+          $ref: '#/components/responses/UnknownId'

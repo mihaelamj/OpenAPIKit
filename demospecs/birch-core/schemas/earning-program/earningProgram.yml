@@ -1,0 +1,30 @@
+type: object
+description: Reward earning data for the card
+required:
+  - transactionLevelEarningScheme
+  - cardLevelEarningScheme
+properties:
+  transactionLevelEarningScheme:
+    description: Grouped by earn rate, the rules that earn multipliers on each transaction
+    type: array
+    items:
+      $ref: ./earningContext.yml
+  cardLevelEarningScheme:
+    description: Card level bonuses, such as sign-on and anniversary bonuses
+    type: array
+    items:
+      $ref: ./earningBonus.yml
+  personalization:
+    description: Annual value of this card for the user, only returned in a simulation
+    type: object
+    properties:
+      totalSpent:
+        type: number
+        description: The amount the user spent in dollars within a calendar year
+      totalEarned:
+        type: number
+        description: The amount of points/miles/dollars the user would have received within a calendar year
+      totalValue:
+        type: number
+        description: The value in USD of the totalEarned amount based on the user's custom point valuation, minus fees
+

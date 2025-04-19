@@ -1,0 +1,14 @@
+type: object
+title: ledgerItemCreateData
+required:
+  - billingCycleId
+  - targetDate
+properties:
+  billingCycleId:
+    title: Billing Cycle Id
+    type: integer
+    format: int64
+  targetDate:
+    title: Target Date
+    type: string
+    format: date

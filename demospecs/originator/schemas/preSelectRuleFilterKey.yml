@@ -1,0 +1,7 @@
+    type: string
+    enum:
+      - range
+      - exact
+      - high
+      - low
+    description: Represents the type of filter to be utlized on the PreSelectRule as knockout criteria, which is associated to the provided characteristic 

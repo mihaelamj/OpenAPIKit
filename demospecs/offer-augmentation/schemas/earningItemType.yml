@@ -1,0 +1,7 @@
+description: Refers to the type (and schema) of the item
+type: string
+enum:
+  - category
+  - merchant
+  - ebp
+  - paymentMethod

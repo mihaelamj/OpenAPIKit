@@ -1,0 +1,13 @@
+summary: List of redemption types
+value:
+  [
+    {
+      "uuid": "982f343e-68cc-4937-8ed8-5105b6f99728",
+      "name": "Flights"
+    },
+    {
+      "uuid": "cc430374-a3e6-4c51-9054-a9766b9bb356",
+      "parentUuid": "982f343e-68cc-4937-8ed8-5105b6f99728",
+      "name": "American Airlines"
+    }
+  ]

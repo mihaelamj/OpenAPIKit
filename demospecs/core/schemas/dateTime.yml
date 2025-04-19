@@ -1,0 +1,3 @@
+type: string
+format: date-time
+description: Timestamp formatted as MM/dd/yyyy HH:mm:ss.SSS

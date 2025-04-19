@@ -1,0 +1,21 @@
+type: object
+description: An earning event which is based on spend or is over time
+required:
+  - type
+  - name
+  - bonus
+  - redemptionValue
+  - requirement
+properties:
+  type:
+    $ref: ./earningBonusType.yml
+  name:
+    $ref: ./earningBonusName.yml
+  bonus:
+    type: string
+  redemptionValue:
+    type: string
+  requirement:
+    type: string
+  personalization:
+    $ref: ./bonusPersonalization.yml

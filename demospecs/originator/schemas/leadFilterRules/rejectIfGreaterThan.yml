@@ -1,0 +1,25 @@
+type: object
+description: A rule to set a maximum for a lead attribute value.
+required:
+  - comparisonValue
+  - strictApproval
+  - rejectIfAttributeNotProvided
+  - rejectIfAttributeNull
+  - leadAttribute
+properties:
+  comparisonValue:
+    type: number
+    description: The maximum value for the lead attribute.
+  strictApproval:
+    type: boolean
+    description: Determines if passing the rule is enough information to decide to send the lead to the demand API.
+  rejectIfAttributeNotProvided:
+    type: boolean
+    description: Determines if the attribute not being present on the lead constitutes a rejection.
+  rejectIfAttributeNull:
+    type: boolean
+    description: Determines if the attribute being present but semantically null constitutes a rejection.
+  leadAttribute:
+    $ref: './leadAttributeNumeric.yml'
+allOf:
+  - $ref: './leadFilterRule.yml'

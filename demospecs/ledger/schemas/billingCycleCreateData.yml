@@ -1,0 +1,31 @@
+type: object
+title: billingCycleCreateData
+required:
+  - accountId
+  - ledgerItemType
+  - effectiveAt
+  - termUnit
+  - netD
+properties:
+  accountId:
+    title: Account Id
+    type: integer
+    format: int64
+  ledgerItemType:
+    title: Ledger Item Type
+    $ref: ./ledgerItemType.yml
+  effectiveAt:
+    title: Effective At
+    type: string
+    format: date
+  endDate:
+    title: End Date
+    type: string
+    format: date
+  termUnit:
+    title: Term Unit
+    $ref: ./termUnit.yml
+  netD:
+    title: NetD
+    type: number
+    format: double

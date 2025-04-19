@@ -1,0 +1,20 @@
+type: object
+required:
+  - uuid
+  - name
+properties:
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for the spending category. This is used to reference
+      spending categories in `POST /offerAugmentation/rewardValueCalculations`.
+  parentUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the spending category's parent spending category.
+  name:
+    type: string
+    description: |
+      The name of the spending category.

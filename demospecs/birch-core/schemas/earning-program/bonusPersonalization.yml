@@ -1,0 +1,10 @@
+type: object
+description: Personalized values calculated for a specific bonus, such as a Sign On Bonus
+properties:
+  minimumSpendMet:
+    type: boolean
+    description: Were the conditions of the bonus met
+  qualifyingSpend:
+    type: string
+    description: The amount of spend the user had within the time period of the bounus
+

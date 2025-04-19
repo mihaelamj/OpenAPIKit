@@ -1,0 +1,12 @@
+type: string
+description: Purposes or categories related to a credit card
+enum:
+  - balance_transfer
+  - cash_back
+  - earning_rewards
+  - improve_credit
+  - low_interest
+  - new_to_credit
+  - student
+  - travel_incentives
+  - unknown

@@ -1,0 +1,11 @@
+description: Invalid Body
+content:
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: ../../core/schemas/apiError.yml
+    example:
+      - message: >-
+          Cannot parse parameter uuid as UUID: Invalid UUID string:
+          123

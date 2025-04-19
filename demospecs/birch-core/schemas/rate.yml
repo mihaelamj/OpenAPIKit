@@ -1,0 +1,17 @@
+type: object
+description: An Interest Rate
+properties:
+  minRate:
+    type: number
+  maxRate:
+    type: number
+  introRate:
+    description: Initial Rate
+    type: number
+  introLengthMonths:
+    description: How long is it low
+    type: number
+  description:
+    description: Additional Details
+    type: string
+

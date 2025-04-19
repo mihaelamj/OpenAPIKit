@@ -1,0 +1,51 @@
+type: object
+required:
+  - uuid
+  - questionType
+  - leapLifeId
+  - prompt
+properties:
+  uuid:
+    type: string
+    pattern: uuid
+  questionType:
+    $ref: ./questionType.yml
+  leapLifeId:
+    type: string
+    description: >
+      The leap life id for the question
+  prompt:
+    type: string
+    description: >
+      The text of the question
+  contextTitle:
+    type: string
+    description: >
+      The context heading, to use for the display of followup questions
+  answerOptions:
+    type: array
+    description: >
+      The possible values that the user can select
+    items:
+      $ref: ./answerOption.yml
+  followupQuestions:
+    type: array
+    description: >
+      The list of followup questions if any.
+      Based on the answer selection of this questions, we should ask the followup question
+    items:
+      $ref: ./followupQuestion.yml
+  company:
+    type: string
+    default: "leap"
+    description: >
+      The company for which this question is relevant
+  allowNoSelection:
+    type: boolean
+    description: >
+      Allow no value to be selected
+      Applicable to `select-many` questions
+  helperText:
+    type: string
+    description: >
+      Additional note on the question

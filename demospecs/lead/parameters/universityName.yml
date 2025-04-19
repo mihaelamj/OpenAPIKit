@@ -1,0 +1,8 @@
+name: name
+in: query
+description: Part of a university name for search
+schema:
+  type: string
+examples:
+  with-name-johns:
+    value: johns

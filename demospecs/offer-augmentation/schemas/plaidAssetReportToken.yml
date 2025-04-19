@@ -1,0 +1,35 @@
+type: object
+required:
+  - uuid
+  - leadUuid
+  - token
+  - createdAt
+  - createdBy
+properties:
+  uuid:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      A unique identifier for this Plaid asset report token
+  leadUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the lead with which the asset associated.
+  token:
+    type: string
+    description: |
+      The Plaid asset report token itself.
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the token was added.
+  createdBy:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to add this token.

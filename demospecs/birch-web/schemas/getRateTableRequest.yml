@@ -1,0 +1,13 @@
+type: object
+required:
+  - productType
+properties:
+  productType:
+    type: string
+    enum:
+      - credit_card
+      - loan
+      - savings
+    description: |
+      Type of Lead to return RateTable for.
+      

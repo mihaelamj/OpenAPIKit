@@ -1,0 +1,56 @@
+type: object
+required:
+  - groupBy
+  - groupKey
+  - numLeads
+  - numLeadsSubmittedApp
+  - numLeadsMatched
+  - numLeadsClicked
+  - numLeadsApproved
+  - totalPayout
+properties:
+  groupBy:
+    $ref: ./summaryGroupBy.yml
+    description: |
+      The requested bucketing criteria, for example "day".
+  groupKey:
+    type: string
+    description: |
+      The value of the bucketing criteria. For example, if "day" was
+      requested as a groupBy, groupKeys could be "2020-07-01" or "2020-07-02"
+  numLeads:
+    type: integer
+    format: int32
+    description: |
+      Number of unique leads from a supply partner created
+      for the credit card vertical.
+  numLeadsSubmittedApp:
+    type: integer
+    format: int32
+    description: |
+      Number of unique leads from a supply partner created
+      that applied for a credit card.
+  numLeadsMatched:
+    type: integer
+    format: int32
+    description: |
+      Number of unique leads from a supply partner created
+      that were matched
+  numLeadsClicked:
+    type: integer
+    format: int32
+    description: |
+      Number of unique leads from a supply partner created
+      that clicked on a credit card application.
+  numLeadsApproved:
+    type: integer
+    format: int32
+    description: |
+      Number of unique leads from a supply partner created
+      that were approved for a credit card application.
+  totalPayout:
+    type: number
+    format: double
+    description: |
+      Payout to the partner, in dollars, attributable
+      to the leads that were created in this bucket.

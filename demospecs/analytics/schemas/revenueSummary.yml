@@ -1,0 +1,108 @@
+type: object
+required:
+  - leadCreatedAtMin
+  - leadCreatedAtMax
+  - leadCount
+  - submittedApplicationCount
+  - preApprovedApplicationCount
+  - offerClickCount
+  - fundedCount
+properties:
+  leadCreatedAtMin:
+    title: Date
+    type: string
+    format: date
+    description: >
+      The beginning day of the bucket, in the UTC timezone. If data is aggregated by week,
+      this defaults to the Monday of each week. If aggregated by month, instead this defaults to the
+      first of each month.
+  leadCreatedAtMax:
+    title: Date
+    type: string
+    format: date
+    description: >
+      The beginning day of the subsequent bucket. By default, this is the day after the leadCreatedAtMin.
+      If data was requested to be aggregated by week, instead this is 7 days after the leadCreatedAtMin.
+      If instead by month, this is the first day of the next month of this bucket.
+  clientTagValue:
+    title: Client Tag Value
+    type: string
+    description: >
+      The actual value of a client tag key-value pair, used for aggregation.
+      Only present if a client tag is specified in the query.
+  creditRating:
+    title: Credit Rating
+    type: string
+    description: >
+      One of (Fair, Poor, Good, Excellent).
+      Only present if credit rating is specified as a group by clause
+  loanPurpose:
+    title: Loan Purpose
+    type: string
+    description: >
+      Self-reported purpose for a lead for applying to this loan, e.g. taxes, student loan refinancing.
+      Only present if loan purpose is specified as a group by clause.
+  referralUrl:
+    description: >
+      Url from which a lead was referred. This has only the host, as other url parameters such as utm
+      will be stripped out.
+      Only present if referral Url is requested as a group by clause.
+  leadCount:
+    title: Leads
+    type: integer
+    format: int32
+    description: >
+      Sum of all leads for the queried partner and time period, for the loan vertical.
+      If booked revenue was requested, instead this column indicates the number of leads paid out to the queried partner.
+  submittedApplicationCount:
+    title: Submitted Applications
+    type: integer
+    format: int32
+    description: >
+      Number of leads from the queried partner that submitted an application.
+      If booked revenue was requested, this number is restricted to just leads that were paid out for.
+  preApprovedApplicationCount:
+    title: Approved Count
+    type: integer
+    format: int32
+    description: >
+      Number of pre-approved applications from the queried partner.
+      If booked revenue was requested, this number is restricted to just leads that were paid out for.
+  offerClickCount:
+    title: Offer Click Count
+    type: integer
+    format: int32
+    description: >
+      Number of leads that clicked on at least one offer, after pre-approval.
+      If booked revenue was requested, this number is restricted to just leads that were paid out for.
+  fundedCount:
+    title: Funded Count
+    type: integer
+    format: int32
+    description: >
+      Number of leads funded by an external loan provider.
+      If booked revenue was requested, this number is restricted to just leads that were paid out for.
+  totalBookedRevenue:
+    title: Total Booked Revenue
+    type: integer
+    format: int32
+    description: >
+      Total revenue to the supply partner in cents (i.e. $1.23 is reported as 123) for a particular bucket.
+      Booked revenue is considered to be revenue that has actually been paid out.
+      This column is only present in the response if booked revenue was requested.
+  totalAttributedRevenue:
+    title: Total Attributed Revenue
+    type: integer
+    format: int32
+    description: >
+      Total revenue to the supply partner in cents (i.e. $1.23 is reported as 123) for a particular bucket.
+      Attributed revenue is considered to be revenue that is projected based on a conversion event,
+      but may not necessarily have been paid out.
+  totalUnattributedRevenue:
+    title: Total Unattributed Revenue
+    type: integer
+    format: int32
+    description: >
+      Total booked revenue to the supply partner in cents (i.e. $1.23 is reported as 123) for a particular bucket.
+      Unattributed revenue is revenue that is paid out but can not be attributed to any lead, and therefore funnel
+      statistics on unattributed revenue behavior would not apply.

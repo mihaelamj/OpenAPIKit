@@ -1,0 +1,6 @@
+summary: A mock rate table object
+value:
+  {
+    "name": "Example mock rate table request",
+    "notes": "Sample JSON for a mock rate table request object"
+  }

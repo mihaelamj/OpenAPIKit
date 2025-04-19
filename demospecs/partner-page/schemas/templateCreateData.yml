@@ -1,0 +1,29 @@
+type: object
+required:
+  - name
+  - type
+  - definition
+  - data
+properties:
+  name:
+    type: string
+    description: 'The display name of the template'
+    example: Personal Loans Partner Page
+  type:
+    type: string
+    $ref: ./../schemas/templateType.yml
+  definition:
+    type: string
+    description: The version definition to be used for this template.
+    example: 8
+  data:
+    $ref: ./../schemas/partnerPageTemplateV8.yml
+    description: Partner page template configuration.
+    example:
+      product: loan
+      step: application
+      loan_flow: stepbystep-application
+      loanPurposeOptions: null
+      shouldAllowLoanCoApplicant: false
+      shouldAutoRedirect: true
+      theme.headerCopy: standard

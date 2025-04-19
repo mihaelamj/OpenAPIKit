@@ -1,0 +1,27 @@
+type: object
+description: Indicates whether the input data conflicts with transunion info on file
+properties:
+  addressCondition:
+    type: string
+    description: >
+      Indicates the condition that invoked the ID Mismatch Alert message. Possible values are:
+      '1' — input does not match file and '2' – Invalid information
+      (TU41 User Guide March 30, 2019 page 730/731)
+  addressStatus:
+    type: string
+    description: >
+      Indicates the condition that invoked the ID Mismatch Alert message. Possible values are:
+      '1' — input does not match file and '2' – Invalid information
+      (TU41 User Guide March 30, 2019 page 730/731)
+  zipcodeCondition:
+    type: string
+    description: >
+      Indicates the condition that invoked the ID Mismatch Alert message. Possible values are:
+      '1' — Mismatch input does not match file and '2' – Invalid information
+      (TU41 User Guide March 30, 2019 page 730/731)
+  zipcodeStatus:
+    type: string
+    description: >
+      Indicates whether the ID Mismatch Alert message refers to a current address or a previous address. 
+      Possible values are: 'C' – Current address and 'P' Previous address
+      (TU41 User Guide March 30, 2019 page 730/731)

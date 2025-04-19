@@ -1,0 +1,8 @@
+type: object
+required:
+  - roles
+properties:
+  roles:
+    type: array
+    items:
+      type: string

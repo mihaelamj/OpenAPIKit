@@ -1,0 +1,226 @@
+openapi: 3.0.3
+info:
+  title: offer-augmentation
+  description: Capture and augment credit card offers with birch offers
+  version: 1.0.0
+  contact:
+    name: Verticals 1 team
+servers:
+  - url: 'https://api.evenfinancial.com/offerAugmentation'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/offerAugmentation'
+    description: Dev
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'offer-augmentation:read': Allows read access to svc-offer-augmentation resources
+            'offer-augmentation:write': Allows write access to svc-offer-augmentation resources
+  schemas:
+    RedemptionType:
+      $ref: ./schemas/redemptionType.yml
+    RewardValueCalculation:
+      $ref: ./schemas/rewardValueCalculation.yml
+    SpendingCategory:
+      $ref: ./schemas/spendingCategory.yml
+tags:
+  - name: Offer Augmentation
+    description: >-
+      Offer Augmentation Items are used to capture and calculate financial
+      informations for our partners
+paths:
+  /spendingCategories:
+    get:
+      summary: Get a list of spending categories
+      description: |
+        Returns a list of spending categories
+      operationId: SpendingCategory.index
+      tags:
+        - Offer Augmentation
+      security:
+        - oauth:
+            - 'offer-augmentation:read'
+      responses:
+        '200':
+          description: array of spending categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/spendingCategory.yml
+  /redemptionTypes:
+    get:
+      summary: Get a list of redemption types
+      description: |
+        Returns a list of redemption types
+      operationId: RedemptionType.index
+      tags:
+        - Offer Augmentation
+      security:
+        - oauth:
+            - 'offer-augmentation:read'
+      responses:
+        '200':
+          description: array of redemption types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/redemptionType.yml
+  /rewardValueCalculations:
+    post:
+      summary: Create a new reward value calculation
+      description: Create a new reward value calculation
+      operationId: RewardValueCalculation.create
+      tags:
+        - Offer Augmentation
+      security:
+        - oauth:
+            - 'offer-augmentation:write'
+      requestBody:
+        $ref: ./request-bodies/createRewardValueCalculation.yml
+      responses:
+        '201':
+          description: The reward value calculation was succesfully created
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/rewardValueCalculation.yml
+    get:
+      summary: Get reward value calculations
+      description: Return the reward value calculations based on the given parameters
+      operationId: RewardValueCalculation.index
+      tags:
+        - Offer Augmentation
+      security:
+        - oauth:
+            - 'offer-augmentation:read'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of reward value calculations ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: rateTableUuids
+          in: query
+          description: >-
+            A comma separated list of rate table uuids associated with the
+            reward value calculation
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+              minimum: 1
+          style: form
+          explode: false
+        - name: createdAtMax
+          in: query
+          description: end of the createdAt range
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMin
+          in: query
+          description: start of the createdAt range
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          description: comma separated list of uuids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          description: beginning of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          description: end of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedBy
+          in: query
+          description: comma separated list of uuids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          description: 'limit the results, default 100'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: 'at what offset do you want to start looking at, default 0'
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: isDeleted
+          description: 'if the value is deleted, default false'
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Reward Value Calculation found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/rewardValueCalculation.yml
+  '/rewardValueCalculations/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a Reward Value Calculation
+      description: Return a `Reward Value Calculation` given a rate table UUID
+      operationId: RewardValueCalculation.getRewardValueCalculationForRateTableUuid
+      tags:
+        - Reward Value Calculation
+      responses:
+        '200':
+          description: successfuly got a reward value calculation
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/rewardValueCalculation.yml

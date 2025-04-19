@@ -1,0 +1,7 @@
+name: offset
+in: query
+description: at what offset do you want to start looking at, default 0
+schema:
+  type: integer
+  format: int64
+  minimum: 0

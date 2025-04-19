@@ -1,0 +1,6 @@
+title: CreditCardRepresentation
+type: string
+description: Descriminator for how detailed the Credit Card response is
+enum:
+  - compact
+  - full

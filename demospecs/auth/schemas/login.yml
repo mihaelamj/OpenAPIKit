@@ -1,0 +1,15 @@
+type: object
+required:
+  - newAccessToken
+  - user
+properties:
+  newAccessToken:
+    description: |
+      A new access token for the user
+    allOf:
+      - $ref: ./accessTokenWithSecret.yml
+  user:
+    description: |
+      The user associated with the login
+    allOf:
+      - $ref: ./user.yml

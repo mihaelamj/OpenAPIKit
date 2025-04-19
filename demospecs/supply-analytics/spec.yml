@@ -1,0 +1,317 @@
+openapi: 3.0.3
+info:
+  title: supply-analytics
+  description: description
+  version: 1.7.0
+  contact:
+    name: Platform Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/PE/pages/523960458/Platform+Team
+servers:
+  - url: 'https://api.evenfinancial.com/supplyAnalytics'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/supplyAnalytics'
+    description: Dev
+components:
+  parameters:
+    subAccountId:
+      $ref: ./parameters/subAccountId.yml
+    endDate:
+      $ref: ./parameters/endDate.yml
+    startDate:
+      $ref: ./parameters/startDate.yml
+    groupingKey:
+      $ref: ./parameters/groupingKey.yml
+  responses:
+    InvalidRequest:
+      $ref: ../core/responses/invalidRequest.yml
+    MalformedRequest:
+      $ref: ../core/responses/malformedRequest.yml
+    UnauthorizedRequest:
+      $ref: ../core/responses/unauthorizedRequest.yml
+  schemas:
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    SummaryGroupBy:
+      $ref: ./schemas/summaryGroupBy.yml
+    LifeInsuranceFunnelSummary:
+      $ref: ./schemas/lifeInsuranceFunnelSummary.yml
+    LifeInsurancePayoutSummary:
+      $ref: ./schemas/lifeInsurancePayoutSummary.yml
+    LoanFunnelSummary:
+      $ref: ./schemas/loanFunnelSummary.yml
+    LoanPayoutSummary:
+      $ref: ./schemas/loanPayoutSummary.yml
+    SavingsFunnelSummary:
+      $ref: ./schemas/savingsFunnelSummary.yml
+    SavingsPayoutSummary:
+      $ref: ./schemas/savingsPayoutSummary.yml
+    CreditCardFunnelSummary:
+      $ref: ./schemas/creditCardFunnelSummary.yml
+    CreditCardPayoutSummary:
+      $ref: ./schemas/creditCardPayoutSummary.yml
+  securitySchemes:
+    internal:
+      type: http
+      scheme: bearer
+      description: An internal bearer token.
+    channelManagement:
+      type: http
+      scheme: bearer
+      description: A channel management bearer token.
+security:
+  - internal: []
+tags:
+  - name: Life Insurance Analytics
+  - name: Loan Analytics
+  - name: Savings Analytics
+  - name: Credit Card Analytics
+paths:
+  /lifeInsuranceFunnelSummaries:
+    get:
+      summary: Get life insurance funnel summaries
+      description: Get life insurance funnel summaries
+      operationId: getLifeInsuranceFunnelSummaries
+      tags:
+        - Life Insurance Analytics
+      security:
+        - internal: []
+        - channelManagement: []
+      parameters:
+        - $ref: '#/components/parameters/subAccountId'
+        - $ref: '#/components/parameters/groupingKey'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LifeInsuranceFunnelSummary'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+      x-lint-skip: index-endpoint-has-limit
+  /lifeInsurancePayoutSummaries:
+    get:
+      summary: Get life insurance payout summaries
+      description: Get life insurance payout summaries
+      operationId: getLifeInsurancePayoutSummaries
+      tags:
+        - Life Insurance Analytics
+      security:
+        - internal: []
+        - channelManagement: []
+      parameters:
+        - $ref: '#/components/parameters/subAccountId'
+        - $ref: '#/components/parameters/groupingKey'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LifeInsurancePayoutSummary'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+      x-lint-skip: index-endpoint-has-limit
+  /loanFunnelSummaries:
+    get:
+      summary: Get loan funnel summaries
+      description: Get loan funnel summaries
+      operationId: getLoanFunnelSummaries
+      tags:
+        - Loan Analytics
+      security:
+        - internal: []
+        - channelManagement: []
+      parameters:
+        - $ref: '#/components/parameters/subAccountId'
+        - $ref: '#/components/parameters/groupingKey'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoanFunnelSummary'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+      x-lint-skip: index-endpoint-has-limit
+  /loanPayoutSummaries:
+    get:
+      summary: Get loan payout summaries
+      description: Get loan payout summaries
+      operationId: getLoanPayoutSummaries
+      tags:
+        - Loan Analytics
+      security:
+        - internal: []
+        - channelManagement: []
+      parameters:
+        - $ref: '#/components/parameters/subAccountId'
+        - $ref: '#/components/parameters/groupingKey'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LoanPayoutSummary'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+      x-lint-skip: index-endpoint-has-limit
+  /savingsFunnelSummaries:
+    get:
+      summary: Get savings funnel summaries
+      description: Get savings funnel summaries
+      operationId: getSavingsFunnelSummaries
+      tags:
+        - Savings Analytics
+      security:
+        - internal: []
+        - channelManagement: []
+      parameters:
+        - $ref: '#/components/parameters/subAccountId'
+        - $ref: '#/components/parameters/groupingKey'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SavingsFunnelSummary'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+      x-lint-skip: index-endpoint-has-limit
+  /savingsPayoutSummaries:
+    get:
+      summary: Get savings payout summaries
+      description: Get savings payout summaries
+      operationId: getSavingsPayoutSummaries
+      tags:
+        - Savings Analytics
+      security:
+        - internal: []
+        - channelManagement: []
+      parameters:
+        - $ref: '#/components/parameters/subAccountId'
+        - $ref: '#/components/parameters/groupingKey'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SavingsPayoutSummary'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+      x-lint-skip: index-endpoint-has-limit
+  /creditCardFunnelSummaries:
+    get:
+      summary: Get credit card funnel summaries
+      description: Return credit card funnel summaries based upon request parameters
+      operationId: getCreditCardFunnelSummaries
+      security:
+        - internal: []
+        - channelManagement: []
+      tags:
+        - Credit Card Analytics
+      parameters:
+        - $ref: '#/components/parameters/subAccountId'
+        - $ref: '#/components/parameters/groupingKey'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditCardFunnelSummary'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+      x-lint-skip: index-endpoint-has-limit
+  /creditCardPayoutSummaries:
+    get:
+      summary: Get credit card payout summaries
+      description: Return credit card payout summaries based upon request parameters
+      operationId: getCreditCardPayoutSummaries
+      security:
+        - internal: []
+        - channelManagement: []
+      tags:
+        - Credit Card Analytics
+      parameters:
+        - $ref: '#/components/parameters/subAccountId'
+        - $ref: '#/components/parameters/groupingKey'
+        - $ref: '#/components/parameters/startDate'
+        - $ref: '#/components/parameters/endDate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditCardPayoutSummary'
+        '400':
+          $ref: '#/components/responses/MalformedRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedRequest'
+        '422':
+          $ref: '#/components/responses/InvalidRequest'
+      x-lint-skip: index-endpoint-has-limit

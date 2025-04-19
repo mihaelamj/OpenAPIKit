@@ -1,0 +1,9 @@
+type: object
+description: An association of an earn rate and a merchant
+allOf:
+  - $ref: ./earningItem.yml
+  - type: object
+    properties:
+      merchant:
+        $ref: ../merchant.yml
+        description: the merchant of the item

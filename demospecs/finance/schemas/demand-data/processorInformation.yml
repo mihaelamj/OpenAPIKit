@@ -1,0 +1,21 @@
+type: object
+required:
+  - extractorType
+  - extractorArguments
+  - transformerTypes
+  - transformerArguments
+properties:
+  extractorType:
+    $ref: ./extractorType.yml
+  extractorArguments:
+    type: array
+    items:
+      type: string
+  transformerTypes:
+    type: array
+    items:
+      $ref: ./transformerType.yml
+  transformerArguments:
+    type: array
+    items:
+      type: string

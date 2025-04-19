@@ -1,0 +1,24 @@
+type: object
+required:
+  - filterKey
+  - characteristic
+title: preSelectRuleFilter
+properties:
+  filterKey:
+    $ref: ./preSelectRuleFilterKey.yml
+  high:
+    type: integer
+    format: int64
+    description: Should be included in RangeFilter and HighFilter
+  low:
+    type: integer
+    format: int64
+    description: Should be included in RangeFilter and LowFilter
+  exact:
+    type: integer
+    format: int64
+    description: Should be included in ExactFilter
+  characteristic:
+    type: string
+    format: string
+    description: TransUnion characteristic for the filter https://github.com/EVENFinancial/third-party-data/blob/master/modules/core/src/main/scala/com/evenfinancial/thirdpartydata/models/TransUnionEnrichedCharacteristic.scala

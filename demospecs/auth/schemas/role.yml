@@ -1,0 +1,46 @@
+type: object
+required:
+  - id
+  - key
+  - description
+  - scopes
+  - createdAt
+  - createdById
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this role.
+  key:
+    type: string
+    description: |
+      A unique, human-readable identifier for this role.
+  description:
+    type: string
+  scopes:
+    type: array
+    description: |
+      The scopes that belong to this role
+    items:
+      type: string
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the role was created.
+  createdById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to create this role.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to delete this role.

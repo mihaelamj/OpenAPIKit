@@ -1,0 +1,8 @@
+type: object
+properties:
+  staticOfferIds:
+    title: Static Offer IDs
+    type: array
+    items:
+      type: integer
+      format: int32

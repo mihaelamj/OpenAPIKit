@@ -1,0 +1,267 @@
+summary: A v8 Partner Page Template
+value:
+  {
+  "version" : "8",
+  "fields" : [
+    {
+      "key" : "productType",
+      "label" : "Product Type (one of loan, mortgage, savings, or credit_card)",
+      "dataType" : "string",
+      "required" : true
+    },
+    {
+      "key" : "partner",
+      "label" : "Partner Key",
+      "dataType" : "string",
+      "required" : true
+    },
+    {
+      "key" : "partnerDisplayName",
+      "label" : "Partner Display Name",
+      "dataType" : "string",
+      "required" : true
+    },
+    {
+      "key" : "headerText",
+      "label" : "Partner Page Header Text",
+      "dataType" : "string",
+      "required" : false
+    },
+    {
+      "key" : "theme.partnerLogo",
+      "label" : "Partner Logo",
+      "dataType" : "string",
+      "required" : true
+    },
+    {
+      "key" : "theme.partnerLogoLink",
+      "label" : "Partner Logo Link URL",
+      "dataType" : "string",
+      "required" : true
+    },
+    {
+      "key" : "step",
+      "label" : "Initial Step (one of preview, application, results)",
+      "dataType" : "string",
+      "required" : false
+    },
+    {
+      "key" : "app.loanAmount",
+      "label" : "Default Loan Amount",
+      "dataType" : "number",
+      "required" : false
+    },
+    {
+      "key" : "app.providedCreditRating",
+      "label" : "Default Credit Rating (one of poor, fair, good, excellent)",
+      "dataType" : "string",
+      "required" : false
+    },
+    {
+      "key" : "app.zipcode",
+      "label" : "Fall-Back ZIP Code",
+      "dataType" : "string",
+      "required" : false
+    },
+    {
+      "key" : "app.purpose",
+      "label" : "Default Loan Purpose",
+      "dataType" : "string",
+      "required" : false,
+      "defaultValue" : "debt_consolidation"
+    },
+    {
+      "key": "ui.defaultSort",
+      "label": "Default Sort By",
+      "dataType": "string",
+      "required": false
+    },
+    {
+      "key": "ui.generic_offer_index",
+      "label": "Generic CTA Location",
+      "dataType": "number",
+      "required": false
+    },
+    {
+      "key" : "ui.maxResults",
+      "label" : "Maximum Number of Results",
+      "dataType" : "number",
+      "required" : true,
+      "defaultValue": 3
+    },
+    {
+      "key" : "theme.colorPrimary",
+      "label" : "Primary Color",
+      "dataType" : "color",
+      "required" : true,
+      "defaultValue" : "#4b2372"
+    },
+    {
+      "key" : "theme.colorSecondary",
+      "label" : "Secondary Color",
+      "dataType" : "color",
+      "required" : true,
+      "defaultValue" : "#ff7200"
+    },
+    {
+      "key" : "theme.colorCta",
+      "label" : "CTA Color",
+      "dataType" : "color",
+      "required" : true,
+      "defaultValue" : "#3fea90"
+    },
+    {
+      "key" : "theme.colorError",
+      "label" : "Error Color",
+      "dataType" : "color",
+      "required" : true,
+      "defaultValue" : "#ff7200"
+    },
+    {
+      "key" : "theme.colorBackgroundPrimary",
+      "label" : "Primary Background Color",
+      "dataType" : "color",
+      "required" : true,
+      "defaultValue" : "#ffffff"
+    },
+    {
+      "key" : "theme.colorBackgroundSecondary",
+      "label" : "Secondary Background Color",
+      "dataType" : "color",
+      "required" : true,
+      "defaultValue" : "#f4f4f4"
+    },
+    {
+      "key" : "theme.colorBorder",
+      "label" : "Border Color",
+      "dataType" : "color",
+      "required" : true,
+      "defaultValue" : "#e2e5e9"
+    },
+    {
+      "key" : "theme.fontFamilyPrimary",
+      "label" : "Primary Font Family (Open Sans unless fully Fiona Branded, then use BrandonGrotesque)",
+      "dataType" : "string",
+      "required" : true,
+      "defaultValue" : "BrandonGrotesque"
+    },
+    {
+      "key" : "theme.fontFamilySecondary",
+      "label" : "Secondary Font Family (Open Sans unless fully Fiona Branded, then use BrandonText)",
+      "dataType" : "string",
+      "required" : true,
+      "defaultValue" : "BrandonText"
+    },
+    {
+      "key" : "theme.fontSizeBase",
+      "label" : "Primary Font Size  (postfix with 'px')",
+      "dataType" : "string",
+      "required" : true,
+      "defaultValue" : "16px"
+    },
+    {
+      "key" : "theme.borderRadiusSmall",
+      "label" : "Small Border Radius (postfix with 'px')",
+      "dataType" : "string",
+      "required" : true,
+      "defaultValue" : "4px"
+    },
+    {
+      "key" : "theme.borderRadiusLarge",
+      "label" : "Large Border Radius (postfix with 'px')",
+      "dataType" : "string",
+      "required" : true,
+      "defaultValue" : "14px"
+    },
+    {
+      "key" : "clientTags",
+      "label" : "Preset Client Tags",
+      "dataType" : "key_values",
+      "required" : false,
+      "defaultValue" : {}
+    },
+    {
+      "key" : "shouldAutoRedirect",
+      "label" : "Auto-redirect User To Pre-approved Offer",
+      "dataType" : "boolean",
+      "required" : false,
+      "defaultValue" : true
+    },
+    {
+      "key" : "shouldShowPartnershipHeading",
+      "label" : "Show 'In Partnership With' Heading",
+      "dataType" : "boolean",
+      "required" : false,
+      "defaultValue" : true
+    },
+    {
+      "key" : "shouldDisplayNavigation",
+      "label" : "Show Even/Fiona Header and Branding",
+      "dataType" : "boolean",
+      "required" : false,
+      "defaultValue" : false
+    },
+    {
+      "key" : "shouldShowSecondaryPages",
+      "label" : "Show Secondary Pages (Home, About, Contact, etc.)",
+      "dataType" : "boolean",
+      "required" : false,
+      "defaultValue" : false
+    },
+    {
+      "key": "shouldAllowLoanCoApplicant",
+      "label": "Allow Loan Co-Applicant",
+      "dataType": "boolean",
+      "required": false,
+      "defaultValue": false
+    },
+    {
+      "key": "pw_fiona",
+      "label" : "Powered By Fiona",
+      "dataType": "boolean",
+      "required": false
+    },
+    {
+      "key" : "partnerDisclaimer",
+      "label" : "Additional Disclaimer from Partner (can include HTML)",
+      "dataType" : "string",
+      "required" : false
+    },
+    {
+      "key" : "embedScripts",
+      "label" : "Script that Should be Included on the Page (this does not fire on any event)",
+      "dataType" : "string",
+      "required" : false
+    },
+    {
+      "key" : "headScripts",
+      "label" : "Script URL to include in <head> tag",
+      "dataType" : "string",
+      "required" : false
+    },
+    {
+      "key" : "credentials.company_uuid",
+      "label" : "CLA Company UUID",
+      "dataType" : "string",
+      "required" : true
+    },
+    {
+      "key" : "credentials.access_token",
+      "label" : "CLA Access Token",
+      "dataType" : "string",
+      "required" : true
+    },
+    {
+      "key" : "credit_card_flow",
+      "label" : "Credit Card Flow Type (redirect, pre-select, or remarketing)",
+      "dataType" : "string",
+      "required" : false
+    },
+    {
+      "key" : "featureFlags",
+      "label" : "MPS Feature Inclusions (one or many comma separated strings)",
+      "dataType" : "string",
+      "required" : false
+    }
+  ]
+}

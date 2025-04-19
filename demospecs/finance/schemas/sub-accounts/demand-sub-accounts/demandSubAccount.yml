@@ -1,0 +1,45 @@
+type: object
+allOf:
+  - $ref: ../subAccount.yml
+  - type: object
+    required:
+      - supportsPreSelect
+      - shouldDisplayPreSelect
+    properties:
+      disclaimer:
+        type: string
+      imageUrl:
+        type: string
+        format: url
+      productType:
+        type: string
+      supportsPreSelect:
+        type: boolean
+      shouldDisplayPreSelect:
+        type: boolean
+      subAccountOwners:
+        $ref: ../subAccountOwner.yml
+      subtextOverride:
+        type: string
+        description: Override the default auto-generated call to action subtext for issuers
+      preSelectTextOverride:
+        type: string
+        description: Override the default display text for indicating a pre-selected offer if shouldDisplayPreSelect is true.
+      foundedYear:
+        type: integer
+        format: int32
+      amBestRating:
+        type: string
+        description: A.M. Best's rating
+      deactivatedAt:
+        type: string
+        format: date-time
+        readOnly: true
+        description: |
+          When the resource was deactivated.
+      deactivatedBy:
+        type: string
+        format: uuid
+        readOnly: true
+        description: |
+          The UUID of the access token that was used to deactivated this resource.

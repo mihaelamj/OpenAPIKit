@@ -1,0 +1,382 @@
+openapi: 3.0.3
+info:
+  title: Channel Management API
+  version: 0.1.0
+servers:
+  - url: 'https://api.evenfinancial.com'
+security:
+  - default: []
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+  schemas:
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    EventType:
+      $ref: ../analytics/schemas/eventType.yml
+    LeadEvent:
+      $ref: ../analytics/schemas/leadEvent.yml
+    OfferFirmness:
+      $ref: ../analytics/schemas/offerFirmness.yml
+    OfferProductType:
+      $ref: ../analytics/schemas/offerProductType.yml
+    RevenueSummary:
+      $ref: ../analytics/schemas/revenueSummary.yml
+    RevenueSummaryGrouping:
+      $ref: ../analytics/schemas/revenueSummaryGrouping.yml
+    RevenueType:
+      $ref: ../analytics/schemas/revenueType.yml
+tags:
+  - name: Analytics
+paths:
+  /analytics/leadEvents:
+    get:
+      summary: Get lead events
+      description: >
+        A variety of event types can be associated with a lead, including:
+          - user actions in your experience
+          - user actions in a financial institution's experience
+          - API responses from an FI
+          - FI decisioning results
+
+        This endpoint provides access to these events for analysis. There are
+        two common way to use this:
+          1. **Get events for a lead** by making the following request, for
+            example:
+            ```
+            GET /analytics/leadEvents?leadUuid=9cc5ef55-4b9f-4c9d-ba52-cf96c9ad957e&limit=1
+            ```
+          2. **Stream all events** by making paginated requests. The first of
+            these requests would be:
+            ```
+            GET /analytics/leadEvents?limit=1000
+            ```
+            Events will always be returned in ascending `eventCreatedAt` order.
+            Take the `eventCreatedAt` of the last record of the result set to
+            form the request for the next page:
+            ```
+            GET /analytics/leadEvents?eventCreatedAtMin=2019-11-19T16:38:47Z&limit=1000
+            ```
+            And repeat until there are no more events. This method will
+            guarantee at least once delivery, so event processing must be
+            idempotent.
+      operationId: getLeadEvents
+      tags:
+        - Analytics
+      parameters:
+        - name: id
+          in: query
+          description: >
+            The unique identifiers of events that should be included in the
+            result set
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+        - name: leadUuid
+          in: query
+          description: >
+            The UUIDs of the leads whose events should be included in the result
+            set
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+          style: form
+          explode: false
+        - name: eventType
+          in: query
+          description: |
+            The event types that should be included in the result set
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/EventType'
+          style: form
+          explode: false
+        - name: leadCreatedAtMin
+          in: query
+          description: >
+            The minimum `leadCreatedAt` (inclusive) for events that should be
+            included in the result set
+          schema:
+            type: string
+            format: date-time
+        - name: leadCreatedAtMax
+          in: query
+          description: >
+            The maximum `leadCreatedAt` (inclusive) for events that should be
+            included in the result set
+          schema:
+            type: string
+            format: date-time
+        - name: eventCreatedAtMin
+          in: query
+          description: >
+            The minimum `eventCreatedAt` (inclusive) for events that should be
+            included in the result set
+          schema:
+            type: string
+            format: date-time
+        - name: eventCreatedAtMax
+          in: query
+          description: >
+            The maximum `eventCreatedAt` (inclusive) for events that should be
+            included in the result set
+          schema:
+            type: string
+            format: date-time
+        - name: offerProductType
+          in: query
+          description: >
+            The offer product types of events that should be included in the
+            result set
+          schema:
+            $ref: '#/components/schemas/OfferProductType'
+        - name: clientTag
+          in: query
+          description: >
+            The value of a client tag on leads that should be included in the
+            result set
+          schema:
+            $ref: ../lead/schemas/clientTags.yml
+          style: form
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+      responses:
+        '200':
+          description: Successfully returned records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadEvent'
+              examples:
+                apiApproved:
+                  $ref: ../analytics/examples/apiApprovedLeadEvent.yml
+                offerClicked:
+                  $ref: ../analytics/examples/offerClickedLeadEvent.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+              examples:
+                missingAccessToken:
+                  summary: access token was not specified
+                  value:
+                    - message: Access token is missing
+                missingScopes:
+                  summary: access token is not authorized
+                  value:
+                    - message: Access token is missing
+        '422':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+              examples:
+                missingLimit:
+                  summary: limit was not specified
+                  value:
+                    - attribute: limit
+                      type: missing
+                      message: limit must be specified
+                malformedLeadUuid:
+                  summary: leadUuid was malformed
+                  value:
+                    - attribute: leadUuid
+                      type: notUuid
+                      message: 'leadUuid must be uuid, but is 123'
+  /analytics/revenueSummaries:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get revenue summaries
+      description: >
+        Provides historical revenue statistics and funnel performance. The
+        metrics returned are aggregated either by a time period (e.g. day, week
+        or month) and or lead attributes such as credit rating, loan purpose or
+        referral URL.
+
+
+        For each aggregated group, the result includes the number of leads,
+        submitted applications, funded applications, along with the amount of
+        revenue. Either attributed or booked revenue is supported.
+
+
+        For example, to get attributed monthly revenue, grouped by credit rating
+        for Q1 of 2019, make the following request:
+          ```
+          GET /analytics/revenueSummaries?groupBy=creditRating&minTime=2019-01-01&maxTime=2019-03-31&revenueType=attributed
+          ```
+      operationId: getRevenueSummaries
+      tags:
+        - Analytics
+      parameters:
+        - name: revenueType
+          in: query
+          description: >
+            There are two dates associated with revenue:
+              * the `attributed` date is when the lead associated with the
+                revenue was added to the system
+              * the `booked` date corresponds to the event that triggered
+                the revenue, e.g. when a loan is funded
+
+
+            The `minDate` and `maxDate` parameters will filter against the
+            specified date type. If none is specified, then the default is
+            `attributed`.
+
+
+            Also, the results will only include a `totalAttributedRevenue` field
+            if `revenueType` is `attributed`, and will only include
+            `totalBookedRevenue` and `totalUnattributedRevenue` if it's
+            `booked`.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/RevenueType'
+        - name: minDate
+          in: query
+          description: >
+            Results will only represent revenue either booked or attributed on
+            or after this date, if specified. If not specified, defaults to 30
+            days ago. Date format must be `YYYY-MM-DD`.
+          schema:
+            type: string
+            format: date
+        - name: maxDate
+          in: query
+          description: >
+            Results will only represent revenue either booked or attributed on
+            or before this date, if specified. If not specified, defaults to
+            today. Date format must be `YYYY-MM-DD`.
+          schema:
+            type: string
+            format: date
+        - name: groupBy
+          in: query
+          description: >
+            The results can be aggregated by only one field at a time. If
+            multiple values are specified, then the first value will be used. If
+            none is specified, then the default is `day`. Time range grouping
+            (i.e., one of `day`, `week` or `month`) will use the create time for
+            the lead.
+
+
+            The `creditRating`, `loanPurpose`, and `referralUrl` fields in the
+            response body will not show up in the results unless explicitly
+            aggregated on. Similarly `leadCreatedAtMin` and `leadCreatedAtMax`
+            will not show unless grouped by time range.
+
+
+            If the `clientTag` query parameter is specified, then any value
+            specified here will be ignored.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/RevenueSummaryGrouping'
+        - name: clientTagKey
+          in: query
+          description: >
+            Results will only represent leads that have a client tag with the
+            specified key. If specified, the results will be grouped by the
+            distinct values of the client tag. Consequently, anything specified
+            by the `groupBy` parameter will be ignored.
+          schema:
+            $ref: ../lead/schemas/clientTags.yml
+          style: form
+        - name: subAccountUuid
+          in: query
+          description: >
+            Results will only represent leads that belong to the sub-account
+            corresponding to the specified UUID.
+          schema:
+            type: string
+            format: uuid
+          explode: false
+        - name: companyUuid
+          in: query
+          description: >
+            Results will only represent leads that are affiliated with a
+            specific company, which itself may have one or more sub accounts.
+            For internal use only. For internal users, this is absolutely
+            required.
+          schema:
+            type: string
+            format: uuid
+          explode: false
+      responses:
+        '200':
+          description: Successfully returned records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RevenueSummary'
+              examples:
+                monthlyReport:
+                  summary: Revenue by month
+                  $ref: ../analytics/examples/revenueSummaryResponse.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+              examples:
+                missingAccessToken:
+                  summary: access token was not specified
+                  value:
+                    - message: Access token is missing
+                missingScopes:
+                  summary: access token is not authorized
+                  value:
+                    - message: Access token is missing
+        '422':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+              examples:
+                badGroupBy:
+                  summary: groupBy clause is invalid
+                  value:
+                    - attribute: groupBy
+                      type: notInEnum
+                      message: >-
+                        groupBy must be one of "day", "week", "month",
+                        "creditRating", "loanPurpose", but is "year"
+                      details:
+                        specified: year
+                        enum:
+                          - day
+                          - week
+                          - month
+                          - creditRating
+                          - loanPurpose

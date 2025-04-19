@@ -1,0 +1,36 @@
+type: object
+properties:
+  amount:
+    type: number
+    format: float
+  originationFee:
+    type: number
+    format: float
+  approvedLoanTerm:
+    type: integer
+    format: int32
+  approvedLoanApr:
+    type: number
+    format: float
+  approvedLoanMinimum36MonthApr:
+    type: number
+    format: float
+  approvedLoanMinimum60MonthApr:
+    type: number
+    format: float
+  listedLoanTerm:
+    type: integer
+    format: int32
+  listedLoanApr:
+    type: number
+    format: float
+  fundedLoanTerm:
+    type: integer
+    format: int32
+  fundedLoanApr:
+    type: number
+    format: float
+  isCoApplicant:
+    type: boolean
+allOf:
+  - $ref: '../externalDemandEventDetails.yml'

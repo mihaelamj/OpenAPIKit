@@ -1,0 +1,18 @@
+type: object
+description: An association of an earn rate and a qualifier, like a category or merchant
+required:
+  - type
+properties:
+  type:
+    $ref: ./earningItemType.yml
+  earnRate:
+    type: number
+    description: Numerical representation of the default earn rate per dollar spent of the item
+  personalization:
+    $ref: ./earningItemPersonalization.yml
+  category:
+    description: An association of an earn rate and a category
+    $ref: ./category.yml
+  merchant:
+    description: An association of an earn rate and a merchant
+    $ref: ./merchant.yml

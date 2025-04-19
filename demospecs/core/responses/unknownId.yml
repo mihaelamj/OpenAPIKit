@@ -1,0 +1,7 @@
+description: Unknown ID
+content:
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: ../schemas/apiError.yml

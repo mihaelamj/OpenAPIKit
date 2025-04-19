@@ -1,0 +1,19 @@
+type: object
+required:
+  - durationMinutes
+properties:
+  supplySubAccountId:
+    type: integer
+    format: int64
+    description: |
+      The ID of the supply sub-account for this configuration.
+  supplySubAccountUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the supply sub-account for this configuration.
+  durationMinutes:
+    type: integer
+    format: int32
+    description: |
+      The number of minutes to look back when looking for duplicate leads.

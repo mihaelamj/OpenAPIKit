@@ -1,0 +1,8 @@
+type: string
+enum:
+  - demand_onboarding
+  - supply_onboarding
+  - poor_performance
+  - demand_request
+  - supply_request
+  - other

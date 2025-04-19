@@ -1,0 +1,19 @@
+type: object
+description: Basic information about a user required for simulation
+properties:
+  student:
+    type: boolean
+    description: Is the user a student?
+  military:
+    type: boolean
+    description: Is the user active duty military or an affiliate?
+  creditScore:
+    description: The user's credit score (or high end of a range)
+    type: integer
+    minimum: 400
+    maximum: 850
+  primaryAirport:
+    description: The user's primary airport or region, using IATA station codes
+    type: string
+    minLength: 3
+    maxLength: 3

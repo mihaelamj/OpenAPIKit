@@ -1,0 +1,23 @@
+type: object
+description: A representation of a user's spending, aggregated over a period of time
+properties:
+  aggregates:
+    type: array
+    items:
+      type: object
+      description: Individual spending groups
+      properties:
+        uuid:
+          description: A category, merchant or other spending group's uuid
+          type: string
+          format: uuid
+        amount:
+          description: A representation of how much (in value or relative) the user spent in this group
+          type: number
+          format: float
+  unit:
+    description: The unit of the values in spend aggregates
+    type: string
+    enum:
+      - usd
+      - none

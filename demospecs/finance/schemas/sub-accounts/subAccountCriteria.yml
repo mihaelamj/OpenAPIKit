@@ -1,0 +1,57 @@
+type: object
+properties:
+  id:
+    description: List of Ids that associated with sub accounts
+    type: array
+    items:
+      type: integer
+      format: int64
+  uuid:
+    description: List of unique identifers of sub accounts
+    type: array
+    items:
+      type: string
+      format: uuid
+  accountId:
+    description: List of Ids of the parent Accounts
+    type: array
+    items:
+      type: integer
+      format: int64
+  companyUuid:
+    description: List of Uuids for companies
+    type: array
+    items:
+      type: string
+      format: uuid
+  name:
+    description: List of internal names of sub accounts
+    type: array
+    items:
+      type: string
+  displayName:
+    description: List of names of sub accounts (external only)
+    type: array
+    items:
+      type: string
+  createdAt:
+    type: string
+    format: date-time
+    description: Creation time of sub account
+  excludeDeleted:
+    type: boolean
+    description: Exclude deleted sub accounts
+  limit:
+    type: integer
+    format: int32
+  offset:
+    type: integer
+    format: int64
+    description: At what offset you want to look at sub account results
+  sortBy:
+    type: string
+    description: Sorting criteria, default is Name
+  order:
+    description: Order results either ascending or descending on the sorting criteria
+    allOf:
+      - $ref: ../../../core/schemas/order.yml

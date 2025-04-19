@@ -1,0 +1,12 @@
+type: object
+description: Mobile request to add new plaid bank
+required:
+  - publicToken
+  - token
+properties:
+  publicToken:
+    description: User account (item) token received from Plaid
+    type: string
+  token:
+    description: Mobile User Token
+    type: string

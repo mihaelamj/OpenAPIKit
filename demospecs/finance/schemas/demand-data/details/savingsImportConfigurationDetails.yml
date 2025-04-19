@@ -1,0 +1,26 @@
+type: object
+required:
+  - accountOpenedTimestampProcessor
+  - accountFundedTimestampProcessor
+  - mobileApplicationInstalledTimestampProcessor
+  - mobileApplicationBankLinkedTimestampProcessor
+  - offerClickedTimestampProcessor
+  - offerClickedCountProcessor
+  - fundedAmountProcessor
+properties:
+  accountOpenedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  accountFundedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  mobileApplicationInstalledTimestampProcessor:
+    $ref: ../processorInformation.yml
+  mobileApplicationBankLinkedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  offerClickedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  offerClickedCountProcessor:
+    $ref: ../processorInformation.yml
+  fundedAmountProcessor:
+    $ref: ../processorInformation.yml 
+allOf:
+  - $ref: ./importConfigurationDetails.yml

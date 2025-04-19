@@ -1,0 +1,15 @@
+type: object
+required:
+  - userIds
+properties:
+  userIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+    description: |
+      The IDs of the users to be deactivated.
+  deactivationReason:
+    type: string
+    description: |
+      Reason why the users were deactivated.

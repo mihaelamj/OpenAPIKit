@@ -1,0 +1,292 @@
+openapi: 3.0.3
+info:
+  title: third-party-data
+  description: For retrieving user data from various 3rd-party sources
+  version: 1.4.0
+  contact:
+    name: Knowledge Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/268238916/Knowledge+Team
+servers:
+  - url: 'https://api.evenfinancial.com/third-party-data'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/third-party-data'
+    description: Dev
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'svc-third-party-data:create': Allows recording third party data
+            'svc-third-party-data:read': Allows reading third party data
+  schemas:
+    TransunionComp:
+      $ref: ./schemas/transunion/comp.yml
+    TransunionCreditSummary:
+      $ref: ./schemas/transunion/creditSummary.yml
+    TransunionCreditSummaryCounts:
+      $ref: ./schemas/transunion/creditSummaryCounts.yml
+    TransunionMismatch:
+      $ref: ./schemas/transunion/mismatch.yml
+    TransunionVscore:
+      $ref: ./schemas/transunion/vscore.yml
+    TransunionProfile:
+      $ref: ./schemas/transunionProfile.yml
+    TransunionRequest:
+      $ref: ./schemas/transunionRequest.yml
+    TransUnionSupplierConfiguration:
+      $ref: ./schemas/transUnionSupplierConfiguration.yml
+    BadRequestError:
+      $ref: ../core/schemas/errors/badRequest.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+tags:
+  - name: TransUnion
+    description: |
+      Get TransUnion profles
+paths:
+  /sources/transunion/profile:
+    x-lint-skip:
+      - path-resource-is-plural
+    post:
+      summary: Retrieve a TransUnion profile
+      description: >
+        Create a TransUnion profile containing a VantageScore® 3.0 score. Input
+        data is passed onto the transunion API, the API result is then passed
+        through as the response of this operation.
+      operationId: createTransunionProfile
+      tags:
+        - TransUnion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransunionRequest'
+            examples:
+              ross:
+                value:
+                  leadUuid: 177d6156-8dea-4ba9-bd4e-40d7632a1555
+                  email: rossypoo@evenfinancial.com
+                  firstName: Cranberry
+                  lastName: Saucey
+                  address: 806 Turkey
+                  city: Fantasy Island
+                  state: IL
+                  zipcode: '60750'
+                  ssn: 666-22-2525
+                  subAccountId: 969
+      responses:
+        '200':
+          description: TU profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransunionProfile'
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/errors/badRequest.yml
+        '404':
+          description: TU profile not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - oauth:
+            - 'svc-third-party-data:create'
+  /transUnionSupplierConfigurations:
+    get:
+      summary: Get a list of transunion configuration according to the parameters
+      description: Get a list of transunion configuration according to the parameters
+      operationId: TransUnionSupplierConfiguration.getTransUnionSupplierConfigurations
+      tags:
+        - SubAccount TransUnion Configuration
+      security:
+        - oauth:
+            - 'svc-third-party-data:read'
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of transunion supplier configuration ids
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: subAccountId
+          in: query
+          description: >-
+            A comma separated list of sub account ids associated with the
+            transunion supplier configuration
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+          style: form
+          explode: false
+        - name: createdAtMax
+          in: query
+          description: end of the createdAt range
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMin
+          in: query
+          description: start of the createdAt range
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          description: comma separated list of uuids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          description: beginning of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          description: end of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedBy
+          in: query
+          description: comma separated list of uuids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          description: 'limit the results, default 100'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: 'at what offset do you want to start looking at, default 0'
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: excludeDeleted
+          description: 'exclude deleted values, default true'
+          in: query
+          schema:
+            type: boolean
+        - name: enableLeadEnhancement
+          in: query
+          description: >-
+            A boolean to indicate if transunion lead enhancement is enabled for
+            the supplier
+          schema:
+            type: boolean
+        - name: enableExcellentCreditBucket
+          in: query
+          description: >-
+            A boolean to indicate if transunion enhancement is enabled for leads
+            in the excellent credit bucket for the supplier
+          schema:
+            type: boolean
+        - name: enableGoodCreditBucket
+          in: query
+          description: >-
+            A boolean to indicate if transunion enhancement is enabled for leads
+            in the good credit bucket for the supplier
+          schema:
+            type: boolean
+        - name: enableFairCreditBucket
+          in: query
+          description: >-
+            A boolean to indicate if transunion enhancement is enabled for leads
+            in the fair credit bucket for the supplier
+          schema:
+            type: boolean
+        - name: enablePoorCreditBucket
+          in: query
+          description: >-
+            A boolean to indicate if transunion enhancement is enabled for leads
+            in the poor credit bucket for the supplier
+          schema:
+            type: boolean
+        - name: enableLimitedCreditBucket
+          in: query
+          description: >-
+            A boolean to indicate if transunion enhancement is enabled for leads
+            in the limited credit bucket for the supplier
+          schema:
+            type: boolean
+        - name: enableUnknownCreditBucket
+          in: query
+          description: >-
+            A boolean to indicate if transunion enhancement is enabled for leads
+            in the unknown credit bucket for the supplier
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: transunion supplier configuration found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransUnionSupplierConfiguration'
+    post:
+      summary: Create a new transunion supplier configuration
+      description: Create a new transunion supplier configuration
+      operationId: TransUnionSupplierConfiguration.createTransUnionSupplierConfiguration
+      tags:
+        - SubAccount TransUnion Configuration
+      security:
+        - oauth:
+            - 'svc-third-party-data:create'
+      requestBody:
+        $ref: ./request-bodies/createTransUnionSupplierConfiguration.yml
+      responses:
+        '201':
+          description: The transunion configuration was succesfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransUnionSupplierConfiguration'

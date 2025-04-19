@@ -1,0 +1,27 @@
+type: object
+description: VantageScore® 3.0 results
+properties:
+  result:
+    type: string
+    description: >
+      The results of the scoring process. If the file is not scored, this element is not returned.
+      Contains a plus sign (+) or a minus sign (-) to indicate whether the score is positive or negative. 
+      A score of zero is always positive.
+  rank1Code:
+    type: string
+    description: See VantageScore® 3.0 factor codes (TU41 User Guide March 30, 2019 page 505+)
+  rank2Code:
+    type: string
+    description: See VantageScore® 3.0 factor codes (TU41 User Guide March 30, 2019 page 505+)
+  rank3Code:
+    type: string
+    description: See VantageScore® 3.0 factor codes (TU41 User Guide March 30, 2019 page 505+)
+  rank4Code:
+    type: string
+    description: See VantageScore® 3.0 factor codes (TU41 User Guide March 30, 2019 page 505+)
+  noScoreReason:
+    type: string
+    description: > 
+      The reason a file could not be scored. Possible values are:
+      `subjectDeceased`, `insufficientCredit`, `notProcessed`, `requirementsNotMet`, 
+      `cascadingModel`, `missingRequiredRiskModels`

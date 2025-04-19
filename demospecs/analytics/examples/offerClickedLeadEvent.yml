@@ -1,0 +1,13 @@
+summary: offer clicked
+value:
+  {
+    "id": "da4b9237bacccdf19c0760cab7aec4a8359010b0",
+    "leadUuid": "4bbb25a6-6fcf-4ed3-88f9-6daacb0f8b33",
+    "leadCreatedAt": "2019-09-21T11:24:45Z",
+    "eventType": "offerClicked",
+    "eventCreatedAt": "2019-09-22T17:44:22Z",
+    "financialInstitutionUuid": "da14e06b-0866-4f02-a3b2-9443501b25b9",
+    "financialInstitutionName": "OpenSky®",
+    "offerUuid": "5243140e-0a98-4301-9b6b-1283a52b857b",
+    "offerName": "OpenSky® Secured Visa® Credit Card"
+  }

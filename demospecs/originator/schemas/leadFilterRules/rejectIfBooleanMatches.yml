@@ -1,0 +1,25 @@
+type: object
+description: A rule to set an invalid boolean value for a lead attribute.
+required:
+  - comparisonValue
+  - strictApproval
+  - rejectIfAttributeNotProvided
+  - rejectIfAttributeNull
+  - leadAttribute
+properties:
+  comparisonValue:
+    description: The boolean to reject if matches.
+    type: boolean
+  strictApproval:
+    type: boolean
+    description: Determines if passing the rule is enough information to decide to send the lead to the demand API.
+  rejectIfAttributeNotProvided:
+    type: boolean
+    description: Determines if the attribute not being present on the lead constitutes a rejection.
+  rejectIfAttributeNull:
+    type: boolean
+    description: Determines if the attribute being present but semantically null constitutes a rejection.
+  leadAttribute:
+    $ref: './leadAttributeBoolean.yml'
+allOf:
+  - $ref: './leadFilterRule.yml'

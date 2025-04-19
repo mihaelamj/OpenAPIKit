@@ -1,0 +1,5 @@
+type: string
+enum:
+  - cash_out
+  - rate_term
+  - unknown

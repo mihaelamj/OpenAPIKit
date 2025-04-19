@@ -1,0 +1,51 @@
+type: object
+description: |
+  A version of an offer
+required:
+  - id
+  - offerId
+  - version
+  - url
+  - createdAt
+  - createdByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+  offerId:
+    type: integer
+    format: int64
+  version:
+    type: integer
+    format: int32
+  loanOfferId:
+    type: integer
+    format: int64
+  specialOfferId:
+    type: integer
+    format: int64
+  savingsOfferId:
+    type: integer
+    format: int64
+  mortgageOfferId:
+    type: integer
+    format: int64
+  creditCardOfferId:
+    type: integer
+    format: int64
+  lineOfCreditOfferId:
+    type: integer
+    format: int64
+  disclaimer:
+    type: string
+  url:
+    type: string
+  createdAt:
+    type: string
+    format: date-time
+  createdByUuid:
+    type: string
+    format: uuid
+  deprecatedByVersion:
+    type: integer
+    format: int32

@@ -1,0 +1,4 @@
+type: object
+title: Bidder
+allOf:
+  - $ref: ../abstractPayoutClause.yml

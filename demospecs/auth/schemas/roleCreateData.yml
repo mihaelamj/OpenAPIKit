@@ -1,0 +1,18 @@
+type: object
+required:
+  - key
+  - description
+  - scopes
+properties:
+  key:
+    type: string
+    description: |
+      A unique, human-readable identifier for this role.
+  description:
+    type: string
+  scopes:
+    type: array
+    description: |
+      Scopes to add to this role
+    items:
+      type: string

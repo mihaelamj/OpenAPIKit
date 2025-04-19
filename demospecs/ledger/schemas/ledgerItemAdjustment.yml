@@ -1,0 +1,37 @@
+type: object
+title: ledgerItemAdjustment
+required:
+  - id
+  - accountAdjustmentId
+  - ledgerItemId
+  - createdAt
+  - createdBy
+properties:
+  id:
+    title: Id
+    type: integer
+    format: int64
+  accountAdjustmentId:
+    title: Account Adjustment Id
+    type: integer
+    format: int64
+  ledgerItemId:
+    title: Ledger Item Id
+    type: integer
+    format: int64
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  createdBy:
+    title: Created By
+    type: string
+    format: uuid
+  deletedAt:
+    title: Deleted At
+    type: string
+    format: date-time
+  deletedBy:
+    title: Deleted By
+    type: string
+    format: uuid

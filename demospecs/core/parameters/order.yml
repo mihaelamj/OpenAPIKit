@@ -1,0 +1,4 @@
+name: order
+in: query
+schema:
+  $ref: ../schemas/order.yml

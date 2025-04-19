@@ -1,0 +1,1280 @@
+openapi: 3.0.3
+info:
+  title: ledger
+  description: Capture and calculate financial informations for our partners
+  version: 1.0.0
+  contact:
+    name: Finance Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/36044820/Finance+Team
+servers:
+  - url: 'https://api.evenfinancial.com/ledger'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/ledger'
+    description: Dev
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'ledger:read': Allows read access to svc-ledger resources
+            'ledger:write': Allows write access to svc-ledger resources
+  schemas:
+    AccountAdjustment:
+      $ref: ./schemas/accountAdjustment.yml
+    AccountAdjustmentCreateData:
+      $ref: ./schemas/accountAdjustmentCreateData.yml
+    AdjustmentReason:
+      $ref: ./schemas/adjustmentReason.yml
+    BillingCycle:
+      $ref: ./schemas/billingCycle.yml
+    BillingCycleCreateData:
+      $ref: ./schemas/billingCycleCreateData.yml
+    BillingCycleUpdateData:
+      $ref: ./schemas/billingCycleUpdateData.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    LedgerItem:
+      $ref: ./schemas/ledgerItem.yml
+    LedgerItemCreateData:
+      $ref: ./schemas/ledgerItemCreateData.yml
+    LedgerItemRecreateData:
+      $ref: ./schemas/ledgerItemRecreateData.yml
+    LedgerItemReconciliation:
+      $ref: ./schemas/ledgerItemReconciliation.yml
+    LedgerItemReconciliationCreateData:
+      $ref: ./schemas/ledgerItemReconciliationCreateData.yml
+    Order:
+      $ref: ../core/schemas/order.yml
+    ReconciliationType:
+      $ref: ./schemas/reconciliationType.yml
+tags:
+  - name: Ledger
+    description: >-
+      Ledger Items are used to capture and calculate financial informations for
+      our partners
+paths:
+  /accountAdjustments:
+    get:
+      summary: Get multiple account adjustments
+      description: |
+        Returns a list of account adjustments that match the specified criteria
+      operationId: AccountAdjustmentController.index
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:read'
+      parameters:
+        - name: id
+          in: query
+          description: A comma separated list of adjustment ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: accountId
+          in: query
+          description: A comma separated list of Account ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: ledgerItemIds
+          in: query
+          description: A comma separated list of Ledger Item ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: adjustmentReason
+          in: query
+          description: Reason for account adjustment based on a defined enum
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              $ref: ./schemas/adjustmentReason.yml
+        - name: q
+          in: query
+          description: Fuzzy search parameter
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdAtStart
+          in: query
+          description: beginning of the createdAt range
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtEnd
+          in: query
+          description: end of the createdAt range
+          schema:
+            type: string
+            format: date-time
+        - name: createdByUuids
+          in: query
+          description: comma separated list of uuids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtStart
+          in: query
+          description: beginning of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtEnd
+          in: query
+          description: end of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedByUuids
+          in: query
+          description: comma separated list of uuids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          description: 'limit the results, default 100'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: 'at what offset do you want to start looking at, default 0'
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          description: 'how do you want to sort, default created_at'
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          schema:
+            $ref: ../core/schemas/order.yml
+        - name: excludeDeleted
+          description: 'ignored deleted items, default true'
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Account Adjustment found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/accountAdjustment.yml
+        '400':
+          description: Missing required query parameter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value:
+                    - message: Query parameter 'limit' must be defined
+                missingOffset:
+                  summary: The request did not include an 'offset' query parameter
+                  value:
+                    - message: Query parameter 'offset' must be defined
+    post:
+      summary: Create an Account Adjustment
+      operationId: AccountAdjustmentController.create
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/accountAdjustmentCreateData.yml
+      responses:
+        '201':
+          description: Account adjustment recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/accountAdjustment.yml
+        '400':
+          description: Invalid request body JSON format
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccountId:
+                  summary: The request body did not include 'accountId'
+                  value:
+                    - attribute: accountId
+                      type: missing
+                      message: accountId must be specified
+                missingAmount:
+                  summary: The request body did not include 'amount'
+                  value:
+                    - attribute: amount
+                      type: missing
+                      message: amount must be specified
+                missingAdjustmentReason:
+                  summary: The request body did not include 'adjustmentReason'
+                  value:
+                    - attribute: adjustmentReason
+                      type: missing
+                      message: adjustmentReason must be specified
+  '/accountAdjustments/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: account adjustment id
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a single account adjustment
+      description: >
+        Soft delete the account adjustment corresponding to the specified ID in
+        URL path, if one exists
+      operationId: AccountAdjustmentController.delete
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      responses:
+        '204':
+          description: Account adjustment was deleted successfully
+        '404':
+          description: ID not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /adjustmentsReasons:
+    get:
+      summary: Return the a list of acceptable reasons for account adjustments
+      operationId: AdjustmentReasonController.index
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:read'
+      responses:
+        '200':
+          description: List of acceptable adjustment reasons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/adjustmentReason.yml
+  /billingCycles:
+    get:
+      summary: Get multiple billing cycles
+      description: |
+        Return a list of billing cycles that match the specified criteria
+      operationId: BillingCycleController.index
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:read'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of Ledger Item ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: accountIds
+          in: query
+          description: A comma separated list of Account ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: ledgerItemType
+          in: query
+          description: 'Ledger Item Type, either payable or receivable'
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: effectiveAtStart
+          in: query
+          description: beginning of effectiveAt range
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: date
+        - name: effectiveAtEnd
+          in: query
+          description: end of effectiveAt range
+          schema:
+            type: string
+            format: date
+        - name: netD
+          in: query
+          description: The amount of time allowed between cycle end and payment due
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdAtStart
+          in: query
+          description: start of createdAtStart range
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtEnd
+          in: query
+          description: end of createdAtStart range
+          schema:
+            type: string
+            format: date-time
+        - name: createdByUuid
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtStart
+          in: query
+          description: start of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtEnd
+          in: query
+          description: end of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedByUuid
+          in: query
+          description: comma separated list of uuid
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          description: 'limit the results, default 100'
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: default 0
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: default asc
+          schema:
+            $ref: ../core/schemas/order.yml
+        - name: excludeDeleted
+          in: query
+          description: 'ignore deleted items, default true'
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Found billing cycles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/billingCycle.yml
+        '400':
+          description: Missing required query parameter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value:
+                    - message: Query parameter 'limit' must be specified
+    post:
+      summary: Record a billing cycle
+      operationId: BillingCycleController.create
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/billingCycleCreateData.yml
+      responses:
+        '201':
+          description: Billing cycle recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/billingCycle.yml
+        '400':
+          description: Invalid request body JSON format
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccountId:
+                  summary: The request body did not include 'accountId'
+                  value:
+                    - attribute: accountId
+                      type: missing
+                      message: accountId must be specified
+                missingLedgerItemType:
+                  summary: The request body did not include 'ledgerItemType'
+                  value:
+                    - attribute: ledgerItemType
+                      type: missing
+                      message: ledgerItemType must be specified
+                missingEffectiveAt:
+                  summary: The request body did not include 'effectiveAt'
+                  value:
+                    - attribute: effectiveAt
+                      type: missing
+                      message: effectiveAt must be specified
+                missingTermUnit:
+                  summary: The request body did not include 'termUnit'
+                  value:
+                    - attribute: termUnit
+                      type: missing
+                      message: termUnit must be specified
+                missingNetD:
+                  summary: The request body did not include 'netD'
+                  value:
+                    - attribute: netD
+                      type: missing
+                      message: netD must be specified
+  '/billingCycles/{id}':
+    parameters:
+      - name: id
+        description: billing cycle id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    put:
+      summary: Update a single billing cycle
+      description: >
+        Updates the memo field of the ledger item corresponding to the specified
+        ID in URL path, if one exists
+      operationId: BillingCycleController.update
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/billingCycleUpdateData.yml
+      responses:
+        '201':
+          description: Billing cycle Updated
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/billingCycle.yml
+        '400':
+          description: Invalid request body JSON format
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingEndDate:
+                  summary: The request body did not include 'endDate'
+                  value:
+                    - attribute: endDate
+                      type: missing
+                      message: endDate must be specified
+        '404':
+          description: ID not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    delete:
+      summary: Delete a single billing cycle
+      description: >
+        Soft delete the billing cycle corresponding to the specified ID in URL
+        path, if one exists
+      operationId: BillingCycleController.delete
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      responses:
+        '204':
+          description: Billing Cycle was deleted successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: ID not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  /billingCycles/generateLedgerItems:
+    post:
+      summary: Generate ledger items in a batch
+      description: |
+        Generate a list of ledger items based on a specifed date
+      operationId: BillingCycleController.generateForDate
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      parameters:
+        - name: generateForDate
+          in: query
+          description: A date you want to generate the ledger items for
+          style: form
+          explode: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '204':
+          description: Request has been sent to process
+        '422':
+          description: Unprocessible entity
+        '503':
+          description: Actor unavailable for processing
+  /ledgerItems:
+    get:
+      summary: Get multiple ledger items
+      description: |
+        Returns a list of ledger items that match the specified criteria.
+      operationId: LedgerItemController.index
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:read'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of Ledger Item ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: accountIds
+          in: query
+          description: A comma separated list of Account ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: startDate
+          in: query
+          description: ledger item start date
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: date
+        - name: endDate
+          in: query
+          description: ledger item end date
+          schema:
+            type: string
+            format: date
+        - name: dueDate
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: ledgerItemType
+          in: query
+          description: 'Ledger Item Type, either payable or receivable'
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: reconciliationType
+          in: query
+          description: 'Reconciliation type, either paid or ignored'
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: netD
+          in: query
+          description: The amount of time allowed between cycle end and payment due
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: q
+          in: query
+          description: Fuzzy search parameter
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdAtStart
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtEnd
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtStart
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtEnd
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedBy
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+        - name: order
+          in: query
+          schema:
+            $ref: ../core/schemas/order.yml
+        - name: excludeDeleted
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Ledger Item(s) found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/ledgerItem.yml
+        '400':
+          description: Missing required query parameter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value:
+                    - message: Query parameter 'limit' must be defined
+                missingOffset:
+                  summary: The request did not include an 'offset' query parameter
+                  value:
+                    - message: Query parameter 'offset' must be defined
+    post:
+      summary: Record a ledger item
+      operationId: LedgerItemController.create
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/ledgerItemCreateData.yml
+      responses:
+        '201':
+          description: Ledger item recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/ledgerItem.yml
+        '400':
+          description: Invalid request body JSON format
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingBillingCycleId:
+                  summary: The request body did not include 'billingCycleId'
+                  value:
+                    - attribute: billingCycleId
+                      type: missing
+                      message: billingCycleId must be specified
+                missingTargetDate:
+                  summary: The request body did not include 'targetDate'
+                  value:
+                    - attribute: targetDate
+                      type: missing
+                      message: targetDate must be specified
+  '/ledgerItems/{id}':
+    parameters:
+      - name: id
+        in: path
+        description: id of ledger item to find
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a single ledger item
+      description: >
+        Returns the ledger item corresponding to the specified ID in the URL
+        path, if one exists.
+      operationId: LedgerItemController.get
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:read'
+      responses:
+        '200':
+          description: Ledger Item found
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/ledgerItem.yml
+        '404':
+          description: ID not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    put:
+      summary: Update a single ledger item
+      description: >
+        Updates the memo field of the ledger item corresponding to the specified
+        ID in URL path, if one exists
+      operationId: LedgerItemController.update
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              title: Memo
+              type: string
+      responses:
+        '200':
+          description: Ledger Item Updated
+        '404':
+          description: ID not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    delete:
+      summary: Delete a single ledger item
+      description: >
+        Soft delete the ledger item corresponding to the specified ID in URL
+        path, if one exists
+      operationId: LedgerItemController.delete
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      responses:
+        '200':
+          description: Ledger Item was deleted successfully
+        '404':
+          description: ID not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/ledgerItems/{id}/recreate':
+    x-lint-skip:
+      - path-resource-is-plural
+    parameters:
+      - name: id
+        description: id of item to recreate
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    post:
+      summary: Recreate a ledger item
+      operationId: LedgerItemController.recreate
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/ledgerItemRecreateData.yml
+      responses:
+        '201':
+          description: Ledger item recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/ledgerItem.yml
+        '400':
+          description: Invalid request body JSON format
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingCopyAdjustments:
+                  summary: The request body did not include 'copyAdjustments'
+                  value:
+                    - attribute: copyAdjustments
+                      type: missing
+                      message: copyAdjustments must be specified
+  /ledgerItemReconciliations:
+    get:
+      summary: Get multiple ledger item reconiliations
+      description: >
+        Returns a list of ledger item reconciliations that match the specified
+        criteria.
+      operationId: LedgerItemReconciliationController.index
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:read'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of Ledger Item ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: ledgerItemIds
+          in: query
+          description: A comma separated list of Ledger Item ids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: reconciliationType
+          in: query
+          description: Ledger Item reconciliation type
+          style: form
+          explode: false
+          schema:
+            $ref: ./schemas/reconciliationType.yml
+        - name: createdAtStart
+          in: query
+          description: beginning of range createdAt
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtEnd
+          in: query
+          description: end of range createdAt
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          description: comma separated list of uuids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtStart
+          in: query
+          description: beginning of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtEnd
+          in: query
+          description: end of range for deletedAt
+          schema:
+            type: string
+            format: date-time
+        - name: deletedBy
+          in: query
+          description: comma separated list of uuids
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          description: default 100
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          description: default is 0
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          in: query
+          description: default is created_at
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: default case is asc
+          schema:
+            $ref: ../core/schemas/order.yml
+        - name: excludeDeleted
+          in: query
+          description: default case is true
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Ledger Item Reconciliations found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/ledgerItemReconciliation.yml
+        '400':
+          description: Missing required query parameter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value:
+                    - message: Query parameter 'limit' must be defined
+    post:
+      summary: Record a ledger item reconciliation
+      operationId: LedgerItemReconciliationController.create
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/ledgerItemReconciliationCreateData.yml
+      responses:
+        '201':
+          description: Ledger item reconciliation recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/ledgerItemReconciliation.yml
+        '400':
+          description: Invalid request body JSON format
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLedgerItemIds:
+                  summary: The request body did not include 'ledgerItemIds'
+                  value:
+                    - attribute: ledgerItemIds
+                      type: missing
+                      message: ledgerItemIds must be specified
+                missingReconciliationType:
+                  summary: The request body did not include 'reconciliationType'
+                  value:
+                    - attribute: reconciliationType
+                      type: missing
+                      message: reconciliationType must be specified
+                missingMemo:
+                  summary: The request body did not include 'memo'
+                  value:
+                    - attribute: memo
+                      type: missing
+                      message: memo must be specified
+    delete:
+      summary: Delete multiple Ledger Item Reconciliations
+      description: >
+        Soft delete multiple ledger item reconciliations that match the ids
+        provided in the URL path
+      operationId: LedgerItemReconciliationController.delete
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:write'
+      parameters:
+        - name: ids
+          in: query
+          description: A comma separated list of Ledger Item id
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+      responses:
+        '200':
+          description: Deleted Ledger Item Reconciliation(s)
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Missing required query parameter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLedgerItemIds:
+                  summary: The request did not include a 'ids' query parameter
+                  value:
+                    - message: Query parameter 'ids' must be defined
+        '404':
+          description: Ledger Item Reconciliation(s) not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/ledgerItemReconciliations/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Ledger item reconciliation id
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a single ledger item reconciliation
+      description: >
+        Returns the ledger item reconciliation corresponding to the specified ID
+        in the URL path, if one exists.
+      operationId: LedgerItemReconciliationController.get
+      tags:
+        - Ledger
+      security:
+        - oauth:
+            - 'ledger:read'
+      responses:
+        '200':
+          description: Ledger Item Reconciliations found
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/ledgerItemReconciliation.yml
+        '404':
+          description: ID not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml

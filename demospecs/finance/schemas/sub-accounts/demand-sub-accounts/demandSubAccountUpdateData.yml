@@ -1,0 +1,23 @@
+type: object
+allOf:
+  - $ref: ../subAccountUpdateData.yml
+  - type: object
+    properties:
+      supportsPreSelect:
+        type: boolean
+      shouldDisplayPreSelect:
+        type: boolean
+      subAccountOwners:
+        $ref: ./demandSubAccountOwnerCreateData.yml
+      subtextOverride:
+        type: string
+        description: Override the default auto-generated call to action subtext for issuers
+      preSelectTextOverride:
+        type: string
+        description: Override the default display text for indicating a pre-selected offer if shouldDisplayPreSelect is true.
+      foundedYear:
+        type: integer
+        format: int32
+      amBestRating:
+        type: string
+        description: A.M. Best's rating

@@ -1,0 +1,15 @@
+type: object
+required:
+  - accountIds
+properties:
+  accountIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+    description: |
+      Identifiers for the accounts that are deactivated.
+  deactivationReason:
+    type: string
+    description: |
+      Reason why the accounts were deactivated.

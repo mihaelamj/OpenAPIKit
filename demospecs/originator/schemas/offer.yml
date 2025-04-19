@@ -1,0 +1,26 @@
+type: object
+required:
+  - uuid
+  - partner
+  - productType
+  - productSubType
+  - url
+properties:
+  uuid:
+    type: string
+    format: uuid
+  partner:
+    $ref: ./demandPartner.yml
+  marketplace:
+    $ref: ./demandPartner.yml
+  productType:
+    $ref: ../../core/schemas/productType.yml
+  productSubType:
+    $ref: ../../lead/schemas/productSubType.yml
+  url:
+    type: string
+    format: url
+  recommendationScore:
+    type: number
+  disclaimer:
+    type: string

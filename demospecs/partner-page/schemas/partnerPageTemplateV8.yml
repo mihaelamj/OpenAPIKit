@@ -1,0 +1,193 @@
+type: object
+title: v8 PartnerPage Template
+required:
+  - credentials.access_token
+  - credentials.company_uuid
+  - partner
+  - partnerDisplayName
+  - productType
+  - theme.borderRediusLarge
+  - theme.borderRadiusSmall
+  - theme.colorBackgroundPrimary
+  - theme.colorBackgroundSecondary
+  - theme.colorBorder
+  - theme.colorCta
+  - theme.colorError
+  - theme.colorPrimary
+  - theme.colorSecondary
+  - theme.fontFamilyPrimary
+  - theme.fontFamilySecondary
+  - theme.fontSizeBase
+  - theme.partnerLogo
+  - theme.partnerLogoLink
+  - ui.maxResults
+  - version
+properties:
+  app:
+    type: object
+    properties:
+      loanAmount:
+        title: Default Loan Amount
+        type: number
+      providedCreditRating:
+        title: Default Credit Rating (one of poor, fair, good, excellent)
+        type: string
+      purpose:
+        title: Default Loan Purpose
+        type: string
+        default: debt_consolidation
+      zipcode:
+        title: Fall-Back ZIP code
+        type: string
+  clientTags:
+    title: Present Client Tags
+    type: object
+    format: key_values
+    default: {}
+  credentials:
+    type: object
+    properties:
+      access_token:
+        title: CLA Access Token
+        type: string
+        format: uuid
+      company_uuid:
+        title: CLA Company UUID
+        type: string
+        format: uuid
+  credit_card_flow:
+    title: Credit Card Flow Type (redirect, pre-select, or remarketing)
+    type: string
+  embedScripts:
+    title: Script that Should be Included on the Page (this does not fire on any event)
+    type: string
+  featureFlags:
+    title: MPS Feature Inclusions (one or many comma separated strings)
+    type: string
+  headScripts:
+    title: Script URL to include in <head> tag
+    type: string
+    format: uri
+  headerText:
+    title: Partner Page Header Text
+    type: string
+  partner:
+    title: Partner Key
+    type: string
+  partnerDisclaimer:
+    title: Additional Disclaimer from Partner (can include HTML)
+    type: string
+  partnerDisplayName:
+    title: Partner Display Name
+    type: string
+  productType:
+    title: Product Type (one of loan, mortgage, savings, or credit_card)
+    type: string
+  pw_fiona:
+    title: Powered By Fiona
+    type: boolean
+  shouldAllowLoanCoApplicant:
+    title: Allow Loan Co-Applicant
+    type: boolean
+    default: false
+  shouldAutoRedirect:
+    title: Auto-redirect user To Pre-approved Offer
+    type: boolean
+    default: true
+  shouldDisplayNavigation:
+    title: Show Even/Fiona Header and Branding
+    type: boolean
+    default: false
+  shouldShowPartnershipHeading:
+    title: Show 'In Partnership With' Heading
+    type: boolean
+    default: true
+  shouldShowSecondaryPages:
+    title: Show Secondary pages (Home, About, Contact, etc.)
+    type: boolean
+    default: false
+  step:
+    title: Initial Step (one of preview, application, results)
+    type: string
+  theme:
+    type: object
+    properties:
+      borderRediusLarge:
+        title: Large Border Radius (postfix with 'px')
+        type: string
+        default: 14px
+      borderRadiusSmall:
+        title: Small Border Radius (postfix with 'px')
+        type: string
+        default: 4px
+      colorBackgroundPrimary:
+        title: Primary Background Color
+        type: string
+        format: color
+        default: '#ffffff'
+      colorBackgroundSecondary:
+        title: Seconfary Background Color
+        type: string
+        format: color
+        default: '#f8f7fc'
+      colorBorder:
+        title: Border Color
+        type: string
+        format: color
+        default: '#e2e5e9'
+      colorCta:
+        title: CTA color
+        type: string
+        format: color
+        default: '#36d386'
+      colorError:
+        title: Error Color
+        type: string
+        format: color
+        default: '#e69575'
+      colorPrimary:
+        title: Primary Color
+        type: string
+        format: color
+        default: '#66a9f4'
+      colorSecondary:
+        title: Secondary Color
+        type: string
+        format: color
+        default: '#66a9f4'
+      fontFamilyPrimary:
+        title: Primary Font Family (Open Sans unless fully Fiona Branded, then use BrandonGrotesque)
+        type: string
+        default: Open Sans
+      fontFamilySecondary:
+        title: Secondary Font Family (Open Sans unless fully Fiona Branded, then use BrandonText)
+        type: string
+        default: Open Sans
+      fontSizeBase:
+        title: Primary Font Size (postfix with 'px')
+        type: string
+        default: 16px
+      partnerLogo:
+        title: Partner Logo
+        type: string
+      partnerLogoLink:
+        title: Partner Logo Link URL
+        type: string
+        format: uri
+  ui:
+    type: object
+    properties:
+      defaultSort:
+        title: Default Sort By
+        type: string
+      generic_offer_index:
+        title: Generic CTA Location
+        type: number
+      maxResults:
+        title: Maximum Number of Results
+        type: number
+        default: 3
+  version:
+    type: string
+    title: Partner page template version
+

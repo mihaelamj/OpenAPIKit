@@ -1,0 +1,15 @@
+type: object
+properties:
+  subtitle:
+    type: string
+    description: Extra information related to fees
+  qualifier:
+    type: string
+    description: Fee caveats and explainations
+  name:
+    type: string
+    description: Fee name
+  value:
+    type: number
+    format: float
+    description: Numerical fee representation

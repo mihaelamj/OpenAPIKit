@@ -1,0 +1,30 @@
+type: object
+required:
+  - name
+properties:
+  name:
+    type: string
+  email:
+    type: string
+  address1:
+    type: string
+  address2:
+    type: string
+  address3:
+    type: string
+  city:
+    type: string
+  state:
+    type: string
+  zipcode:
+    type: string
+  country:
+    type: string
+  phoneNumber:
+    type: string
+  billingName:
+    type: string
+  receivableBillingName:
+    type: string
+  accountOwners:
+    $ref: ./accountOwnersWriteData.yml

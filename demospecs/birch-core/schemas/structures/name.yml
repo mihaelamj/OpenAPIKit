@@ -1,0 +1,12 @@
+type: object
+description: A name, when multiple variations or aliases exist
+properties:
+  value:
+    type: string
+    description: The value to display
+  primary:
+    type: boolean
+    description: Whether this is this primary name
+  details:
+    type: string
+    description: More Details

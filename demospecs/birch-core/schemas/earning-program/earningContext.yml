@@ -1,0 +1,29 @@
+type: object
+description: A context around a nuumber of earning groups, such as caps, tiers, etc
+required:
+  - groups
+  - type
+properties:
+  type:
+    description: The type of context this is. Basic contexts have no details.
+    type: string
+    enum:
+      - basic
+      - calculation
+      - introductory
+      - rotating
+      - capped
+  groups:
+    description: The earning groups relevent in this context
+    type: array
+    items:
+      $ref: ./earningGroup.yml
+  detail:
+    description: A phrase describing the context around the earning groups
+    type: string
+  explaination:
+    description: A full sentence describing the context around the earning groups
+    type: string
+  personalization:
+    $ref: ./earningItemPersonalization.yml
+

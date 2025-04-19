@@ -1,0 +1,11 @@
+type: object
+properties:
+  name:
+    type: string
+    description: Name of credit card bonus
+  amount:
+    type: string
+    description: Quantity of the stated bonus in dollars to be recieved
+  bonusRequirement:
+    type: string
+    description: Additional prerequisites for recieving bonuses

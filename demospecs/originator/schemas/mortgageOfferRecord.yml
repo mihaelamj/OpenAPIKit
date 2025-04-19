@@ -1,0 +1,30 @@
+type: object
+required:
+  - interestRate
+  - loanType
+  - priceAdjustment
+  - monthlyPayment
+  - netClosingCosts
+  - apr
+  - loanTerm
+  - adjustmentType
+properties:
+  interestRate:
+    type: number
+  loanType:
+    $ref: ./mortgageLoanType.yml
+  priceAdjustment:
+    type: number
+  monthlyPayment:
+    type: number
+  netClosingCosts:
+    type: number
+  apr:
+    type: number
+  loanTerm:
+    type: integer
+    format: int32
+  adjustmentType:
+    $ref: ./adjustmentType.yml
+allOf:
+  - $ref: ./offerDetailsRecord.yml

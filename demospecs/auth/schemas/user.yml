@@ -1,0 +1,94 @@
+type: object
+required:
+  - id
+  - uuid
+  - accountId
+  - accountUuid
+  - companyUuid
+  - emailAddress
+  - firstName
+  - lastName
+  - createdAt
+  - createdById
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this user.
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for this user.
+  accountId:
+    type: integer
+    format: int64
+    description: |
+      The ID of the account resource for this user
+  accountUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the account resource for this user
+  companyUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the company that this user belongs to
+  emailAddress:
+    type: string
+    description: |
+      The user's email address.
+  firstName:
+    type: string
+    description: |
+      The user's email address.
+  lastName:
+    type: string
+    description: |
+      The user's email address.
+  title:
+    type: string
+    description: |
+      The user's email address.
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the user was created.
+  createdById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to create this user.
+  updatedAt:
+    type: string
+    format: date-time
+    description: |
+      When the user was last updated.
+  updatedById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to last update this user.
+  deactivatedAt:
+    type: string
+    format: date-time
+    description: |
+      When the user was deactivated.
+  deactivatedBy:
+    type: string
+    format: uuid
+    description: |
+       The UUID of the access token that was used to deactivate this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the user was deleted.
+  deletedById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to delete this user.

@@ -1,0 +1,6 @@
+type: string
+enum:
+  - own_outright
+  - own_with_mortgage
+  - rent
+  - unknown

@@ -1,0 +1,14 @@
+type: object
+description: How a user feels about a particular way to redeem rewards
+properties:
+  redemptionTypeUuid:
+    description: The UUID of a redemption type
+    type: string
+    format: uuid
+  weight:
+    description: The user's weight of the preference. >
+      -1 indicates the user would value this type of redemption at $0
+      0 indicates the user doesnt have a preference
+      Positive integers indicate a preference, which is normalized against other preferences
+    type: integer
+    format: int32

@@ -1,0 +1,64 @@
+type: object
+required:
+  - appliedAmountProcessor
+  - appliedTimestampProcessor
+  - approvedAmountProcessor
+  - approvedTimestampProcessor
+  - rejectedAmountProcessor
+  - rejectedTimestampProcessor
+  - listedAmountProcessor
+  - listedTimestampProcessor
+  - fundedAmountProcessor
+  - fundedTimestampProcessor
+  - originationFeeProcessor
+  - approvedLoanTermProcessor
+  - approvedLoanAprProcessor
+  - approvedLoanMinimum36MonthAprProcessor
+  - approvedLoanMinimum60MonthAprProcessor
+  - listedLoanTermProcessor
+  - listedLoanAprProcessor
+  - fundedLoanTermProcessor
+  - fundedLoanAprProcessor
+properties:
+  appliedAmountProcessor:
+    $ref: ../processorInformation.yml
+  appliedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  approvedAmountProcessor:
+    $ref: ../processorInformation.yml
+  approvedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  rejectedAmountProcessor:
+    $ref: ../processorInformation.yml
+  rejectedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  listedAmountProcessor:
+    $ref: ../processorInformation.yml
+  listedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  fundedAmountProcessor:
+    $ref: ../processorInformation.yml
+  fundedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  originationFeeProcessor:
+    $ref: ../processorInformation.yml
+  approvedLoanTermProcessor:
+    $ref: ../processorInformation.yml
+  approvedLoanAprProcessor:
+    $ref: ../processorInformation.yml
+  approvedLoanMinimum36MonthAprProcessor:
+    $ref: ../processorInformation.yml
+  approvedLoanMinimum60MonthAprProcessor:
+    $ref: ../processorInformation.yml
+  listedLoanTermProcessor:
+    $ref: ../processorInformation.yml
+  listedLoanAprProcessor:
+    $ref: ../processorInformation.yml
+  fundedLoanTermProcessor:
+    $ref: ../processorInformation.yml
+  fundedLoanAprProcessor:
+    $ref: ../processorInformation.yml
+  isCoApplicantProcessor:
+    $ref: ../processorInformation.yml 
+allOf:
+  - $ref: ./importConfigurationDetails.yml

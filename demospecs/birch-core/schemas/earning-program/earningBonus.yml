@@ -1,0 +1,29 @@
+type: object
+description: An earning event which is based on spend or is over time
+required:
+  - type
+  - name
+  - bonus
+  - redemptionValue
+  - requirement
+properties:
+  type:
+    type: string
+    enum:
+      - One Time
+      - Recurring
+  name:
+    type: string
+    enum:
+      - Sign-Up Bonus
+      - Anniversary Bonus
+      - Annual Bonus
+      - Usage Bouns
+  bonus:
+    type: string
+  redemptionValue:
+    type: string
+  requirement:
+    type: string
+  personalization:
+    $ref: ./bonusPersonalization.yml

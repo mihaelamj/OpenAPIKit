@@ -1,0 +1,56 @@
+type: object
+required:
+  - id
+  - subAccountId
+  - leadUuid
+  - eventType
+  - timestamp
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  subAccountId:
+    type: integer
+    format: int64
+  leadUuid:
+    type: string
+    format: uuid
+  eventType:
+   $ref: ./externalDemandEventType.yml
+  timestamp:
+    type: string
+    format: date-time
+  details:
+    $ref: ./externalDemandEventDetails.yml
+  productSubType:
+    $ref: ../../../lead/schemas/productSubType.yml
+  partnerTrackingId:
+    type: integer
+    format: int64
+  offerId:
+    type: integer
+    format: int64
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the external demand event was created.
+  createdByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this external demand event.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the external demand event was deleted.
+  deletedByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this external demand event.

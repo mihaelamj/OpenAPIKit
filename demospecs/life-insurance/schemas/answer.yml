@@ -1,0 +1,17 @@
+type: object
+required:
+  - questionUuid
+  - values
+properties:
+  questionUuid:
+    type: string
+    pattern: uuid
+    description: >
+      The uuid of the question that is being answered
+  values:
+    type: array
+    description: >
+      The list of values that are the response to this question
+    items:
+      type: string
+      pattern: '[a-zA-z_]+'

@@ -1,0 +1,9 @@
+type: object
+description: An offer for a mortgage
+required:
+  - details
+properties:
+  details:
+    $ref: ./mortgageOfferDetails.yml
+allOf:
+  - $ref: ./offer.yml

@@ -1,0 +1,36 @@
+type: object
+required:
+  - offerId
+  - staticOfferId
+  - offerClickCount
+  - loanRevenue
+  - savingsRevenue
+  - creditCardRevenue
+  - otherRevenue
+  - revenue
+properties:
+  offerId:
+    type: integer
+    format: int32
+  staticOfferId:
+    type: integer
+    format: int32
+  offerClickCount:
+    type: integer
+    format: int32
+  loanRevenue:
+    type: integer
+    format: int64
+  savingsRevenue:
+    type: integer
+    format: int64
+  creditCardRevenue:
+    type: integer
+    format: int64
+  otherRevenue:
+    type: integer
+    format: int64
+  revenue:
+    type: integer
+    format: int64
+    description: Total revenue attributed to the given static offer

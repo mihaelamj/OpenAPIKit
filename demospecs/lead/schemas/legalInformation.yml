@@ -1,0 +1,15 @@
+type: object
+description: Information regarding a `Lead`'s communication concent
+properties:
+  consentsToFcra:
+    type: boolean
+    description: Whether the lead was shown, and consented to a Fair Credit Reporting Act notice
+  consentsToTcpa:
+    type: boolean
+    description: Whether the lead was shown, and consented to a Telephone Consumer Protection Act notice
+  tcpaLanguage:
+    type: string
+    description: The exact text to which the lead consented
+  consentsToSms:
+    type: boolean
+    description: The lead agrees to recieve SMS text messages from the Financial Institution

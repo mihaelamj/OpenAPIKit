@@ -1,0 +1,5 @@
+description: Reward value calculated successfully
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/rewardValueCalculation.yml

@@ -1,0 +1,5 @@
+description: Create a Plaid asset report token
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/plaidAssetReportToken.yml

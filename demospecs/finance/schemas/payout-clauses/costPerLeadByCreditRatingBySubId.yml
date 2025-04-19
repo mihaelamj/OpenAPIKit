@@ -1,0 +1,63 @@
+type: object
+title: Cost Per Lead by Credit Rating by Sub Id
+required:
+  - defaultCost
+  - subIdKey
+  - key
+properties:
+  defaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Default Amount (in $ USD)
+    minimum: 0.01
+  subIdKey:
+    type: string
+    title: Sub Id Key
+    minLength: 1
+  excellentDefaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Excellent Default Amount(in $ USD)
+    minimum: 0.01
+  excellentCostPerValue:
+    type: array
+    items:
+      $ref: ./costPerSubIdValue.yml
+  goodDefaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Good Default Amount(in $ USD)
+    minimum: 0.01
+  goodCostPerValue:
+    type: array
+    items:
+      $ref: ./costPerSubIdValue.yml
+  fairDefaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Fair Default Amount(in $ USD)
+    minimum: 0.01
+  fairCostPerValue:
+    type: array
+    items:
+      $ref: ./costPerSubIdValue.yml
+  poorDefaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Poor Default Amount(in $ USD)
+    minimum: 0.01
+  poorCostPerValue:
+    type: array
+    items:
+      $ref: ./costPerSubIdValue.yml
+  limitedDefaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Limited Default Amount(in $ USD)
+    minimum: 0.01
+  limitedCostPerValue:
+    type: array
+    items:
+      $ref: ./costPerSubIdValue.yml
+allOf:
+  - $ref: ../abstractPayoutClause.yml

@@ -1,0 +1,18 @@
+type: object
+required:
+  - redemptionTypeUuid
+  - weight
+properties:
+  redemptionTypeUuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for the redemption type. This is used to reference
+      redemption type in `POST /offerAugmentation/rewardValueCalculations`.
+  weight:
+    description: The user's weight of the preference. >
+      -1 indicates the user would value this type of redemption at $0
+      0 indicates the user doesnt have a preference
+      Positive integers indicate a preference, which is normalized against other preferences
+    type: integer
+    format: int32

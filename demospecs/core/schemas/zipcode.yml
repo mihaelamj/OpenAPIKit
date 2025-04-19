@@ -1,0 +1,4 @@
+type: string
+format: zip
+description: 5 digit ZIP code followed by an optional hyphen and plus 4 code
+pattern: ^\d{5}([-\s]\d{4})?$

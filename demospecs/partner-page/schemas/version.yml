@@ -1,0 +1,17 @@
+type: object
+properties:
+  version:
+    type: integer
+  fields:
+    type: array
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+        label:
+          type: string
+        dataType:
+          type: string
+        required:
+          type: boolean

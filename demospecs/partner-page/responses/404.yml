@@ -1,0 +1,8 @@
+description: Resource Not Found
+content:
+  application/json:
+    schema:
+      $ref: ./../schemas/error.yml
+    example:
+      type: NotFoundException
+      message: Requested resource not found.

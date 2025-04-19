@@ -1,0 +1,72 @@
+type: object
+required:
+  - id
+  - version
+  - subAccountId
+  - staticOfferId
+  - capType
+  - staticOfferInventoryCapEvents
+  - startDate
+  - endDate
+  - createdAt
+  - createdByUuid
+  - updatedAt
+  - updatedByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+  version:
+    type: integer
+    format: int32
+  subAccountId:
+    type: integer
+    format: int64
+  staticOfferId:
+    type: integer
+    format: int64
+  capType:
+    $ref: ./capTypeWrapper.yml
+  budgetCapAmount:
+    type: number
+    format: double
+  currentAttributedRevenue:
+    type: number
+    format: double
+  clickCapAmount:
+    type: integer
+    format: int64
+  currentAttributedClicks:
+    type: integer
+    format: int64
+  lastCalculatedAt:
+    type: string
+    format: date-time
+  staticOfferInventoryCapEvents:
+    type: array
+    items:
+      $ref: ./staticOfferInventoryCapEvent.yml
+  startDate:
+    type: string
+    format: date
+  endDate:
+    type: string
+    format: date
+  createdAt:
+    type: string
+    format: date-time
+  createdByUuid:
+    type: string
+    format: uuid
+  updatedAt:
+    type: string
+    format: date-time
+  updatedByUuid:
+    type: string
+    format: uuid
+  deletedAt:
+    type: string
+    format: date-time
+  deletedByUuid:
+    type: string
+    format: uuid

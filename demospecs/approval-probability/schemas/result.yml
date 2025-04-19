@@ -1,0 +1,10 @@
+type: string
+enum:
+  - successful
+  - inconclusive
+description: |
+  The result of the calculation.
+
+  If this value is `successful`, then `approvalProbability` will be
+  specified. If `inconclusive` then we didn't have enough data to
+  perform the calculation, and `approvalProbability` will not be specified.

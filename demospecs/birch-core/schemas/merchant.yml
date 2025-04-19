@@ -1,0 +1,14 @@
+type: object
+description: A business or store that is affiliated with a credit card earning program
+properties:
+  uuid:
+    type: string
+    format: uuid
+  name:
+    description: The merchant's name
+    type: string
+  logo:
+    type: string
+    description: Logo URL
+  category:
+      $ref: ./category.yml

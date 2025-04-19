@@ -1,0 +1,60 @@
+
+type: object
+required:
+  - id
+  - demandSubAccountId
+  - demandSubAccountName
+  - audienceName
+  - description
+  - productType
+  - offerRate
+  - clickToFundRate
+  - averageOfferRank
+  - projectedOfferRank
+  - currentClickVolume
+  - availableClickVolume
+  - projectedClickVolume
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+  demandSubAccountId:
+    type: integer
+    format: int64
+  demandSubAccountName:
+    type: string
+  audienceName:
+    type: string
+  description:
+    type: string
+  productType:
+    $ref: ../../core/schemas/productType.yml
+  offerRate:
+    type: number
+    format: float
+  clickToFundRate:
+    type: number
+    format: float
+  averageOfferRank:
+    type: number
+    format: float
+  projectedOfferRank:
+    type: number
+    format: float
+  currentClickVolume:
+    type: integer
+    format: int32
+  availableClickVolume:
+    type: integer
+    format: int32'
+  projectedClickVolume:
+    type: integer
+    format: int32
+  createdAt:
+    type: string
+    format: date-time
+  createdBy:
+    type: string
+    format: uuid

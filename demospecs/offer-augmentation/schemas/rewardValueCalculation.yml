@@ -1,0 +1,61 @@
+type: object
+required:
+  - uuid
+  - rateTableUuid
+  - offerRewardValues
+  - createdAt
+  - createdBy
+properties:
+  uuid:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      A unique identifier for the caclulation.
+  rateTableUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the rate table for the calculation.
+  plaidAssetReportToken:
+    type: string
+    description: |
+      A Plaid asset report token to retrieve transaction data for the user. Any
+      relevant tokens previously associated with the rate table's lead via
+      `POST /offerAugmentation/plaidAssetReportTokens` will also be taken into
+      account.
+  aggregatedSpending:
+    description: >
+      A breakdown of spending habits, grouped by high level categories. The
+      proportion for any particular category is relative to the proportions of
+      all other specified categories.
+    allOf:
+      - $ref: ./aggregatedSpending.yml
+  annualSpend:
+    type: boolean
+    description: A flag to determine if the aggregated spending values are annual or monthly. Default is set to true, to annualize the spending.
+  preferredRedemptionTypes:
+    type: array
+    description: >
+      A list of point redemption types that the user prefers. UUIDs reference
+      redemption type records returned by the
+      `GET /offerAugmentation/redemptionTypes` endpoint.
+    items:
+      $ref: ./preferredRedemptionType.yml
+  offerCalculations:
+    type: array
+    readOnly: true
+    items:
+      $ref: ./offerCalculation.yml
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the calculation was performed.
+  createdBy:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to request the calculation.

@@ -1,0 +1,10 @@
+type: string
+enum:
+  - employed_full_time
+  - employed_part_time
+  - military
+  - not_employed
+  - self_employed
+  - retired
+  - other
+  - unknown

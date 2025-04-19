@@ -1,0 +1,31 @@
+type: object
+title: Refinance loan information
+properties:
+  accountNumber:
+    type: string
+    description: The account number for a loan the lead is refinancing
+  incomeBasedRepayment:
+    type: boolean
+    description: If the repayment is income-based for a loan the lead is refinancing
+  interestRate:
+    type: number
+    format: float
+    description: The interest rate for a loan the lead is refinancing
+  loanAmount:
+    type: integer
+    format: int32
+    description: The loan amount for a loan the lead is refinancing
+  loanServicer:
+    type: string
+    description: The name of a loan servicer of a loan the lead is refinancing
+  loanType:
+    $ref: ./refinanceLoanType.yml
+    description: The loan type for a loan the lead is refinancing
+  nextPaymentAmount:
+    type: number
+    format: float
+    description: The amount the next payment will be on a loan the lead is refinancing
+  nextPaymentDate:
+    type: string
+    format: date
+    description: The next payment date for a loan the lead is refinancing

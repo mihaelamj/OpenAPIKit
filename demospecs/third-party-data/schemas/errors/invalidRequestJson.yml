@@ -1,0 +1,12 @@
+type: object
+required:
+  - message
+  - details
+properties:
+  message:
+    type: string
+    example: Bad Request
+  details:
+    type: array
+    items:
+      type: string

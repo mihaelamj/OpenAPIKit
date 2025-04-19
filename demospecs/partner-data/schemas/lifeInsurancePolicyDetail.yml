@@ -1,0 +1,25 @@
+type: object
+properties:
+  subAccountId:
+    type: integer
+    format: int64
+    description: |
+      The id belonging to the associated Demand Sub Account
+  key:
+    type: string
+    description: |
+      a key unique on the subAccount. A subAccount/carrier can have more than type of Policy.
+  convertToPermanent:
+    type: boolean
+  childRider:
+    type: string
+  acceleratedDeathBenefit:
+    type: boolean
+  waiverOfPremium:
+    type: string
+  isOnlineApplication:
+    type: boolean
+  deliveryMethod:
+    $ref: ./lifeInsurancePolicyDeliveryMethod.yml
+  examRequired:
+    type: string

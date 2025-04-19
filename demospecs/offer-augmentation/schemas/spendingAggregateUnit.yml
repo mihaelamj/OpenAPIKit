@@ -1,0 +1,5 @@
+description: The unit of the values in spend aggregates
+type: string
+enum:
+  - usd
+  - none

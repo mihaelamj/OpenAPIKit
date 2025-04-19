@@ -1,0 +1,9 @@
+type: object
+required:
+  - access_token
+properties:
+  access_token:
+    type: string
+    description: |
+     The bearer token to authenticate, which must be the corresponding access
+     token UUID and access token secret concatenated together with an underscore.

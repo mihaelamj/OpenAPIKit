@@ -1,0 +1,18 @@
+type: object
+required:
+  - key
+  - description
+  - roles
+properties:
+  key:
+    type: string
+    description: |
+      A unique, human-readable identifier for this role.
+  description:
+    type: string
+  roles:
+    type: array
+    description: |
+      The roles that this scope should belong to
+    items:
+      type: string

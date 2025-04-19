@@ -1,0 +1,39 @@
+type: object
+title: ledgerItemReconciliation
+required:
+  - id
+  - ledgerItemId
+  - reconciliationType
+  - createdAt
+  - createdBy
+properties:
+  id:
+    title: Id
+    type: integer
+    format: int64
+  ledgerItemId:
+    title: Ledger Item Id
+    type: integer
+    format: int64
+  reconciliationType:
+    title: Reconciliation Type
+    $ref: ./reconciliationType.yml
+  memo:
+    title: Memo
+    type: string
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  createdBy:
+    title: Created By
+    type: string
+    format: uuid
+  deletedAt:
+    title: Deleted At
+    type: string
+    format: date-time
+  deletedBy:
+    title: Deleted By
+    type: string
+    format: uuid

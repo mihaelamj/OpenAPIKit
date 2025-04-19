@@ -1,0 +1,11 @@
+type: object
+required:
+  - childRules
+properties:
+  childRules: 
+    type: array
+    description: Child rules
+    items:
+      type: string
+allOf: 
+  - $ref: './leadFilterRule.yml'

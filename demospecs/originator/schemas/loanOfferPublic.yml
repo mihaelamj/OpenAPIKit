@@ -1,0 +1,98 @@
+type: object
+required:
+  - termLength
+  - termUnit
+  - maxAmount
+  - allowPrepayment
+  - preQualified
+  - preApproved
+  - secured
+  - sponsored
+  - aprType
+properties:
+  uuid:
+    type: string
+    format: uuid
+  originator:
+    $ref: ./originator.yml
+  originatorId:
+    type: string
+  termLength:
+    type: integer
+    format: int32
+  termUnit:
+    $ref: ./termUnit.yml
+  maxAmount:
+    type: integer
+    format: int32
+  minAmount:
+    type: integer
+    format: int32
+  maxApr:
+    type: number
+  minApr:
+    type: number
+  meanApr:
+    type: number
+  feeRate:
+    type: number
+    description: The maximum percent of loan amount fee for an offer. `maxFeeRate` should be used instead
+    deprecated: true
+  maxFeeRate:
+    type: number
+  minFeeRate:
+    type: number
+  feeFixed:
+    type: number
+    description: The maximum fee, in dollars, for an offer. `maxFeeFixed` should be used instead
+    deprecated: true
+  maxFeeFixed:
+    type: number
+  minFeeFixed:
+    type: number
+  allowPrepayment:
+    type: boolean
+  prepaymentFee:
+    type: number
+  monthlyPayment:
+    type: number
+    description: The estimated maximum monthly payment, in dollars, for an offer. `maxMonthlyPayment` should be used instead
+    deprecated: true
+  maxMonthlyPayment:
+    type: number
+  minMonthlyPayment:
+    type: number
+  meanMonthlyPayment:
+    type: number
+  maxTotalPayment:
+    type: number
+  minTotalPayment:
+    type: number
+  meanTotalPayment:
+    type: number
+  terms:
+    type: string
+  url:
+    type: string
+    format: url
+  preQualified:
+    type: boolean
+  preApproved:
+    type: boolean
+  secured:
+    type: boolean
+  sponsored:
+    type: boolean
+    deprecated: true
+  recommendationScore:
+    type: number
+  payout:
+    type: number
+  conversionProbability:
+    type: number
+  productType:
+    $ref: ../../core/schemas/productType.yml
+  productSubType:
+    $ref: ../../lead/schemas/productSubType.yml
+  aprType:
+    $ref: ./aprType.yml

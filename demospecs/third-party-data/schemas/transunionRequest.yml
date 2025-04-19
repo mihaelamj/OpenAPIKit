@@ -1,0 +1,47 @@
+type: object
+required:
+  - leadUuid
+  - email
+  - firstName
+  - lastName
+  - address
+  - city
+  - state
+  - zipcode
+  - subAccountId
+properties:
+  leadUuid:
+    type: string
+    format: uuid
+  email:
+    $ref: ../../core/schemas/email.yml
+  firstName:
+    type: string
+    format: string
+  lastName:
+    type: string
+    format: string
+  address:
+    type: string
+    format: string
+  address2:
+    type: string
+    format: string
+  city:
+    type: string
+    format: string
+  state:
+    type: string
+    format: string
+  zipcode:
+    type: string
+    format: string
+  dateOfBirth:
+    type: string
+    format: Date
+  subAccountId:
+    type: integer
+    format: int64
+    description: Supply sub account id
+  ssn:
+    $ref: ../../core/schemas/ssn.yml

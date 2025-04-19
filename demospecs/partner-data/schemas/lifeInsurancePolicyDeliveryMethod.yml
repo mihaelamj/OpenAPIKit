@@ -1,0 +1,6 @@
+type: string
+enum:
+  - paper
+  - electronic
+description: >
+  Delivery method of the policy

@@ -1,0 +1,32 @@
+type: object
+required:
+  - id
+  - uuid
+  - roles
+  - createdAt
+  - createdById
+properties:
+  account:
+    $ref: ./account.yml
+  company:
+    description: |
+      The company that this account belongs to
+    allOf:
+      - $ref: ./company.yml
+  application:
+    description: |
+      The application that decorates this account, if any.
+    allOf:
+      - $ref: ./application.yml
+  user:
+    description: |
+      The user that decorates this account, if any.
+    allOf:
+      - $ref: ./user.yml
+  service:
+    description: |
+      The service that decorates this account, if any. The service concept is
+      deprecated and will ultimately be removed. 
+    deprecated: true
+    allOf:
+      - $ref: ./service.yml

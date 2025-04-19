@@ -1,0 +1,15 @@
+summary: A demand contract
+value:
+  {
+    "id": 9,
+    "subAccountId": 258,
+    "effectiveAt": "2019-01-11",
+    "revenueClauses": [
+        {
+            "cost": 100,
+            "key": "cost_per_loan/funded"
+        }
+    ],
+    "createdAt": "2019-05-16T14:49:02.143280Z",
+    "createdBy": "77e1e05f-0831-406d-b1a2-ad1fa857bbb5"
+  }

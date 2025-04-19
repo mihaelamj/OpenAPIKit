@@ -1,0 +1,54 @@
+type: object
+title: billingCycle
+required:
+  - id
+  - accountId
+  - ledgerItemType
+  - effectiveAt
+  - termUnit
+  - netD
+  - createdAt
+  - createdBy
+properties:
+  id:
+    title: Id
+    type: integer
+    format: int64
+  accountId:
+    title: Account Id
+    type: integer
+    format: int64
+  ledgerItemType:
+    title: Ledger Item Type
+    $ref: ./ledgerItemType.yml
+  effectiveAt:
+    title: Effective At
+    type: string
+    format: date
+  endDate:
+    title: End Date
+    type: string
+    format: date
+  termUnit:
+    title: Term Unit
+    $ref: ./termUnit.yml
+  netD:
+    title: NetD
+    type: number
+    format: double
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  createdBy:
+    title: Created By
+    type: string
+    format: uuid
+  deletedAt:
+    title: Deleted At
+    type: string
+    format: date-time
+  deletedBy:
+    title: Deleted By
+    type: string
+    format: uuid

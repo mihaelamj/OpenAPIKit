@@ -1,0 +1,307 @@
+openapi: 3.0.3
+info:
+  title: approval-probability
+  description: |
+    Predicts the probability of pre-approval for a user based upon an identity
+    hash
+  version: 1.0.0
+  contact:
+    name: API Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/348455141/API+Team
+servers:
+  - url: 'https://api.evenfinancial.com/approvalProbability'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/approvalProbability'
+    description: Dev
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'approval-probability:read': Allows read access to approval-probability resources
+            'approval-probability:write': Allows write access to approval-probability svc-finance resources
+  schemas:
+    ApprovalProbabilityCalculation:
+      $ref: ./schemas/approvalProbabilityCalculation.yml
+    EmploymentStatus:
+      $ref: ../lead/schemas/employmentStatus.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    ProvidedCreditRating:
+      $ref: ../lead/schemas/providedCreditRating.yml
+    Result:
+      $ref: ./schemas/result.yml
+    State:
+      $ref: ../core/schemas/state-lead.yml
+    IdentityHash:
+      $ref: ./schemas/identityHash.yml
+tags:
+  - name: Approval Probability
+paths:
+  /approvalProbabilityCalculations:
+    post:
+      summary: Calculate approval probability for a user
+      description: |
+        Caclulate the probability of a user getting a pre-approved offer for a
+        particular product type.
+
+        Caclulations are based upon either an irreversible, PII-based identity
+        hash or non-PII data about the user, or both. As a result, user consent
+        is not required to run the calculation.
+
+        If an identity hash is specified, it's possible that the approval
+        probability will be calculated to be 100%. This indicates that there are
+        active offers for the user, for specified product type. If this is the
+        case, a UUID for a rate table containing those offers will be returned.
+      tags:
+        - Approval Probability
+      operationId: createApprovalProbabilityCalculation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/approvalProbabilityCalculation.yml
+      responses:
+        '201':
+          description: Approval probability calculated successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/approvalProbabilityCalculation.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  $ref: ../core/examples/error/missingAccessToken.yml
+        '422':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                invalidProductType:
+                  summary: The specified product type is invalid
+                  value:
+                    - attribute: productType
+                      type: notInEnum
+                      message: >
+                        productType must be one of 'credit_card', 'insurance',
+
+                        'life_insurance', 'loan', 'mortgage', 'savings',
+                        'other',
+
+                        but is 'invalid_product_type'
+                      details:
+                        specified: invalid_product_type
+                        enum:
+                          - credit_card
+                          - insurance
+                          - life_insurance
+                          - loan
+                          - mortgage
+                          - savings
+                          - other
+                          - unknown
+  /identityHashes:
+    get:
+      summary: Get identity hashes
+      description: Return identity hashes based upon request parameters
+      operationId: getIdentityHashes
+      security:
+        - oauth:
+            - 'approval-probability:read'
+      tags:
+        - Identity Hash
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: leadUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: leadUpdatedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: leadUpdatedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Identity hashes matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/identityHash.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+        '422':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create a identity hash
+      description: Create a identity hash
+      operationId: createIdentityHash
+      security:
+        - oauth:
+            - 'approval-probability:write'
+      tags:
+        - Identity Hash
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/identityHash.yml
+      responses:
+        '201':
+          description: The identity hash was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/identityHash.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+        '422':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/identityHashes/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a identity hash
+      description: Delete a identity hash
+      operationId: deleteIdentityHash
+      security:
+        - oauth:
+            - 'approval-probability:write'
+      tags:
+        - Identity Hash
+      responses:
+        '200':
+          description: The identity hash was successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/identityHash.yml
+        '404':
+          description: No identity hash exists for the specified ID

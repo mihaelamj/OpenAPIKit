@@ -1,0 +1,42 @@
+type: object
+description: >
+  Contains the totals of the public records, inquiries, and different types of
+  accounts included in this consumer file
+properties:
+  publicCount:
+    type: integer
+    format: int32
+  collectionCount:
+    type: integer
+    format: int32
+  totalTradeCount:
+    type: integer
+    format: int32
+  negativeTradeCount:
+    type: integer
+    format: int32
+  historicalNegativeTradeCount:
+    type: integer
+    format: int32
+  historicalNegativeOccurrencesCount:
+    type: integer
+    format: int32
+  revolvingTradeCount:
+    type: integer
+    format: int32
+  installmentTradeCount:
+    type: integer
+    format: int32
+  mortgageTradeCount:
+    type: integer
+    format: int32
+  openTradeCount:
+    type: integer
+    format: int32
+  unspecifiedTradeCount:
+    type: integer
+    format: int32
+    description: The number of accounts with an unspecified (blank) portfolio type contained in this file.
+  totalInquiryCount:
+    type: integer
+    format: int32

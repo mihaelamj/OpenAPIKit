@@ -1,0 +1,24 @@
+summary: A supply contract
+value:
+  {
+    "subAccountId": 1,
+    "effectiveAt": "2019-01-01",
+    "payoutClauses": [
+      {
+        "cost": 100.11,
+        "key": "cost_per_lead"
+      },
+      {
+        "defaultCost": 0.10,
+        "excellentCost": 100.55,
+        "poorCost": 0.55,
+        "key": "cost_per_lead_by_credit_rating"
+      },
+      {
+        "defaultCost": 0.10,
+        "subIdKey": "hello",
+        "costPerValue": [{"key": "a", "value": 0.02}],
+        "key": "cost_per_lead_by_sub_id"
+      }
+    ]
+  }

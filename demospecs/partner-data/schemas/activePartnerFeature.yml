@@ -1,0 +1,42 @@
+type: object
+required:
+  - id
+  - subAccountId
+  - feature
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  subAccountId:
+    type: integer
+    format: int64
+    description: |
+      The id belonging to the associated Sub Account
+  feature:
+    $ref: ./partnerFeature.yml
+    description: |
+      The name of the feature
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this resource.

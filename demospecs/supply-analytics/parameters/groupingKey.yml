@@ -1,0 +1,5 @@
+name: groupingKey
+in: query
+required: true
+schema:
+  $ref: ../schemas/summaryGroupBy.yml

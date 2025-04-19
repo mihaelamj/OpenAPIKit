@@ -1,0 +1,7 @@
+description: Lead created
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/leadUuid.yml
+    example:
+      uuid: 81c08fb9-559a-4bab-948c-ba38f8dd0dcc

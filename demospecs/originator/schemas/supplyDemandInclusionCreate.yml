@@ -1,0 +1,24 @@
+type: object
+title: SupplyDemandInclusionCreate
+required:
+  - demandSubAccountId
+  - supplySubAccountId
+  - createdReason
+  - createdMemo
+properties:
+  demandSubAccountId:
+    title: Demand Sub Account Id
+    type: integer
+    format: int64
+  supplySubAccountId:
+    title: Supply Sub Account Id
+    type: integer
+    format: int64
+  createdReason:
+    title: Created Reason
+    description: enumerated field with set reasons for creation
+    type: string
+  createdMemo:
+    title: Created Memo
+    description: field to provide further details to the reason for creation
+    type: string

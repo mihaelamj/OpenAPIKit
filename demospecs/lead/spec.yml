@@ -1,0 +1,650 @@
+openapi: 3.0.3
+info:
+  title: lead
+  description: Capture and calculate financial informations for our partners
+  version: 1.4.0
+  contact:
+    name: Offers Chapter
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/PE/pages/363233573/Offers+Chapter
+servers:
+  - url: 'https://api.evenfinancial.com'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com'
+    description: Dev
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'svc-lead:leads:insert': Allows write access to `Leads`
+            'svc-lead:leads:insert-test': >-
+              Disables non-test write access to `Leads`. An access token with
+              this scope can _only_ create test `Lead`s
+            'svc-lead:leads:readAll': Allows read access to all `Lead`s
+            'svc-lead:admin:read': Allows reads on admin endpoints in lead
+            'svc-lead:admin:write': Allows writes on admin endpoints in lead
+  schemas:
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    AprType:
+      $ref: ../originator/schemas/aprType.yml
+    BankAccountType:
+      $ref: ./schemas/bankAccountType.yml
+    BestTimeToCall:
+      $ref: ./schemas/bestTimeToCall.yml
+    BonusPersonalization:
+      $ref: ../offer-augmentation/schemas/bonusPersonalization.yml
+    CardBenefits:
+      $ref: ../lead/schemas/cardBenefits.yml
+    CardPurpose:
+      $ref: ./schemas/cardPurposes.yml
+    CardType:
+      $ref: ../originator/schemas/cardType.yml
+    CitizenshipStatus:
+      $ref: ./schemas/citizenshipStatus.yml
+    ClientTags:
+      $ref: ./schemas/clientTags.yml
+    CoApplicantInformation:
+      $ref: ./schemas/coApplicantInformation.yml
+    CreditCardInformation:
+      $ref: ./schemas/creditCardInformation.yml
+    CreditInformation:
+      $ref: ./schemas/creditInformation.yml
+    CreditCardIntroOfferType:
+      $ref: ../originator/schemas/introOfferType.yml
+    CreditCardOffer:
+      $ref: ../originator/schemas/creditCardOffer.yml
+    CreditCardOfferDetails:
+      $ref: ../originator/schemas/creditCardOfferDetails.yml
+    DeduplicationConfiguration:
+      $ref: ./schemas/deduplicationConfiguration.yml
+    DeduplicationConfigurationSort:
+      type: string
+      enum:
+        - id
+        - supplySubAccountId
+        - durationMinutes
+        - createdAt
+        - deletedAt
+    DemandPartner:
+      $ref: ../originator/schemas/demandPartner.yml
+    EarningBonus:
+      $ref: ../offer-augmentation/schemas/earningBonus.yml
+    EarningBonusName:
+      $ref: ../offer-augmentation/schemas/earningBonusName.yml
+    EarningBonusType:
+      $ref: ../offer-augmentation/schemas/earningBonusType.yml
+    EarningContext:
+      $ref: ../offer-augmentation/schemas/earningContext.yml
+    EarningContextType:
+      $ref: ../offer-augmentation/schemas/earningContextType.yml
+    EarningGroup:
+      $ref: ../offer-augmentation/schemas/earningGroup.yml
+    EarningItem:
+      $ref: ../offer-augmentation/schemas/earningItem.yml
+    EarningItemPersonalization:
+      $ref: ../offer-augmentation/schemas/earningItemPersonalization.yml
+    EarningItemType:
+      $ref: ../offer-augmentation/schemas/earningItemType.yml
+    EarningProgram:
+      $ref: ../offer-augmentation/schemas/earningProgram.yml
+    EarningProgramPersonalization:
+      $ref: ../offer-augmentation/schemas/earningProgramPersonalization.yml
+    EducationInformation:
+      $ref: ./schemas/educationInformation.yml
+    EducationLevel:
+      $ref: ./schemas/educationLevel.yml
+    EmploymentInformation:
+      $ref: ./schemas/employmentInformation.yml
+    EmploymentPayFrequency:
+      $ref: ./schemas/employmentPayFrequency.yml
+    EmploymentStatus:
+      $ref: ./schemas/employmentStatus.yml
+    FinancialInformation:
+      $ref: ./schemas/financialInformation.yml
+    IdType:
+      $ref: ./schemas/idType.yml
+    Gender:
+      $ref: ./schemas/gender.yml
+    GraduateDegreeType:
+      $ref: ./schemas/graduateDegreeType.yml
+    HealthInformation:
+      $ref: ./schemas/healthInformation.yml
+    IdentificationInformation:
+      $ref: ./schemas/identificationInformation.yml
+    LeadAction:
+      $ref: ./schemas/leadActionResponse.yml
+    LeadActionRejectReason:
+      $ref: ./schemas/rejectReason.yml
+    LeadActionType:
+      $ref: ./schemas/leadActionType.yml
+    LeadRequest:
+      $ref: ./schemas/leadRequestJson.yml
+    LeadResponse:
+      $ref: ./schemas/leadResponseJson.yml
+    LeadResponseWrapper:
+      $ref: ./schemas/leadResponseWrapper.yml
+    LeadUuid:
+      $ref: ./schemas/leadUuid.yml
+    LegalInformation:
+      $ref: ./schemas/legalInformation.yml
+    LifeInsuranceInformation:
+      $ref: ./schemas/lifeInsuranceInformation.yml
+    LoanInformation:
+      $ref: ./schemas/loanInformation.yml
+    LoanOffer:
+      $ref: ../originator/schemas/loanOfferPublic.yml
+    LoanPurpose:
+      $ref: ./schemas/purpose.yml
+    LoanTermUnit:
+      $ref: ../originator/schemas/termUnit.yml
+    Merchant:
+      $ref: ../offer-augmentation/schemas/merchant.yml
+    MerchantCategory:
+      $ref: ../offer-augmentation/schemas/category.yml
+    MorgageAdjustmentType:
+      $ref: ../originator/schemas/adjustmentType.yml
+    MorgageInformation:
+      $ref: ./schemas/mortgageInformation.yml
+    MorgageLoanType:
+      $ref: ../originator/schemas/mortgageLoanType.yml
+    MortgageOccupancyType:
+      $ref: ./schemas/occupancyType.yml
+    MortgageOffer:
+      $ref: ../originator/schemas/mortgageOffer.yml
+    MortgageOfferDetails:
+      $ref: ../originator/schemas/mortgageOfferDetails.yml
+    MortgagePropertySearchStatus:
+      $ref: ./schemas/propertySearchStatus.yml
+    MortgagePropertyStatus:
+      $ref: ./schemas/propertyStatus.yml
+    MortgagePropertyType:
+      $ref: ./schemas/propertyType.yml
+    MortgagePurchaseStatus:
+      $ref: ./schemas/purchaseStatus.yml
+    MortgageRefinanceType:
+      $ref: ./schemas/refinanceType.yml
+    MortgageType:
+      $ref: ./schemas/mortgageType.yml
+    NewDeduplicationConfiguration:
+      $ref: ./schemas/newDeduplicationConfiguration.yml
+    Offer:
+      $ref: ../originator/schemas/offer.yml
+    Order:
+      $ref: ../core/schemas/order.yml
+    Originator:
+      $ref: ../originator/schemas/originator.yml
+    OriginatorImage:
+      $ref: ../originator/schemas/originatorImage.yml
+    PendingResponse:
+      $ref: ../originator/schemas/pendingResponse.yml
+    PersonalInformation:
+      $ref: ./schemas/personalInformation.yml
+    PersonalReferenceInformation:
+      $ref: ./schemas/personalReferenceInformation.yml
+    PersonalReferenceRelationType:
+      $ref: ./schemas/personalReferenceRelationType.yml
+    ProductSubType:
+      $ref: ./schemas/productSubType.yml
+    ProductType:
+      $ref: ../core/schemas/productType.yml
+    ProvidedCreditRating:
+      $ref: ./schemas/providedCreditRating.yml
+    RateTablePublic:
+      $ref: ../originator/schemas/rateTablePublic.yml
+    RefinanceLoanInformation:
+      $ref: ./schemas/refinanceLoanInformation.yml
+    RefinanceLoanType:
+      $ref: ./schemas/refinanceLoanType.yml
+    SavingsCompoundingMethod:
+      $ref: ../originator/schemas/compoundingMethod.yml
+    SavingsInformation:
+      $ref: ./schemas/savingsInformation.yml
+    SavingsOffer:
+      $ref: ../originator/schemas/savingsOffer.yml
+    SavingsOfferDetails:
+      $ref: ../originator/schemas/savingsOfferDetails.yml
+    SessionInformation:
+      $ref: ./schemas/sessionInformation.yml
+    SpecialOffer:
+      $ref: ../originator/schemas/specialOfferPublic.yml
+    State:
+      $ref: ../core/schemas/state-lead.yml
+    TimestampField:
+      type: string
+      enum:
+        - createdAt
+        - updatedAt
+    University:
+      $ref: ./schemas/university.yml
+tags:
+  - name: Deduplication Configuration
+    description: >-
+      Used to indicate that leads from the specified supply sub-account should
+      be rejected as duplicate if they have an email that has been submitted by
+      any supply partner, within a configurable number of minutes.
+  - name: Lead
+    description: >-
+      The `Lead` object contains information associated with a possible
+      applicant for one or more products.
+  - name: University
+    description: University endpoints used to improve student loan refinance UX
+paths:
+  /leads:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get leads
+      operationId: getLeads
+      security:
+        - oauth:
+            - 'svc-lead:leads:readAll'
+      tags:
+        - Lead
+      parameters:
+        - name: uuid
+          in: query
+          description: |
+            Limits results to leads with the specified UUIDs.
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: email
+          in: query
+          description: |
+            Limits results to leads with the specified email addresses.
+          schema:
+            type: array
+            items:
+              type: string
+        - name: credit
+          in: query
+          description: >
+            Limits results to leads that have the specified self-assessed credit
+            bands.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ProvidedCreditRating'
+        - name: timestampField
+          in: query
+          description: >
+            Defines the timestamp to consider for the `from` and `to`
+            parameters.
+          schema:
+            type: string
+            default: createdAt
+            allOf:
+              - $ref: '#/components/schemas/TimestampField'
+        - name: from
+          in: query
+          description: >
+            The earliest timestamp to include in the result set. Will either
+            match against `createdAt` or `updatedAt`, depending on the value of
+            the `timestampField` parameter.
+          schema:
+            type: string
+            format: date-time
+        - name: to
+          in: query
+          description: >
+            The latest timestamp to include in the result set. Will either match
+            against `createdAt` or `updatedAt`, depending on the value of the
+            `timestampField` parameter.
+          schema:
+            type: string
+            format: date-time
+        - name: company
+          in: query
+          description: >
+            Limits the result set to leads belonging the companies with the
+            specified UUIDs
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: test
+          in: query
+          description: >
+            When true, only returns test leads; otherwise, only returns non-test
+            leads
+          schema:
+            type: boolean
+            default: false
+        - name: status
+          in: query
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/LeadActionType'
+        - name: sortDirection
+          in: query
+          schema:
+            $ref: '#/components/schemas/Order'
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: limit
+          in: query
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            default: 100
+      responses:
+        '200':
+          description: Leads matching the query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LeadResponseWrapper'
+    post:
+      summary: Create a lead
+      operationId: createLead
+      tags:
+        - Lead
+      requestBody:
+        description: A lead object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/leadRequestJson.yml
+      responses:
+        '200':
+          $ref: ./responses/leadCreated.yml
+        '400':
+          $ref: ./responses/invalidLead.yml
+      security:
+        - oauth:
+            - 'svc-lead:leads:insert'
+            - 'svc-lead:leads:insert-test'
+  '/leads/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: The UUID of the lead
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a lead
+      description: >-
+        Return a `Lead` given its UUID. Depending on the access token scope, the
+        response may contain a subset of a `Lead` object.
+      operationId: getLead
+      tags:
+        - Lead
+      responses:
+        '200':
+          $ref: ./responses/leadFound.yml
+        '400':
+          $ref: ./responses/invalidLeadUuid.yml
+        '404':
+          description: '`Lead` with the given UUID does not exist'
+      security:
+        - oauth:
+            - 'svc-lead:leads:readAll'
+    patch:
+      summary: Update a lead
+      description: >-
+        Update a `Lead` by its UUID. Array fields (like `productTypes`) with new
+        values are _merged_ with existing values.
+      operationId: updateLead
+      tags:
+        - Lead
+      requestBody:
+        description: A Lead object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/leadRequestJson.yml
+      responses:
+        '200':
+          description: Lead updated
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/leadUuid.yml
+                example:
+                  uuid: 81c08fb9-559a-4bab-948c-ba38f8dd0dcc
+          links:
+            lead:
+              operationId: LeadController.getLead
+              description: Get the updated `Lead`
+              parameters:
+                uuid: $request.path.uuid
+        '400':
+          description: Invalid data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                invalid-uuid:
+                  value:
+                    - message: >-
+                        Cannot parse parameter uuid as UUID: Invalid UUID
+                        string: 123
+                invalid-body:
+                  value:
+                    - message: >-
+                        Invalid fields present: List(123 is not a valid email),
+                        full request: ...
+        '404':
+          description: '`Lead` with the given UUID does not exist'
+      security:
+        - oauth:
+            - 'svc-lead:leads:insert'
+            - 'svc-lead:leads:insert-test'
+  /leads/rateTables:
+    post:
+      summary: Submit a lead and get a rate table
+      description: >-
+        A shorthand operation for `POST /leads` followed by a `POST
+        /originator/rateTables`. The response `RateTable` must still be queried
+        until there are no more `pendingResponses`
+      operationId: getRateTableForLead
+      tags:
+        - Lead
+      requestBody:
+        description: A Lead object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/leadRequestJson.yml
+      responses:
+        '200':
+          description: The generated `RateTable`
+          content:
+            application/json:
+              schema:
+                $ref: ../originator/schemas/rateTablePublic.yml
+              examples:
+                rateTable:
+                  value:
+                    $ref: ../originator/examples/rateTablePublic.yml
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - oauth:
+            - 'svc-lead:leads:insert'
+            - 'svc-lead:leads:insert-test'
+  /leads/admin/universities:
+    get:
+      summary: Get all available universites (limited to first 10000)
+      operationId: getUniversities
+      tags:
+        - University
+      responses:
+        '200':
+          description: A list of all available universities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/university.yml
+      security:
+        - oauth:
+            - 'svc-lead:admin:read'
+  /admin/deduplicationConfigurations:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get deduplication configurations
+      description: Return deduplication configurations based upon request parameters
+      operationId: getDeduplicationConfigurations
+      security:
+        - oauth:
+            - 'svc-lead:admin:read'
+      tags:
+        - Deduplication Configuration
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: supplySubAccountId
+          in: query
+          schema:
+            type: integer
+            format: int64
+        - name: supplySubAccountUuid
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: includeDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+            default: 0
+        - name: limit
+          in: query
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            default: 100
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            $ref: '#/components/schemas/DeduplicationConfigurationSort'
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Deduplication configurations matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeduplicationConfiguration'
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+    post:
+      summary: Create a deduplication configuration
+      description: |
+        Create a deduplication configuration. Must specify exactly one of
+        `supplySubAccountId` or `supplySubAccountUuid`, otherwise an error will
+        be returned.
+      operationId: createDeduplicationConfiguration
+      security:
+        - oauth:
+            - 'svc-lead:admin:write'
+      tags:
+        - Deduplication Configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewDeduplicationConfiguration'
+      responses:
+        '201':
+          description: The deduplication configuration was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeduplicationConfiguration'
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/admin/deduplicationConfigurations/{id}':
+    delete:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      summary: Delete a deduplication configuration
+      description: Delete a deduplication configuration
+      operationId: deleteDeduplicationConfiguration
+      security:
+        - oauth:
+            - 'svc-lead:admin:write'
+      tags:
+        - Deduplication Configuration
+      responses:
+        '204':
+          description: The deduplication configuration was successfully deleted.
+        '404':
+          description: No deduplication configuration exists for the specified ID

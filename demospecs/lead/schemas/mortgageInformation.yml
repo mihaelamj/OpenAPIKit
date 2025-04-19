@@ -1,0 +1,78 @@
+type: object
+properties:
+  propertyType:
+    $ref: ./propertyType.yml
+  propertyValue:
+    type: integer
+    format: int32
+  mortgageBalance:
+    type: integer
+    format: int32
+  lenderName:
+    type: string
+  hasFHALoan:
+    type: boolean
+  currentWithLoan:
+    type: boolean
+  propertyStatus:
+    $ref: ./propertyStatus.yml
+  mortgageType:
+    $ref: ./mortgageType.yml
+  mortgageAmount:
+    type: integer
+    format: int32
+    description: Amount the lead will borrow
+  downPaymentAmount:
+    type: integer
+    format: int32
+  propertyState:
+    type: string
+  propertyCounty:
+    type: string
+  propertyAddress1:
+    type: string
+    description: Street address (primary address line)
+  propertyAddress2:
+    type: string
+    description: Secondary address line
+  propertyZipcode:
+    type: string
+  propertyCity:
+    type: string
+  refinanceAmount:
+    type: integer
+    format: int32
+    description: Amount the lead will borrow for refinancing an existing mortgage
+  cashOutAmount:
+    type: integer
+    format: int32
+    description: Additional amount the lead will borrow against existing home equity in the case of refinance
+  occupancyType:
+    $ref: ./occupancyType.yml
+  refinanceType:
+    $ref: ./refinanceType.yml
+  propertySearchStatus:
+    $ref: ./propertySearchStatus.yml
+  numUnits:
+    type: integer
+    format: int32
+    description: The number of legal units on the property
+  closingDate:
+    type: string
+    format: date
+  purchaseStatus:
+    $ref: ./purchaseStatus.yml
+  purchaseDate:
+    type: string
+    format: date
+  monthlyHoaFee:
+    type: number
+    format: float
+    description: The amount of the HOA fee for the lead
+  mortgageCompany:
+    type: string
+    description: The name of the company holding the lead's mortgage
+  mortgageEscrowAmount:
+    type: number
+    format: float
+    description: The amount of escrow the lead pays

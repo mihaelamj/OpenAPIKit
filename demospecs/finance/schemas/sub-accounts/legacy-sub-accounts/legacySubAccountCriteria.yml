@@ -1,0 +1,7 @@
+type: object
+allOf:
+  - $ref: ../subAccountCriteria.yml
+  - type: object
+    properties:
+      subAccountType:
+        $ref: ../subAccountType.yml

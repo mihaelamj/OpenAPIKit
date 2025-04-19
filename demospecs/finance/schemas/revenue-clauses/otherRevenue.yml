@@ -1,0 +1,4 @@
+type: object
+title: Other Revenue
+allOf:
+  - $ref: ../abstractRevenueClause.yml  

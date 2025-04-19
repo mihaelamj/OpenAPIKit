@@ -1,0 +1,11 @@
+name: id
+in: query
+description: A comma separated list of ids
+style: form
+explode: false
+schema:
+  type: array
+  items:
+    type: integer
+    format: int64
+    minimum: 1

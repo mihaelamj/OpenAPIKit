@@ -1,0 +1,39 @@
+type: object
+required:
+  - id
+  - key
+  - description
+  - createdAt
+  - createdById
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this scope.
+  key:
+    type: string
+    description: |
+      A unique, human-readable identifier for this role.
+  description:
+    type: string
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to delete this resource.

@@ -1,0 +1,13 @@
+type: string
+enum:
+  - high_school
+  - associate
+  - bachelors
+  - masters
+  - doctorate
+  - other_grad_degree
+  - certificate
+  - did_not_graduate
+  - still_enrolled
+  - other
+  - unknown

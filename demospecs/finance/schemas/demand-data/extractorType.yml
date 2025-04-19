@@ -1,0 +1,9 @@
+type: string
+enum:
+  - conditional_two_column_value_equal_not
+  - conditional_column_value
+  - double_conditional_column_value
+  - json_string
+  - prefixed_key_value
+  - no_op
+  - simple_column 

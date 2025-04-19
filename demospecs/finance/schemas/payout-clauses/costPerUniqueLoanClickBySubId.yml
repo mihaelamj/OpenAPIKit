@@ -1,0 +1,22 @@
+type: object
+title: Cost Per Unique Loan Click by Sub Id
+required:
+  - defaultCost
+  - subIdKey
+  - costPerValue
+properties:
+  defaultCost:
+    type: number
+    title: Default Amount (in $ USD)
+    multipleOf: 0.01
+    minimum: 0.01
+  subIdKey:
+    type: string
+    title: Sub Id Key
+    minLength: 1
+  costPerValue:
+    type: array
+    items:
+      $ref: ./costPerSubIdValue.yml
+allOf:
+  - $ref: ../abstractPayoutClause.yml

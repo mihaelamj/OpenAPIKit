@@ -1,0 +1,13 @@
+type: object
+required:
+  - supplySubAccountId
+  - demandSubAccountIds
+properties:
+  supplySubAccountId:
+    type: integer
+    format: int64
+  demandSubAccountIds:
+    type: array
+    items:
+      type: integer
+      format: int64

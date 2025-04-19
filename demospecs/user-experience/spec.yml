@@ -1,0 +1,2003 @@
+openapi: 3.0.3
+info:
+  title: User Experience API
+  version: 1.5.0
+  description: >
+    # Overview
+
+
+    The User Experience API is centered around submitting a lead in exchange for
+    a rate
+
+    table.
+      - **leads** combine information about a user with search criteria for
+        financial products
+      - **rate tables** are lists of offers corresponding to leads
+
+    These resources are used to search for any type of financial product
+
+    supported by the API, e.g. personal loans, savings accounts, credit cards,
+
+    etc.
+
+
+    The firmness of an offer on a rate table - i.e., pre-approved or
+
+    pre-qualified - can vary depending upon the information on a lead and the
+
+    financial institution making the offer.
+
+
+    No fields on a lead are required, but depending on the type of financial
+
+    product requested, you will only get firm offers if some subset of fields
+
+    are specified.
+
+
+    A rate table might indicate that we're still awaiting responses from one
+
+    or more financial instutions. In this case, the rate table should be
+
+    reloaded until it indicates that we're no long awaiting responses.
+
+
+    # Blocking Rate Table Endpoint
+
+    Clients have the option to request a rate table syncronously via the
+
+    following blocking endpoint:
+
+
+    ```
+
+    POST https://integrations.evenfinancial.com/blocking/leads/rateTables
+
+    ```
+
+
+    The interface is identical to that of
+
+    `api.evenfinancial.com/leads/rateTables`, but will only respond when all
+
+    financial institution responses have been received.
+
+
+    As a consequence, the `pendingResponses` field on the rate table will
+
+    always be empty, so there's no need to poll for more results. However, the
+
+    response latency will likely be much higher than the asyncronous endpoint.
+
+
+    # Loans
+
+
+    To search for personal loans, you should set `productTypes` to `["loan"]`
+
+    on the lead. In order to get pre-approved and pre-qualified offers,
+
+    you should also include the following fields:
+
+
+    - `personalInformation.firstName`
+
+    - `personalInformation.lastName`
+
+    - `personalInformation.address1`
+
+    - `personalInformation.address2` (when applicable)
+
+    - `personalInformation.city`
+
+    - `personalInformation.state`
+
+    - `personalInformation.zipcode`
+
+    - `personalInformation.email`
+
+    - `personalInformation.primaryPhone`
+
+    - `personalInformation.dateOfBirth`
+
+    - `personalInformation.ssn`
+
+    - `loanInformation.purpose`
+
+    - `loanInformation.loanAmount`
+
+    - `mortgageInformation.propertyStatus`
+
+    - `creditInformation.providedCreditRating` or
+    `creditInformation.providedNumericCreditScore`
+
+    - `financialInformation.employmentStatus`
+
+    - `financialInformation.employmentPayFrequency`
+
+    - `financialInformation.annualIncome`
+
+    - `educationInformation.educationLevel`
+
+    - `legalInformation.consentsToTcpa`
+
+    - `legalInformation.consentsToFcra`
+
+    - `legalInformation.tcpaLanguage`
+
+
+
+    If you'd like to potentially also get offers for co-applicant loans, include
+
+    the following fields:
+
+
+    - `coApplicantInformation.firstName`
+
+    - `coApplicantInformation.lastName`
+
+    - `coApplicantInformation.address1`
+
+    - `coApplicantInformation.address2` (when applicable)
+
+    - `coApplicantInformation.city`
+
+    - `coApplicantInformation.state`
+
+    - `coApplicantInformation.zipcode`
+
+    - `coApplicantInformation.dateOfBirth`
+
+    - `coApplicantInformation.annualIncome`
+
+
+
+    **Example**: Search for personal loans
+
+
+
+    _Request_
+
+    ```
+
+    POST /leads/rateTables
+
+
+    {
+      "productTypes": [
+        "loan"
+      ],
+      "personalInformation": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com",
+        "city": "New York",
+        "state": "NY",
+        "primaryPhone": "2125556789",
+        "address1": "45 West 21st Street",
+        "address2": "5th Floor",
+        "zipcode": "10010",
+        "dateOfBirth": "1993-10-09",
+        "ssn": "111-22-3333"
+      },
+      "loanInformation": {
+        "purpose": "debt_consolidation",
+        "loanAmount": 10000
+      },
+      "mortgageInformation": {
+        "propertyStatus": "own_with_mortgage"
+      },
+      "creditInformation": {
+        "providedCreditRating": "excellent"
+      },
+      "financialInformation": {
+        "employmentStatus": "employed",
+        "employmentPayFrequency": "weekly",
+        "annualIncome": 75000
+      },
+      "educationInformation": {
+        "educationLevel": "masters"
+      },
+      "legalInformation": {
+        "consentsToFcra": true,
+        "consentsToTcpa": true,
+        "tcpaLanguage": "I agree to be contacted by Even Financial and its partners at the telephone number(s) I have provided above to explore personal loan offers, including contact through automatic dialing systems, artificial or pre-recorded voice messaging, or text message. I understand my consent is not required as a condition to purchasing any goods or services from anyone."
+      },
+      "clientTags": {
+        "subId": [
+          "aaa053cb"
+        ]
+      }
+    }
+
+    ```
+
+
+
+    _Response_
+
+    ```
+
+    200 OK
+
+
+    {
+      "uuid": "2c6cb6e4-0aa2-4ab5-9109-8679de537e10",
+      "leadUuid": "f823a7c0-586a-4fc3-9cfa-c38694b80b2c",
+      "loanOffers": [
+        {
+          "uuid": "fef16e91-960f-4ac7-a8ec-98d7a6b32c7e",
+          "originator": {
+            "key": "lending-club",
+            "name": "LendingClub",
+            "description": "Low fixed rate personal loans from $1,000 to $40,000",
+            "images": [
+              {
+                "sizeKey": "150",
+                "url": "aff-tag.evenfinancial.com/images/lendingclub/lendingclub_120.png"
+              }
+            ],
+            "disclaimer": "Suspendisse rhoncus magna erat, nec rhoncus leo elementum eget."
+          },
+          "originatorId": null,
+          "termLength": 36,
+          "termUnit": "month",
+          "maxAmount": 12000,
+          "minAmount": 800,
+          "maxApr": 35.99,
+          "minApr": 25.01,
+          "meanApr": 30.5,
+          "feeRate": null,
+          "maxFeeRate": null,
+          "minFeeRate": null,
+          "feeFixed": null,
+          "maxFeeFixed": null,
+          "minFeeFixed": null,
+          "allowPrepayment": true,
+          "prepaymentFee": 0,
+          "monthlyPayment": 119.3,
+          "maxMonthlyPayment": 137.4,
+          "minMonthlyPayment": 119.3,
+          "meanMonthlyPayment": 128.18,
+          "maxTotalPayment": 4947,
+          "minTotalPayment": 4295,
+          "meanTotalPayment": 4615,
+          "terms": null,
+          "url": "https://offers.evenfinancial.com/ref/fef16e91-960f-4ac7-a8ec-98d7a6b32c7e",
+          "preQualified": false,
+          "preApproved": true,
+          "sponsored": false,
+          "aprType": "fixed",
+          "recommendationScore": 95
+        },
+        ...
+      ],
+      "specialOffers": [],
+      "savingsOffers": [],
+      "creditCardOffers": [],
+      "mortgageOffers": [],
+      "pendingResponses": [
+        {
+          "partner": {
+            "uuid": "91d08be0-2a8c-4d28-b399-7e1b38e2522e",
+            "name": "Avant",
+            "description": "Personal loans from $1,000 to $35,000",
+            "disclaimer": "Suspendisse rhoncus magna erat, nec rhoncus leo elementum eget.",
+            "imageUrl": "https://images.evenfinancial.com/old/images/avant/avant_120.png"
+          },
+          "productTypes": [
+            "loan"
+          ]
+        }
+      ],
+      "pendingOriginators": [
+        {
+          "key": "avant",
+          "name": "Avant",
+          "description": "Personal loans from $1,000 to $35,000",
+          "images": [
+            {
+              "sizeKey": "120",
+              "url": "aff-tag.evenfinancial.com/images/avant/avant_120.png"
+            }
+          ],
+          "disclaimer": "Suspendisse rhoncus magna erat, nec rhoncus leo elementum eget."
+        }
+      ]
+    }
+
+    ```
+
+
+    # Student Loan Refinancing
+
+
+    Searching for student loan refinancing loans is just like searching for
+
+    generic personal loans, but with some additional requirements:
+
+
+    - `productSubTypes` must be `["student_loan_refinance"]`
+
+    - `loanInformation.purpose` must be `"student_loan_refi"`
+
+    - `educationInformation.graduationDate` must be specified.
+
+    - `financialInformation.monthlyHousingPayment` must be specified.
+
+    - `financialInformation.availableAssets` must be specified.
+
+    - `personalInformation.citizenshipStatus` must be specified.
+
+    - `educationInformation.universityAttended` must be specified. This is a
+
+    free form text field for the university name, which should be taken from
+
+    the `GET /leads/universities` utility endpoint.
+
+    - if `educationInformation.educationLevel` is `"doctorate"`, then
+
+    `educationInformation.graduateDegreeType` must be specified.
+
+
+    _Request_
+
+    ```
+
+    POST /leads/rateTables
+
+
+    {
+      "productTypes": [
+        "loan"
+      ],
+      "productSubTypes": [
+        "student_loan_refinance"
+      ],
+      "personalInformation": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com",
+        "city": "New York",
+        "state": "NY",
+        "primaryPhone": "2125556789",
+        "address1": "45 West 21st Street",
+        "address2": "5th Floor",
+        "zipcode": "10010",
+        "dateOfBirth": "1993-10-09",
+        "ssn": "111-22-3333",
+        "citizenshipStatus": "citizen"
+      },
+      "loanInformation": {
+        "purpose": "student_loan_refi",
+        "loanAmount": 10000
+      },
+      "mortgageInformation": {
+        "propertyStatus": "own_with_mortgage"
+      },
+      "creditInformation": {
+        "providedCreditRating": "excellent"
+      },
+      "financialInformation": {
+        "annualIncome": 75000,
+        "availableAssets": 10000,
+        "employmentStatus": "employed",
+        "employmentPayFrequency": "weekly",
+        "monthlyHousingPayment": 1000
+      },
+      "educationInformation": {
+        "educationLevel": "doctorate",
+        "graduationDate": "1999-06-30",
+        "graduateDegreeType": "doctor_of_medicine",
+        "universityAttended": "New York University"
+      },
+      "legalInformation": {
+        "consentsToFcra": true,
+        "consentsToTcpa": true,
+        "tcpaLanguage": "I agree to be contacted by Even Financial and its partners at the telephone number(s) I have provided above to explore personal loan offers, including contact through automatic dialing systems, artificial or pre-recorded voice messaging, or text message. I understand my consent is not required as a condition to purchasing any goods or services from anyone."
+      },
+      "clientTags": {
+        "subId": [
+          "aaa053cb"
+        ]
+      }
+    }
+
+    ```
+
+
+    _Response_
+
+    ```
+
+    200 OK
+
+
+    {
+      "uuid": "2c6cb6e4-0aa2-4ab5-9109-8679de537e10",
+      "leadUuid": "f823a7c0-586a-4fc3-9cfa-c38694b80b2c",
+      "loanOffers": [
+        {
+          "uuid": "fef16e91-960f-4ac7-a8ec-98d7a6b32c7e",
+          "originator": {
+            "key": "lendKey",
+            "name": "Lend Key",
+            "description": "Low fixed rate personal loans from $1,000 to $40,000",
+            "images": [
+              {
+                "sizeKey": "150",
+                "url": "aff-tag.evenfinancial.com/images/lendKey/lendkey_120.png"
+              }
+            ],
+            "disclaimer": "Suspendisse rhoncus magna erat, nec rhoncus leo elementum eget."
+          },
+          "originatorId": null,
+          "termLength": 36,
+          "termUnit": "month",
+          "maxAmount": 12000,
+          "minAmount": 800,
+          "maxApr": 35.99,
+          "minApr": 25.01,
+          "meanApr": 30.5,
+          "feeRate": null,
+          "maxFeeRate": null,
+          "minFeeRate": null,
+          "feeFixed": null,
+          "maxFeeFixed": null,
+          "minFeeFixed": null,
+          "allowPrepayment": true,
+          "prepaymentFee": 0,
+          "monthlyPayment": 119.3,
+          "maxMonthlyPayment": 137.4,
+          "minMonthlyPayment": 119.3,
+          "meanMonthlyPayment": 128.18,
+          "maxTotalPayment": 4947,
+          "minTotalPayment": 4295,
+          "meanTotalPayment": 4615,
+          "terms": null,
+          "url": "https://offers.evenfinancial.com/ref/fef16e91-960f-4ac7-a8ec-98d7a6b32c7e",
+          "preQualified": false,
+          "preApproved": true,
+          "sponsored": false,
+          "aprType": "fixed",
+          "recommendationScore": 95
+        },
+        ...
+      ],
+      "specialOffers": [],
+      "savingsOffers": [],
+      "creditCardOffers": [],
+      "mortgageOffers": [],
+      "pendingResponses": [
+        {
+          "partner": {
+            "uuid": "91d08be0-2a8c-4d28-b399-7e1b38e2522e",
+            "name": "SoFi",
+            "description": "Personal loans from $1,000 to $35,000",
+            "disclaimer": "Suspendisse rhoncus magna erat, nec rhoncus leo elementum eget.",
+            "imageUrl": "https://images.evenfinancial.com/old/images/sofi/sofi_120.png"
+          },
+          "productTypes": [
+            "loan"
+          ]
+        }
+      ],
+      "pendingOriginators": [
+        {
+          "key": "sofi",
+          "name": "SoFi",
+          "description": "Personal loans from $1,000 to $35,000",
+          "images": [
+            {
+              "sizeKey": "120",
+              "url": "aff-tag.evenfinancial.com/images/sofi/sofi_120.png"
+            }
+          ],
+          "disclaimer": "Suspendisse rhoncus magna erat, nec rhoncus leo elementum eget."
+        }
+      ]
+    }
+
+    ```
+
+
+    # Savings
+
+
+    To search for savings accounts, you should set `productTypes` to
+
+    `["savings"]` on the lead. To get the best matching offers, you should
+
+    also specify the following fields:
+
+
+    - `personalInformation.zipcode`
+
+    - `creditInformation.providedCreditRating` or
+    `creditInformation.providedNumericCreditScore`
+
+    - `savingsInformation.minDepositAmount`
+
+
+    **Example**: Seach for savings accounts
+
+
+
+    _Request_
+
+    ```
+
+    POST /leads/rateTables
+
+
+    {
+      "productTypes": [
+        "savings"
+      ],
+      "personalInformation": {
+        "zipcode": "10010",
+      },
+      "creditInformation": {
+        "providedCreditRating": "excellent"
+      },
+      "savingsInformation": {
+        "minDepositAmount": 1000
+      },
+      "clientTags": {
+        "subId": [
+          "3fdb9596"
+        ]
+      }
+    }
+
+    ```
+
+
+    _Response_
+
+    ```
+
+    200 OK
+
+
+    {
+      "uuid": "2c6cb6e4-0aa2-4ab5-9109-8679de537e10",
+      "leadUuid": "f823a7c0-586a-4fc3-9cfa-c38694b80b2c",
+      "loanOffers": [],
+      "specialOffers": [],
+      "savingsOffers": [
+        {
+          "uuid": "60a32cee-a5aa-4358-a5fe-f8070f8f2a14",
+          "partner": {
+            "uuid": "f7df60e5-13c0-4241-aba0-61a8877e142f",
+            "name": "Partner Bank",
+            "description": "Partner Bank Description",
+            "disclaimer": "Partner Bank Disclaimer",
+            "imageUrl": "https://dev-admin.evenfinancial.com/partner_image.gif"
+          },
+          "marketplace": {
+            "uuid": "7a95da6d-2a03-4f58-beb0-d31eaddcfb15",
+            "name": "Marketplace",
+            "description": "Source of offers",
+            "disclaimer": "Source disclaimer",
+            "imageUrl": "https://dev-admin.evenfinancial.com/marketplace_image.gif"
+          },
+          "productType": "savings",
+          "productSubType": "money_market_account",
+          "url": "https://dev-offers.evenfinancial.com/ref/1ed2f58e-af3f-409e-a1e6-f7f00f18cd88",
+          "consumerRating": 80,
+          "details": {
+            "name": "Ally Bank",
+            "description": "Open an Account Today. Ally Bank, Member FDIC.",
+            "details": "",
+            "rate": 1.14,
+            "annualPercentYield": 1.15,
+            "compoundingMethod": "annually",
+            "introductoryPeriodMonths": 0,
+            "introductoryRate": 0,
+            "minimumDeposit": 0,
+            "minimumDepositWithFees": 0,
+            "monthlyFee": 0,
+            "checkWriting": false,
+            "effectiveAsOf": 1501113600000
+          }
+        }
+      ],
+      "creditCardOffers": [],
+      "mortgageOffers": [],
+      "pendingResponses": [
+        {
+          "partner": {
+            "uuid": "91d08be0-2a8c-4d28-b399-7e1b38e2522e",
+            "name": "Partner Bank 2",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "disclaimer": "Cras vestibulum diam sed tempor sagittis.",
+            "imageUrl": "https://images.evenfinancial.com/partnerBank2/partnerBank2Logo.png"
+          },
+          "productTypes": [
+            "savings"
+          ]
+        }
+      ],
+      "pendingOriginators": []
+    }
+
+    ```
+
+
+    # Credit Cards
+
+
+    To search for credit cards, you should set `productTypes` to
+
+    `["credit_card"]` on the lead. To get the best matching offers, you should
+
+    also specify the following fields:
+
+
+    - `personalInformation.firstName`
+
+    - `personalInformation.lastName`
+
+    - `personalInformation.address1`
+
+    - `personalInformation.address2` (when applicable)
+
+    - `personalInformation.city`
+
+    - `personalInformation.state`
+
+    - `personalInformation.zipcode`
+
+    - `personalInformation.email`
+
+    - `personalInformation.dateOfBirth`
+
+    - `creditInformation.providedCreditRating` or
+    `creditInformation.providedNumericCreditScore`
+
+    - `creditCardInformation.cardPurposes`
+
+    - `creditCardInformation.allowAnnualFee`
+
+    - `legalInformation.consentsToFcra`
+
+    - `legalInformation.consentsToTcpa`
+
+    - `legalInformation.tcpaLanguage`
+
+
+    **Example**: Searching for credit cards
+
+
+    _Request_
+
+    ```
+
+    POST /leads/rateTables
+
+
+    {
+      "productTypes": [
+        "credit_card"
+      ],
+      "personalInformation": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john@example.com",
+        "city": "New York",
+        "state": "NY",
+        "primaryPhone": "2125556789",
+        "address1": "45 West 21st Street",
+        "address2": "5th Floor",
+        "zipcode": "10011",
+        "dateOfBirth": "1993-10-09"
+      },
+      "creditCardInformation": {
+        "allowAnnualFee": true,
+        "cardPurposes": [
+          "travel_incentives"
+        ]
+      },
+      "creditInformation": {
+        "providedCreditRating": "excellent",
+      },
+      "legalInformation": {
+        "consentsToFcra": true,
+        "consentsToTcpa": true,
+        "tcpaLanguage": "I agree to be contacted by Even Financial and its partners at the telephone number(s) I have provided above to explore personal loan offers, including contact through automatic dialing systems, artificial or pre-recorded voice messaging, or text message. I understand my consent is not required as a condition to purchasing any goods or services from anyone."
+      },
+      "clientTags": {
+        "subId": [
+          "2ee169ef"
+        ]
+      }
+    }
+
+    ```
+
+
+    _Response_
+
+    ```
+
+    200 OK
+
+
+    {
+      "uuid": "2c6cb6e4-0aa2-4ab5-9109-8679de537e10",
+      "leadUuid": "f823a7c0-586a-4fc3-9cfa-c38694b80b2c",
+      "loanOffers": [],
+      "specialOffers": [],
+      "savingsOffers": [],
+      "creditCardOffers": [
+        {
+          "uuid": "6e6a6043-afaf-4c61-971b-a035282548f0",
+          "partner": {
+            "uuid": "f7df60e5-13c0-4241-aba0-61a8877e142f",
+            "name": "Partner Bank",
+            "description": "Partner Bank Description",
+            "disclaimer": "Partner Bank Disclaimer",
+            "supportsPersonalizedOffers": false,
+            "supportsPreSelect": false,
+            "imageUrl": "https://dev-admin.evenfinancial.com/partner_image.gif"
+          },
+          "marketplace": {
+            "uuid": "7a95da6d-2a03-4f58-beb0-d31eaddcfb15",
+            "name": "Marketplace",
+            "description": "Source of offers",
+            "disclaimer": "Source disclaimer",
+            "imageUrl": "https://dev-admin.evenfinancial.com/marketplace_image.gif"
+          },
+          "productType": "credit_card",
+          "productSubType": "credit_card",
+          "url": "https://dev-offers.evenfinancial.com/ref/6bb3ed5c-f1d1-4c69-af1c-d02a4e028b3c",
+          "details": {
+            "cardName": "Credit Card",
+            "cardImageUrl": "https://example.com/image",
+            "cardPurposes": [
+              "travel_incentives"
+            ],
+            "ratesUrl": "https://example.com/",
+            "maxPurchaseApr": 15,
+            "minPurchaseApr": 15,
+            "maxPurchaseIntroApr": 0,
+            "minPurchaseIntroApr": 0,
+            "purchaseIntroAprTerm": 12,
+            "purchaseIntroAprTermUnit": "month",
+            "maxCashAdvanceApr": 15,
+            "minCashAdvanceApr": 15,
+            "maxCashAdvanceIntroApr": 0,
+            "minCashAdvanceIntroApr": 0,
+            "cashAdvanceIntroAprTerm": 12,
+            "cashAdvanceIntroAprTermUnit": "month",
+            "maxBalanceTransferApr": 15,
+            "minBalanceTransferApr": 15,
+            "maxBalanceTransferIntroApr": 0,
+            "minBalanceTransferIntroApr": 0,
+            "balanceTransferIntroAprTerm": 12,
+            "balanceTransferIntroAprTermUnit": "month",
+            "annualFee": 100,
+            "annualIntroFee": 0,
+            "annualIntroFeeTerm": 1,
+            "details": [
+              "Credit card detail"
+            ],
+            "additionalDetails": [
+              "One click away credit card detail"
+            ],
+            "cardType": "visa",
+            "minimumCreditLine": 5000,
+            "minimumPenaltyApr": 10,
+            "maximumPenaltyApr": 10,
+            "balanceTransferFee": 25,
+            "cashAdvanceFee": 5,
+            "lateFee": 25,
+            "foreignExchangeFee": 10,
+            "accountOpeningFee": 0,
+            "returnPaymentFee": 0,
+            "monthlyServiceFee": 0,
+            "recommendedCreditRatings": [
+              "good"
+            ],
+            "preQualified": false,
+            "preApproved": false,
+            "preSelected": false,
+            "aprType": "variable"
+          }
+        }
+      ],
+      "mortgageOffers": [],
+      "pendingResponses": [
+        {
+          "partner": {
+            "uuid": "91d08be0-2a8c-4d28-b399-7e1b38e2522e",
+            "name": "Partner Bank 2",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "disclaimer": "Cras vestibulum diam sed tempor sagittis.",
+            "imageUrl": "https://images.evenfinancial.com/partnerBank2/partnerBank2Logo.png"
+          },
+          "productTypes": [
+            "credit_card"
+          ]
+        }
+      ],
+      "pendingOriginators": []
+    }
+
+    ```
+servers:
+  - url: 'https://api.evenfinancial.com'
+components:
+  securitySchemes:
+    api-auth:
+      type: oauth2
+      description: >
+        All requests to the Even API are authenticated using a bearer token
+
+        specified in the `Authorization` header.
+
+
+        The bearer token corresponds to an access token record, and consists of
+
+        two UUIDs joined by an underscore:
+          1. the access token's unique identifier
+          2. the access token's secret, which is only available upon access token
+            creation
+
+        The header value is prefixed with the string "Bearer ", so a properly
+
+        authenticated request will have a header that looks something like this:
+
+
+        ```
+
+        Authorization: Bearer
+        0a930e7f-4a96-4388-8c12-c794a161084e_409cc5f2-4008-42aa-84a4-0b68f163f437
+
+        ```
+
+
+        Requests are authorized using scopes that are associated with the access
+
+        token. Each endpoint defines the scopes required to authorize a request.
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'analytics:report:read': |
+              Read data from analytics endpoints.
+            'originator:rateTables:read': |
+              Read rate tables.
+            'svc-lead:leads:insert': |
+              Submit leads.
+            'svc-lead:leads:insert-test': >
+              Any lead submitted using an access token with this scope will be
+              designated a test lead.
+            'svc-lead:leads:readRestricted': |
+              Read leads.
+            'ui-event:write': |
+              Record UI events.
+  schemas:
+    AggregatedSpending:
+      $ref: ../offer-augmentation/schemas/aggregatedSpending.yml
+    AnalyticsEventType:
+      $ref: ../analytics/schemas/eventType.yml
+    AnalyticsOfferProductType:
+      $ref: ../analytics/schemas/offerProductType.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    ApiErrorDetails:
+      $ref: ../core/schemas/apiErrorDetails.yml
+    AprType:
+      $ref: ../originator/schemas/aprType.yml
+    BankAccountType:
+      $ref: ../lead/schemas/bankAccountType.yml
+    BonusPersonalization:
+      $ref: ../offer-augmentation/schemas/bonusPersonalization.yml
+    CardBenefit:
+      $ref: ../lead/schemas/cardBenefits.yml
+    CardLevelEarningScheme:
+      $ref: ../offer-augmentation/schemas/earningBonus.yml
+    CardLevelEarningSchemeName:
+      $ref: ../offer-augmentation/schemas/earningBonusName.yml
+    CardLevelEarningSchemeType:
+      $ref: ../offer-augmentation/schemas/earningBonusType.yml
+    CardPurpose:
+      $ref: ../lead/schemas/cardPurposes.yml
+    CardType:
+      $ref: ../originator/schemas/cardType.yml
+    CitizenshipStatus:
+      $ref: ../lead/schemas/citizenshipStatus.yml
+    CompoundingMethod:
+      $ref: ../originator/schemas/compoundingMethod.yml
+    CreditCardOffer:
+      $ref: ../originator/schemas/creditCardOffer.yml
+    CreditCardOfferDetails:
+      $ref: ../originator/schemas/creditCardOfferDetails.yml
+    ClientTags:
+      $ref: ../lead/schemas/clientTags.yml
+    EarningGroup:
+      $ref: ../offer-augmentation/schemas/earningGroup.yml
+    EarningItem:
+      $ref: ../offer-augmentation/schemas/earningItem.yml
+    EarningItemCategory:
+      $ref: ../offer-augmentation/schemas/category.yml
+    EarningItemMerchant:
+      $ref: ../offer-augmentation/schemas/merchant.yml
+    EarningItemType:
+      $ref: ../offer-augmentation/schemas/earningItemType.yml
+    EarningItemPersonalization:
+      $ref: ../offer-augmentation/schemas/earningItemPersonalization.yml
+    EarningProgram:
+      $ref: ../offer-augmentation/schemas/earningProgram.yml
+    EarningProgramPersonalization:
+      $ref: ../offer-augmentation/schemas/earningProgramPersonalization.yml
+    EducationLevel:
+      $ref: ../lead/schemas/educationLevel.yml
+    EmploymentPayFrequency:
+      $ref: ../lead/schemas/employmentPayFrequency.yml
+    EmploymentStatus:
+      $ref: ../lead/schemas/employmentStatus.yml
+    FeaturedFinancialInstitution:
+      $ref: ../partner-data/schemas/featuredFinancialInstitution.yml
+    IdType:
+      $ref: ../lead/schemas/idType.yml
+    GraduateDegreeType:
+      $ref: ../lead/schemas/graduateDegreeType.yml
+    Gender:
+      $ref: ../lead/schemas/gender.yml
+    IntroOfferType:
+      $ref: ../originator/schemas/introOfferType.yml
+    IpAddress:
+      $ref: ../core/schemas/ipAddress.yml
+    Lead:
+      $ref: ../lead/schemas/leadResponseJson.yml
+    LeadBestTimeToCall:
+      $ref: ../lead/schemas/bestTimeToCall.yml
+    LeadCoApplicantInformation:
+      $ref: ../lead/schemas/coApplicantInformation.yml
+    LeadCreditInformation:
+      $ref: ../lead/schemas/creditInformation.yml
+    LeadCreditCardInformation:
+      $ref: ../lead/schemas/creditCardInformation.yml
+    LeadEducationInformation:
+      $ref: ../lead/schemas/educationInformation.yml
+    LeadEducationLevel:
+      $ref: ../lead/schemas/educationLevel.yml
+    LeadEmploymentInformation:
+      $ref: ../lead/schemas/employmentInformation.yml
+    LeadFinancialInformation:
+      $ref: ../lead/schemas/financialInformation.yml
+    LeadHealthInformation:
+      $ref: ../lead/schemas/healthInformation.yml
+    LeadIdentificationInformation:
+      $ref: ../lead/schemas/identificationInformation.yml
+    LeadLegalInformation:
+      $ref: ../lead/schemas/legalInformation.yml
+    LeadLifeInsuranceInformation:
+      $ref: ../lead/schemas/lifeInsuranceInformation.yml
+    LeadLoanInformation:
+      $ref: ../lead/schemas/loanInformation.yml
+    LeadMortgageInformation:
+      $ref: ../lead/schemas/mortgageInformation.yml
+    LeadPersonalInformation:
+      $ref: ../lead/schemas/personalInformation.yml
+    LeadSavingsInformation:
+      $ref: ../lead/schemas/savingsInformation.yml
+    LeadSessionInformation:
+      $ref: ../lead/schemas/sessionInformation.yml
+    LeadAction:
+      $ref: ../lead/schemas/leadActionResponse.yml
+    LeadActionType:
+      $ref: ../lead/schemas/leadActionType.yml
+    LeadEvent:
+      $ref: ../analytics/schemas/leadEvent.yml
+    LeadUuid:
+      $ref: ../lead/schemas/leadUuid.yml
+    LeadRequest:
+      $ref: ../lead/schemas/leadRequestJson.yml
+    LoanOffer:
+      $ref: ../originator/schemas/loanOfferPublic.yml
+    LoanPurpose:
+      $ref: ../lead/schemas/purpose.yml
+    MortgageAdjustmentType:
+      $ref: ../originator/schemas/adjustmentType.yml
+    MortgageLoanType:
+      $ref: ../originator/schemas/mortgageLoanType.yml
+    MortgageOffer:
+      $ref: ../originator/schemas/mortgageOffer.yml
+    MortgageOfferDetails:
+      $ref: ../originator/schemas/mortgageOfferDetails.yml
+    MortgageType:
+      $ref: ../lead/schemas/mortgageType.yml
+    OccupancyType:
+      $ref: ../lead/schemas/occupancyType.yml
+    Offer:
+      $ref: ../originator/schemas/offer.yml
+    OfferCalculation:
+      $ref: ../offer-augmentation/schemas/offerCalculation.yml
+    OfferDisplay:
+      $ref: ../ui-event/schemas/offerDisplay.yml
+    OfferFirmness:
+      $ref: ../analytics/schemas/offerFirmness.yml
+    Originator:
+      $ref: ../originator/schemas/originator.yml
+    OriginatorImage:
+      $ref: ../originator/schemas/originatorImage.yml
+    Partner:
+      $ref: ../originator/schemas/demandPartner.yml
+    PlaidAssetReportToken:
+      $ref: ../offer-augmentation/schemas/plaidAssetReportToken.yml
+    PendingResponse:
+      $ref: ../originator/schemas/pendingResponse.yml
+    PersonalReferenceInformation:
+      $ref: ../lead/schemas/personalReferenceInformation.yml
+    PersonalReferenceRelationType:
+      $ref: ../lead/schemas/personalReferenceRelationType.yml
+    PreferredRedemptionType:
+      $ref: ../offer-augmentation/schemas/preferredRedemptionType.yml
+    ProductType:
+      $ref: ../core/schemas/productType.yml
+    ProductSubType:
+      $ref: ../lead/schemas/productSubType.yml
+    ProvidedCreditRating:
+      $ref: ../lead/schemas/providedCreditRating.yml
+    PropertyStatus:
+      $ref: ../lead/schemas/propertyStatus.yml
+    PropertySearchStatus:
+      $ref: ../lead/schemas/propertySearchStatus.yml
+    PropertyType:
+      $ref: ../lead/schemas/propertyType.yml
+    PurchaseStatus:
+      $ref: ../lead/schemas/purchaseStatus.yml
+    RateTable:
+      $ref: ../originator/schemas/rateTablePublic.yml
+    RefinanceLoanInformation:
+      $ref: ../lead/schemas/refinanceLoanInformation.yml
+    RefinanceLoanType:
+      $ref: ../lead/schemas/refinanceLoanType.yml
+    RefinanceType:
+      $ref: ../lead/schemas/refinanceType.yml
+    RejectReason:
+      $ref: ../lead/schemas/rejectReason.yml
+    RevenueSummary:
+      $ref: ../analytics/schemas/revenueSummary.yml
+    RevenueSummaryGrouping:
+      $ref: ../analytics/schemas/revenueSummaryGrouping.yml
+    RevenueType:
+      $ref: ../analytics/schemas/revenueType.yml
+    RedemptionType:
+      $ref: ../offer-augmentation/schemas/redemptionType.yml
+    RewardValueCalculation:
+      $ref: ../offer-augmentation/schemas/rewardValueCalculation.yml
+    SavingsOffer:
+      $ref: ../originator/schemas/savingsOffer.yml
+    SavingsOfferDetails:
+      $ref: ../originator/schemas/savingsOfferDetails.yml
+    SessionInit:
+      $ref: ../ui-event/schemas/sessionInit.yml
+    SessionInitNew:
+      $ref: ../ui-event/schemas/newSessionInit.yml
+    SpecialOffer:
+      $ref: ../originator/schemas/specialOfferPublic.yml
+    SpendingAggregate:
+      $ref: ../offer-augmentation/schemas/aggregates.yml
+    SpendingAggregateUnit:
+      $ref: ../offer-augmentation/schemas/spendingAggregateUnit.yml
+    SpendingCategory:
+      $ref: ../offer-augmentation/schemas/spendingCategory.yml
+    State:
+      $ref: ../core/schemas/state-lead.yml
+    TermUnit:
+      $ref: ../originator/schemas/termUnit.yml
+    TransactionLevelEarningScheme:
+      $ref: ../offer-augmentation/schemas/earningContext.yml
+    TransactionLevelEarningSchemeType:
+      $ref: ../offer-augmentation/schemas/earningContextType.yml
+tags:
+  - name: Lead / Rate Table
+  - name: Offer Preview
+  - name: Offer Augmentation
+    description: |
+      _The Offer Augmentation API is in **Beta**_
+  - name: UI Events
+  - name: UI Utils
+  - name: Analytics
+    description: |
+      _The Analytics API is in **Beta**_
+paths:
+  /leads:
+    post:
+      summary: Submit a lead
+      operationId: createLead
+      tags:
+        - Lead / Rate Table
+      requestBody:
+        description: A Lead object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../lead/schemas/leadRequestJson.yml
+            examples:
+              rateTable:
+                $ref: ../lead/examples/creditCardLead.yml
+      responses:
+        '200':
+          $ref: ../lead/responses/leadCreated.yml
+        '400':
+          $ref: ../lead/responses/invalidLead.yml
+      security:
+        - api-auth:
+            - 'svc-lead:leads:insert'
+            - 'svc-lead:leads:insert-test'
+  '/leads/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a lead
+      description: >-
+        Return a `Lead` given its UUID. Depending on the access token scope, the
+        response may contain a subset of a `Lead` object.
+      operationId: getLead
+      tags:
+        - Lead / Rate Table
+      responses:
+        '200':
+          $ref: ../lead/responses/leadFound.yml
+        '400':
+          $ref: ../lead/responses/invalidLeadUuid.yml
+        '404':
+          description: '`Lead` with the given UUID does not exist'
+      security:
+        - api-auth:
+            - 'svc-lead:leads:readRestricted'
+  '/originator/rateTables/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a rate table
+      description: Return a `RateTable` given its UUID
+      operationId: getRateTable
+      tags:
+        - Lead / Rate Table
+      responses:
+        '200':
+          description: Succesfully retrieved rate table
+          content:
+            application/json:
+              schema:
+                $ref: ../originator/schemas/rateTablePublic.yml
+              examples:
+                rateTable:
+                  $ref: ../originator/examples/creditCardRateTable.yml
+        '400':
+          description: Invalid UUID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              example:
+                - message: >-
+                    Cannot parse parameter uuid as UUID: Invalid UUID string:
+                    123
+        '404':
+          description: '`RateTable` with the given UUID does not exist'
+      security:
+        - api-auth:
+            - 'originator:rateTables:read'
+  /leads/rateTables:
+    post:
+      summary: Submit a lead and get a rate table
+      description: >-
+        A shorthand operation for `POST /leads` followed by a `POST
+        /originator/rateTables`. The response `RateTable` must still be queried
+        until there are no more `pendingResponses`
+      operationId: createRateTable
+      tags:
+        - Lead / Rate Table
+      requestBody:
+        description: A Lead object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../lead/schemas/leadRequestJson.yml
+            examples:
+              rateTable:
+                $ref: ../lead/examples/creditCardLead.yml
+      responses:
+        '200':
+          description: Succesfully created rate table
+          content:
+            application/json:
+              schema:
+                $ref: ../originator/schemas/rateTablePublic.yml
+              examples:
+                rateTable:
+                  $ref: ../originator/examples/creditCardRateTable.yml
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+      security:
+        - api-auth:
+            - 'svc-lead:leads:insert'
+            - 'svc-lead:leads:insert-test'
+  /offerPreview/loanOffers:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      operationId: getPreviewLoanOffers
+      tags:
+        - Offer Preview
+      summary: Get loan preview offers
+      description: Get loan preview offers
+      security:
+        - api-auth:
+            - 'originator:rateTables:read'
+      parameters:
+        - name: loanAmount
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: providedCreditRating
+          in: query
+          required: false
+          schema:
+            $ref: ../lead/schemas/providedCreditRating.yml
+        - name: loanPurpose
+          in: query
+          required: false
+          schema:
+            $ref: ../lead/schemas/purpose.yml
+        - name: zipCode
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: array of loan offers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../originator/schemas/loanOfferPublic.yml
+  /offerPreview/creditCardOffers:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get credit card preview offers
+      description: Get credit card preview offers
+      operationId: getPreviewCreditCardOffers
+      tags:
+        - Offer Preview
+      security:
+        - api-auth:
+            - 'originator:rateTables:read'
+      parameters:
+        - name: providedCreditRating
+          in: query
+          required: false
+          schema:
+            $ref: ../lead/schemas/providedCreditRating.yml
+        - name: zipCode
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: cardPurposes
+          in: query
+          required: false
+          schema:
+            $ref: ../lead/schemas/cardPurposes.yml
+      responses:
+        '200':
+          description: array of credit card offers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../originator/schemas/creditCardOffer.yml
+  /offerPreview/savingsOffers:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      operationId: getPreviewSavingsOffers
+      summary: Get savings preview offers
+      description: Get savings preview offers
+      tags:
+        - Offer Preview
+      security:
+        - api-auth:
+            - 'originator:rateTables:read'
+      parameters:
+        - name: maxDepositAmount
+          in: query
+          required: false
+          schema:
+            type: number
+            format: int64
+        - name: minDepositAmount
+          in: query
+          required: false
+          schema:
+            type: number
+            format: int64
+        - name: zipCode
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: array of savings offers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../originator/schemas/savingsOffer.yml
+  /uiEvent/sessionInits:
+    post:
+      summary: Record the beginning of a new session
+      description: |
+        Records that a user has begun a new session. A session can be any
+        extended interaction with the Even API by an individual user.
+
+        The most common use case is to initiate a session when a user lands on
+        a financial offer search experience. You can either supply `sessionUuid`
+        in the request body, or submit an empty body and one will be generated
+        for you. In either case, the returned `sessionUuid` should be included
+        in the lead body of subsequent rate table requests.
+      operationId: createSessionInit
+      tags:
+        - UI Events
+      requestBody:
+        $ref: ../ui-event/request-bodies/sessionInit.yml
+      responses:
+        '201':
+          $ref: ../ui-event/responses/sessionInitCreated.yml
+        '400':
+          $ref: ../ui-event/responses/invalidSessionInit.yml
+      security:
+        - api-auth:
+            - 'ui-event:write'
+  /uiEvent/offerDisplays:
+    post:
+      summary: Record an offer display
+      description: >
+        Records that an offer was displayed to a user.
+
+
+        You can also use a pixel to record this event, by rendering an `img`
+
+        tag in the DOM alongside the offer, where the `src` URL follows this
+
+        pattern:
+
+        ```
+
+        /uiEvent/offerDisplays/{leadUuid}/{rateTableUuid}/{offerUuid}/pixel.gif
+
+        ```
+
+
+        So, for example:
+
+        ```html
+
+        <img
+        src="https://api.evenfinancial.com/uiEvent/offerDisplays/39197a3f-d2f4-43eb-9999-7f7a154d79bc/eb0e6cc4-df13-42fe-b254-c58c9b35a3d6/a698f56f-0946-4642-9720-5f280bc8b2e0/pixel.gif">
+
+        ```
+
+
+        The URL will always respond successfully with a transparent 1x1 GIF.
+      operationId: createOfferDisplay
+      tags:
+        - UI Events
+      requestBody:
+        $ref: ../ui-event/request-bodies/offerDisplay.yml
+      responses:
+        '201':
+          $ref: ../ui-event/responses/offerDisplayCreated.yml
+        '400':
+          $ref: ../ui-event/responses/invalidOfferDisplay.yml
+      security:
+        - api-auth:
+            - 'ui-event:write'
+  /leads/universities:
+    get:
+      summary: Get university names
+      description: >-
+        Returns a list of possible university names for use in a lead's
+        `educationInformation.universityAttened` field given a user input
+        fragment.
+      operationId: getUniversities
+      tags:
+        - UI Utils
+      parameters:
+        - $ref: ../lead/parameters/universityName.yml
+        - $ref: ../core/parameters/offset.yml
+        - $ref: ../core/parameters/limit.yml
+      responses:
+        '200':
+          description: >-
+            A list of completion suggestions for a full supported university
+            name
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                with-name-johns:
+                  value:
+                    - Johns Hopkins University
+                    - Johns Hopkins University - Carey Business School
+                    - >-
+                      Johns Hopkins University - Paul Nifle School of Advanced
+                      International Studies
+                    - Johns Hopkins University - Peabody Conservatory of Music
+                    - Johns Hopkins University - School of Arts & Science
+                    - Johns Hopkins University - School of Medicine
+                    - Johns Hopkins University - School of Nursing
+                    - Johns Hopkins University - School of Public Health
+                    - Johns Hopkins University - SPSBE
+                    - Saint Johns University
+                    - 'Cornell University Johnson, MBA'
+                    - Johnson College
+                    - Johnson County Community College
+                    - Johnson University
+                    - Johnson & Wales University
+                    - >-
+                      Northern Vermont University - Johnson (FKA Johnson State
+                      College + Lyndon State College)
+                    - >-
+                      Northern Vermont University - Lyndon (FKA Lyndon State
+                      College + Johnson State College)
+                    - University of Pittsburgh - Johnstown
+      security:
+        - api-auth:
+            - 'svc-lead:leads:insert'
+            - 'svc-lead:leads:insert-test'
+  /offerAugmentation/rewardValueCalculations:
+    post:
+      summary: Calculate rewards values
+      description: >
+        For a rate table, will calculate the expected reward value for each
+        credit card offer, based upon specified spending habits and preferred
+        redemption types.
+
+
+        For non-credit-card offers, the `rewardValue` will always be `null`.
+      operationId: createRewardValueCalculation
+      tags:
+        - Offer Augmentation
+      requestBody:
+        $ref: ../offer-augmentation/request-bodies/createRewardValueCalculation.yml
+      responses:
+        '200':
+          $ref: ../offer-augmentation/responses/rewardValueCalculationCreated.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  $ref: ../core/examples/error/missingAccessToken.yml
+  /offerAugmentation/spendingCategories:
+    get:
+      summary: Get spending categories
+      description: >
+        Returns a list of spending categories to use when calculating reward
+        values for a rate table.
+      operationId: getSpendingCategories
+      tags:
+        - Offer Augmentation
+      responses:
+        '200':
+          description: Successfully returned spending categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../offer-augmentation/schemas/spendingCategory.yml
+              examples:
+                listOfSpendingCategories:
+                  $ref: ../offer-augmentation/examples/spendingCategories.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  $ref: ../core/examples/error/missingAccessToken.yml
+  /offerAugmentation/redemptionTypes:
+    get:
+      summary: Get redemption types
+      description: >
+        Returns a list of redemption types for use when calculating reward
+        values for a rate table.
+      operationId: getRedemptionTypes
+      tags:
+        - Offer Augmentation
+      responses:
+        '200':
+          description: Successfully returned redemption types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../offer-augmentation/schemas/redemptionType.yml
+              examples:
+                listOfRedemptionTypes:
+                  $ref: ../offer-augmentation/examples/redemptionTypes.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  $ref: ../core/examples/error/missingAccessToken.yml
+  /offerAugmentation/plaidAssetReportTokens:
+    post:
+      summary: Add Plaid asset report token to lead
+      description: |
+        Associated a Plaid asset report token with a lead. This will be used by
+        the `POST /offerAugmentation/rewardValueCalculations` endpoint to
+        perform the calculation.
+      operationId: createPlaidAssetReportToken
+      tags:
+        - Offer Augmentation
+      requestBody:
+        $ref: ../offer-augmentation/request-bodies/createPlaidAssetReportToken.yml
+      responses:
+        '200':
+          $ref: ../offer-augmentation/responses/plaidAssetReportTokenCreated.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  $ref: ../core/examples/error/missingAccessToken.yml
+        '422':
+          description: Token already associated with lead
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  $ref: >-
+                    ../offer-augmentation/examples/errors/tokenAlreadyAssociatedWithLead.yml
+  /analytics/leadEvents:
+    get:
+      summary: Get lead events
+      description: >
+        A variety of event types can be associated with a lead, including:
+          - user actions in your experience
+          - user actions in a financial institution's experience
+          - API responses from an FI
+          - FI decisioning results
+
+        This endpoint provides access to these events for analysis. There are
+        two common way to use this:
+          1. **Get events for a lead** by making the following request, for
+            example:
+            ```
+            GET /analytics/leadEvents?leadUuid=9cc5ef55-4b9f-4c9d-ba52-cf96c9ad957e&limit=1
+            ```
+          2. **Stream all events** by making paginated requests. The first of
+            these requests would be:
+            ```
+            GET /analytics/leadEvents?limit=1000
+            ```
+            Events will always be returned in ascending `eventCreatedAt` order.
+            Take the `eventCreatedAt` of the last record of the result set to
+            form the request for the next page:
+            ```
+            GET /analytics/leadEvents?eventCreatedAtMin=2019-11-19T16:38:47Z&limit=1000
+            ```
+            And repeat until there are no more events. This method will
+            guarantee at least once delivery, so event processing must be
+            idempotent.
+      operationId: getLeadEvents
+      tags:
+        - Analytics
+      parameters:
+        - name: id
+          in: query
+          description: >
+            The unique identifiers of events that should be included in the
+            result set
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+        - name: leadUuid
+          in: query
+          description: >
+            The UUIDs of the leads whose events should be included in the result
+            set
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+          style: form
+          explode: false
+        - name: eventType
+          in: query
+          description: |
+            The event types that should be included in the result set
+          schema:
+            type: array
+            items:
+              $ref: ../analytics/schemas/eventType.yml
+          style: form
+          explode: false
+        - name: leadCreatedAtMin
+          in: query
+          description: >
+            The minimum `leadCreatedAt` (inclusive) for events that should be
+            included in the result set
+          schema:
+            type: string
+            format: date-time
+        - name: leadCreatedAtMax
+          in: query
+          description: >
+            The maximum `leadCreatedAt` (inclusive) for events that should be
+            included in the result set
+          schema:
+            type: string
+            format: date-time
+        - name: eventCreatedAtMin
+          in: query
+          description: >
+            The minimum `eventCreatedAt` (inclusive) for events that should be
+            included in the result set
+          schema:
+            type: string
+            format: date-time
+        - name: eventCreatedAtMax
+          in: query
+          description: >
+            The maximum `eventCreatedAt` (inclusive) for events that should be
+            included in the result set
+          schema:
+            type: string
+            format: date-time
+        - name: offerProductType
+          in: query
+          description: >
+            The offer product types of events that should be included in the
+            result set
+          schema:
+            $ref: ../analytics/schemas/offerProductType.yml
+        - name: clientTag
+          in: query
+          description: >
+            The value of a client tag on leads that should be included in the
+            result set
+          schema:
+            $ref: ../lead/schemas/clientTags.yml
+          style: form
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+      responses:
+        '200':
+          description: Successfully returned records
+          content:
+            application/json:
+              schema:
+                $ref: ../analytics/schemas/leadEvent.yml
+              examples:
+                apiApproved:
+                  $ref: ../analytics/examples/apiApprovedLeadEvent.yml
+                offerClicked:
+                  $ref: ../analytics/examples/offerClickedLeadEvent.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  summary: access token was not specified
+                  value:
+                    - message: Access token is missing
+                missingScopes:
+                  summary: access token is not authorized
+                  value:
+                    - message: Access token is missing
+        '422':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingLimit:
+                  summary: limit was not specified
+                  value:
+                    - attribute: limit
+                      type: missing
+                      message: limit must be specified
+                malformedLeadUuid:
+                  summary: leadUuid was malformed
+                  value:
+                    - attribute: leadUuid
+                      type: notUuid
+                      message: 'leadUuid must be uuid, but is 123'
+      security:
+        - api-auth:
+            - 'svc-lead:leads:readRestricted'
+  /analytics/revenueSummaries:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get revenue summaries
+      description: >
+        Provides historical revenue statistics and funnel performance. The
+        metrics returned are aggregated either by a time period (e.g. day, week
+        or month) and or lead attributes such as credit rating, loan purpose or
+        referral URL.
+
+
+        For each aggregated group, the result includes the number of leads,
+        submitted applications, funded applications, along with the amount of
+        revenue. Either attributed or booked revenue is supported.
+
+
+        For example, to get attributed monthly revenue, grouped by credit rating
+        for Q1 of 2019, make the following request:
+          ```
+          GET /analytics/revenueSummaries?groupBy=creditRating&minTime=2019-01-01&maxTime=2019-03-31&revenueType=attributed
+          ```
+      operationId: getRevenueSummaries
+      tags:
+        - Analytics
+      parameters:
+        - name: revenueType
+          in: query
+          description: >
+            There are two dates associated with revenue:
+              * the `attributed` date is when the lead associated with the
+                revenue was added to the system
+              * the `booked` date corresponds to the event that triggered
+                the revenue, e.g. when a loan is funded
+
+
+            The `minDate` and `maxDate` parameters will filter against the
+            specified date type. If none is specified, then the default is
+            `attributed`.
+
+
+            Also, the results will only include a `totalAttributedRevenue` field
+            if `revenueType` is `attributed`, and will only include
+            `totalBookedRevenue` and `totalUnattributedRevenue` if it's
+            `booked`.
+          schema:
+            type: array
+            items:
+              $ref: ../analytics/schemas/revenueType.yml
+        - name: minDate
+          in: query
+          description: >
+            Results will only represent revenue either booked or attributed on
+            or after this date, if specified. If not specified, defaults to 30
+            days ago. Date format must be `YYYY-MM-DD`.
+          schema:
+            type: string
+            format: date
+        - name: maxDate
+          in: query
+          description: >
+            Results will only represent revenue either booked or attributed on
+            or before this date, if specified. If not specified, defaults to
+            today. Date format must be `YYYY-MM-DD`.
+          schema:
+            type: string
+            format: date
+        - name: groupBy
+          in: query
+          description: >
+            The results can be aggregated by only one field at a time. If
+            multiple values are specified, then the first value will be used. If
+            none is specified, then the default is `day`. Time range grouping
+            (i.e., one of `day`, `week` or `month`) will use the create time for
+            the lead.
+
+
+            The `creditRating`, `loanPurpose`, and `referralUrl` fields in the
+            response body will not show up in the results unless explicitly
+            aggregated on. Similarly `leadCreatedAtMin` and `leadCreatedAtMax`
+            will not show unless grouped by time range.
+
+
+            If the `clientTag` query parameter is specified, then any value
+            specified here will be ignored.
+          schema:
+            type: array
+            items:
+              $ref: ../analytics/schemas/revenueSummaryGrouping.yml
+        - name: clientTagKey
+          in: query
+          description: >
+            Results will only represent leads that have a client tag with the
+            specified key. If specified, the results will be grouped by the
+            distinct values of the client tag. Consequently, anything specified
+            by the `groupBy` parameter will be ignored.
+          schema:
+            $ref: ../lead/schemas/clientTags.yml
+          style: form
+        - name: subAccountUuid
+          in: query
+          description: >
+            Results will only represent leads that belong to the sub-account
+            corresponding to the specified UUID.
+          schema:
+            type: string
+            format: uuid
+          explode: false
+        - name: companyUuid
+          in: query
+          description: >
+            Results will only represent leads that are affiliated with a
+            specific company, which itself may have one or more sub accounts.
+            For internal use only. For internal users, this is absolutely
+            required.
+          schema:
+            type: string
+            format: uuid
+          explode: false
+      responses:
+        '200':
+          description: Successfully returned records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../analytics/schemas/revenueSummary.yml
+              examples:
+                monthlyReport:
+                  summary: Revenue by month
+                  $ref: ../analytics/examples/revenueSummaryResponse.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                missingAccessToken:
+                  summary: access token was not specified
+                  value:
+                    - message: Access token is missing
+                missingScopes:
+                  summary: access token is not authorized
+                  value:
+                    - message: Access token is missing
+        '422':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+              examples:
+                badGroupBy:
+                  summary: groupBy clause is invalid
+                  value:
+                    - attribute: groupBy
+                      type: notInEnum
+                      message: >-
+                        groupBy must be one of "day", "week", "month",
+                        "creditRating", "loanPurpose", but is "year"
+                      details:
+                        specified: year
+                        enum:
+                          - day
+                          - week
+                          - month
+                          - creditRating
+                          - loanPurpose
+      security:
+        - api-auth:
+            - 'analytics:report:read'
+  /uiUtil/featuredFinancialInstitutions:
+    x-implemented-by:
+      service: partner-data
+      path: /userExperience/featuredFinancialInstitutions
+    get:
+      summary: Get a list of featured financial institutions
+      description: >
+        Returns a list of selected financial institution logos, in the preferred
+        order, to be used for display on the initial page of a UX, before the
+        user enters their information.
+      operationId: getFeaturedFinancialInstitutions
+      tags:
+        - UI Utils
+      responses:
+        '200':
+          description: The featured financial institutions belonging to the channel partner
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../partner-data/schemas/featuredFinancialInstitution.yml
+        '400':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml

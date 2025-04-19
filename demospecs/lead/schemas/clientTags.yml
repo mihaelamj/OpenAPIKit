@@ -1,0 +1,12 @@
+type: object
+description: Arbitrary key-values mappings to associate with a `Lead`. This field can be use to attach `subid`s to a `Lead`
+additionalProperties:
+  type: array
+  items:
+    type: string
+maxProperties: 1
+minProperties: 1
+example:
+  {
+    "subid": ["123"]
+  }

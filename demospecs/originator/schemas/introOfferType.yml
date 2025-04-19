@@ -1,0 +1,5 @@
+type: string
+enum:
+  - miles
+  - points
+  - statement_credit

@@ -1,0 +1,5 @@
+type: string
+enum:
+  - driver_license
+  - state_id
+  - passport

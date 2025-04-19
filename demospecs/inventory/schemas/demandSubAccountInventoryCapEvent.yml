@@ -1,0 +1,31 @@
+type: object
+required:
+  - id
+  - demandSubAccountInventoryCapId
+  - capEventReason
+  - createdAt
+properties:
+  id:
+    type: integer
+    format: int64
+    readOnly: true
+    description: |
+      A unique, internal identifier for this resource.
+  demandSubAccountInventoryCapId:
+    type: integer
+    format: int64
+    readOnly: true
+    description: |
+      The id of the demand sub account inventory cap corresponding to the event record.
+  capEventReason:
+    type: string
+    $ref: ./capEventReason.yml
+    readOnly: true
+    description: |
+      The reason why this inventory cap event was created.
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the resource was created.

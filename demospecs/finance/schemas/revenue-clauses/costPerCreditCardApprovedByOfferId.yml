@@ -1,0 +1,30 @@
+type: object
+title: Cost Per Credit Card By Offer Id
+required:
+  - defaultCost
+  - costPerOfferId
+properties:
+  defaultCost:
+    type: number
+    title: Default Amount (in $ USD)
+    multipleOf: 0.01
+    minimum: 0.01
+  costPerOfferId:
+    type: array
+    items:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: integer
+          format: int64
+          title: Offer Id
+        value:
+          type: number
+          title: Amount (in $ USD)
+          multipleOf: 0.01
+          minimum: 0
+allOf:
+  - $ref: ../abstractRevenueClause.yml

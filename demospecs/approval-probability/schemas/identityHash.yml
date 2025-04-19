@@ -1,0 +1,87 @@
+type: object
+required:
+  - id
+  - leadUuid
+  - leadUpdatedAt
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    readOnly: true
+    description: |
+      A unique, internal identifier for this resource.
+  leadUuid:
+    type: string
+    format: uuid
+  email:
+    type: string
+    writeOnly: true
+  ssn:
+    type: string
+    writeOnly: true
+  phone:
+    type: string
+    writeOnly: true
+  dateOfBirth:
+    type: string
+    format: date
+    writeOnly: true
+  ssnEmailHash:
+    type: string
+    readOnly: true
+  ssnPhoneHash:
+    type: string
+    readOnly: true
+  ssnPhoneEmailHash:
+    type: string
+    readOnly: true
+  lastFourSsnEmailHash:
+    type: string
+    readOnly: true
+  lastFourSsnPhoneHash:
+    type: string
+    readOnly: true
+  lastFourSsnPhoneEmailHash:
+    type: string
+    readOnly: true
+  phoneEmailHash:
+    type: string
+    readOnly: true
+  phoneDobHash:
+    type: string
+    readOnly: true
+  phoneEmailDobHash:
+    type: string
+    readOnly: true
+  emailHash:
+    type: string
+    readOnly: true
+  leadUpdatedAt:
+    type: string
+    format: date-time
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the resource was created.
+  createdBy:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the resource was deleted.
+  deletedBy:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to delete this resource.

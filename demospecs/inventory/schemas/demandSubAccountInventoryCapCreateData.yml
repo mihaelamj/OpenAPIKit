@@ -1,0 +1,27 @@
+type: object
+required:
+  - demandSubAccountId
+  - capType
+  - startDate
+  - endDate
+properties:
+  demandSubAccountId:
+    type: integer
+    format: int64
+  capType:
+    $ref: ./capType.yml
+  leadCapAmount:
+    type: integer
+    format: int64
+  clickCapAmount:
+    type: integer
+    format: int64
+  budgetCapAmount:
+    type: number
+    format: double
+  startDate:
+    type: string
+    format: date
+  endDate:
+    type: string
+    format: date

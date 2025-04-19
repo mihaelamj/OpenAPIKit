@@ -1,0 +1,11 @@
+type: string
+enum:
+  - BudgetCap
+  - ClickCap
+  - DemandSubAccountClickCap
+  - LeadCap
+description: |
+  The type of the inventory cap.
+
+  For demand sub account caps, the values `DemandSubAccoutClickCap` and `LeadCap` are
+  allowed. For static offer caps, the values `ClickCap` and `BudgetCap` are allowed.

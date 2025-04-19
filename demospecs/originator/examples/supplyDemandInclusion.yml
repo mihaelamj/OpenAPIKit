@@ -1,0 +1,14 @@
+summary: A supply demand inclusion object
+value:
+  {
+    "demandSubAccountId": 1,
+    "supplySubAccountId": 2,
+    "createdReason": "demand_onboarding",
+    "createdMemo": "created during onboarding process for so and so bank",
+    "createdAt": "2019-05-16T14:49:02.143280Z",
+    "createdBy": "77e1e05f-0831-406d-b1a2-ad1fa857bbb5",
+    "deletedReason": "poor_performance",
+    "deletedMemo": "supply partner providing poor leads",
+    "deletedAt": "2019-05-20T14:49:02.143280Z",
+    "deletedBy": "77e1e05f-0831-406d-b1a2-ad1fa857bbb5",
+  }

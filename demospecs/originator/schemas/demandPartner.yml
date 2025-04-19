@@ -1,0 +1,24 @@
+type: object
+required:
+  - uuid
+  - name
+  - description
+  - disclaimer
+  - supportsPersonalizedOffers
+  - imageUrl
+properties:
+  uuid:
+    type: string
+    format: uuid
+  name:
+    type: string
+  description:
+    type: string
+  disclaimer:
+    type: string
+  supportsPersonalizedOffers:
+    type: boolean
+    description: Whether the partner supports returning pre-qualified or pre-approved offers
+  imageUrl:
+    type: string
+    format: url

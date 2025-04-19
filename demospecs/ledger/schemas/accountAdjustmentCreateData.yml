@@ -1,0 +1,20 @@
+type: object
+required:
+  - accountId
+  - amount
+  - adjustmentReason
+properties:
+  accountId:
+    type: integer
+    format: int64
+  amount:
+    type: number
+    format: double
+  adjustmentReason:
+    $ref: ./adjustmentReason.yml
+  memo:
+    title: Memo
+    type: string
+  ledgerItemId:
+    type: integer
+    format: int64

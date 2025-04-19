@@ -1,0 +1,21 @@
+type: object
+required:
+  - id
+  - opeId
+  - name
+  - createdAt
+  - createdByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+  opeId:
+    type: string
+  name:
+    type: string
+  createdAt:
+    type: string
+    format: date-time
+  createdByUuid:
+    type: string
+    format: uuid

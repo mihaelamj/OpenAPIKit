@@ -1,0 +1,22 @@
+type: object
+description: A Fee
+properties:
+  type:
+    $ref: ./feesEnum.yml
+  dollarValue:
+    type: number
+  percentageValue:
+    type: number
+  additive:
+    description: If true, the sum of dollar and percentage, else, the greater of the two
+    type: boolean
+  waivedInitially:
+    description: Is this waived when the card is opened
+    type: boolean
+  waivedMonths:
+    description: How long is it waived
+    type: number
+  description:
+    description: Additional Details
+    type: string
+

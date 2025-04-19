@@ -1,0 +1,19 @@
+type: object
+description: Reward earning data for the card
+required:
+  - transactionLevelEarningScheme
+  - cardLevelEarningScheme
+properties:
+  transactionLevelEarningScheme:
+    description: Grouped by earn rate, the rules that earn multipliers on each transaction
+    type: array
+    items:
+      $ref: ./earningContext.yml
+  cardLevelEarningScheme:
+    description: Card level bonuses, such as sign-on and anniversary bonuses
+    type: array
+    items:
+      $ref: ./earningBonus.yml
+  personalization:
+    description: Annual value of this card for the user, only returned in a simulation
+    $ref: ./earningProgramPersonalization.yml

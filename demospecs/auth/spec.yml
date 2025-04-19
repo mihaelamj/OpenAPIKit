@@ -1,0 +1,1699 @@
+openapi: 3.0.3
+info:
+  title: auth
+  description: |
+    Centralized authentication service for Even
+  version: 1.4.0
+  contact:
+    name: API Chapter
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/PE/pages/348455141/API+Chapter
+servers:
+  - url: 'https://api.evenfinancial.com/auth'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/auth'
+    description: Dev
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'auth:read': Deprecated scope
+            'auth:write': Deprecated scope
+            'get:account': Deprecated scope
+            'get:company': Deprecated scope
+            'get:user': Deprecated scope
+            'create:access-token': Deprecated scope
+            'create:account': Deprecated scope
+            'create:company': Deprecated scope
+            'create:company-user': Deprecated scope
+            'create:role_scope': Deprecated scope
+            'delete:role_scope': Deprecated scope
+            'list:account': Deprecated scope
+            'list:company': Deprecated scope
+            'list:user': Deprecated scope
+            'update:account': Deprecated scope
+            'update:company': Deprecated scope
+            'update:user': Deprecated scope
+  schemas:
+    AccessToken:
+      $ref: ./schemas/accessToken.yml
+    AccessTokenCreateData:
+      $ref: ./schemas/accessTokenCreateData.yml
+    AccessTokenSort:
+      type: string
+      enum:
+        - created_at
+        - deleted_at
+        - id
+    AccessTokenWithSecret:
+      $ref: ./schemas/accessTokenWithSecret.yml
+    Account:
+      $ref: ./schemas/account.yml
+    AccountCreateData:
+      $ref: ./schemas/accountCreateData.yml
+    AccountSort:
+      type: string
+      enum:
+        - created_at
+        - deleted_at
+    AccountUpdateData:
+      $ref: ./schemas/accountUpdateData.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    Application:
+      $ref: ./schemas/application.yml
+    ApplicationCreateData:
+      $ref: ./schemas/applicationCreateData.yml
+    ApplicationSort:
+      type: string
+      enum:
+        - created_at
+        - deleted_at
+        - id
+        - name
+    AuthCreateData:
+      $ref: ./schemas/authCreateData.yml
+    Company:
+      $ref: ./schemas/company.yml
+    CompanyCreateData:
+      $ref: ./schemas/companyCreateData.yml
+    CompanyUpdateData:
+      $ref: ./schemas/companyUpdateData.yml
+    InternalAccessToken:
+      $ref: ./schemas/internalAccessToken.yml
+    Login:
+      $ref: ./schemas/login.yml
+    LoginCreateData:
+      $ref: ./schemas/loginCreateData.yml
+    Order:
+      $ref: ../core/schemas/order.yml
+    PasswordCreateData:
+      $ref: ./schemas/passwordCreateData.yml
+    PasswordResetCreateData:
+      $ref: ./schemas/passwordResetCreateData.yml
+    PasswordResetRequestCreateData:
+      $ref: ./schemas/passwordResetRequestCreateData.yml
+    RichAccessToken:
+      $ref: ./schemas/richAccessToken.yml
+    RichAccount:
+      $ref: ./schemas/richAccount.yml
+    Role:
+      $ref: ./schemas/role.yml
+    RoleCreateData:
+      $ref: ./schemas/roleCreateData.yml
+    RoleScopes:
+      $ref: ./schemas/roleScopes.yml
+    RoleSort:
+      type: string
+      enum:
+        - created_at
+        - deleted_at
+        - id
+        - key
+    Service:
+      $ref: ./schemas/service.yml
+    Scope:
+      $ref: ./schemas/scope.yml
+    ScopeCreateData:
+      $ref: ./schemas/scopeCreateData.yml
+    ScopeSort:
+      type: string
+      enum:
+        - created_at
+        - deleted_at
+        - key
+    User:
+      $ref: ./schemas/user.yml
+    UserCreateData:
+      $ref: ./schemas/userCreateData.yml
+    UserSort:
+      type: string
+      enum:
+        - created_at
+        - deleted_at
+        - id
+        - name
+    UserUpdateData:
+      $ref: ./schemas/userUpdateData.yml
+    UserDeactivation:
+      $ref: ./schemas/userDeactivation.yml
+    UserDeactivationCreateData:
+      $ref: ./schemas/userDeactivationCreateData.yml
+tags:
+  - name: Access Token
+  - name: Account
+  - name: Application
+  - name: Auth
+  - name: Company
+  - name: Password
+  - name: Role
+  - name: Scope
+  - name: User
+  - name: User Deactivation
+paths:
+  /users:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get users
+      description: |
+        Get users
+      tags:
+        - User
+      operationId: getUsers
+      security:
+        - oauth:
+            - 'list:user'
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: uuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: accountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: companyId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: email
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: deletedById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - name: isDeactivated
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+        - name: sortBy
+          in: query
+          schema:
+            $ref: '#/components/schemas/UserSort'
+        - name: order
+          in: query
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Users matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+    post:
+      summary: Create user
+      description: |
+        Create user
+      tags:
+        - User
+      operationId: createUser
+      security:
+        - oauth:
+            - 'create:company-user'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateData'
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+    put:
+      summary: Update user
+      description: |
+        Update user
+      tags:
+        - User
+      operationId: updateUser
+      security:
+        - oauth:
+            - 'update:user'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateData'
+      responses:
+        '200':
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '409':
+          description: Invalid data
+  '/users/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: The UUID of the user
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get user
+      description: |
+        Create user
+      tags:
+        - User
+      operationId: getUser
+      security:
+        - oauth:
+            - 'get:user'
+      responses:
+        '200':
+          description: User for the specified ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '409':
+          description: Unknown user UUID
+    delete:
+      summary: Delete user
+      description: |
+        Delete user
+      tags:
+        - User
+      operationId: deleteUser
+      security:
+        - oauth:
+            - 'update:user'
+      responses:
+        '200':
+          description: User deleted successfully
+  /accessTokens:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get access tokens
+      description: |
+        Get access tokens
+      tags:
+        - Access Token
+      operationId: getAccessTokens
+      security:
+        - oauth:
+            - 'auth:read'
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: uuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: resourceOwnerId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: clientId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: deletedById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: excludeDeleted
+          in: query
+          schema:
+            type: boolean
+            default: true
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 0
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 1000
+        - name: sortBy
+          in: query
+          schema:
+            $ref: '#/components/schemas/AccessTokenSort'
+        - name: order
+          in: query
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Access tokens matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InternalAccessToken'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+    post:
+      summary: Create an access token
+      description: |
+        Create an access token
+      tags:
+        - Access Token
+      operationId: createAccessToken
+      security:
+        - oauth:
+            - 'create:access-token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenCreateData'
+      responses:
+        '201':
+          description: Access token created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenWithSecret'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/accessTokens/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete an access token
+      description: Delete an access token
+      operationId: deleteAccessToken
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - Access Token
+      responses:
+        '204':
+          description: The access token was successfully deleted.
+        '404':
+          description: No access token exists for the specified ID
+  /richAccessTokens:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get rich access tokens
+      description: Return rich access tokens based upon request parameters
+      operationId: getRichAccessTokens
+      security:
+        - oauth:
+            - 'list:account'
+      tags:
+        - Access Token
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: accessTokenUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            format: int32
+            default: 1000
+            minimum: 1
+      responses:
+        '200':
+          description: Rich access tokens matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RichAccessToken'
+  /applications:
+    get:
+      summary: Get applications
+      description: Return applications based upon request parameters
+      operationId: getApplications
+      security:
+        - oauth:
+            - 'auth:read'
+      tags:
+        - Application
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: uuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: accountId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: companyUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: createdById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: deletedById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            $ref: '#/components/schemas/ApplicationSort'
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Applications matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Application'
+    post:
+      summary: Create a application
+      description: Create a application
+      operationId: createApplication
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - Application
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationCreateData'
+      responses:
+        '201':
+          description: The application was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/applications/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a application
+      description: Delete a application
+      operationId: deleteApplication
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - Application
+      responses:
+        '204':
+          description: The application was successfully deleted.
+        '404':
+          description: No application exists for the specified ID
+  /roles:
+    get:
+      summary: Get roles
+      description: Return roles based upon request parameters
+      operationId: getRoles
+      security:
+        - oauth:
+            - 'auth:read'
+      tags:
+        - Role
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: key
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: scopes
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: deletedById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            $ref: '#/components/schemas/RoleSort'
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Roles matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+    post:
+      summary: Create a role
+      description: Create a role
+      operationId: createRole
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - Role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreateData'
+      responses:
+        '201':
+          description: The role was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/roles/{key}':
+    parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+    delete:
+      summary: Delete a role
+      description: Delete a role
+      operationId: deleteRole
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - Role
+      responses:
+        '204':
+          description: The role was successfully deleted.
+        '409':
+          description: No role exists for the specified ID
+  '/roles/{roleKey}/scopes':
+    parameters:
+      - name: roleKey
+        in: path
+        required: true
+        schema:
+          type: string
+    post:
+      summary: Add scopes to a role
+      description: Add scopes to a role
+      operationId: addScopesToRole
+      security:
+        - oauth:
+            - 'create:role_scope'
+      tags:
+        - Role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleScopes'
+      responses:
+        '201':
+          description: The specified role with scopes added
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/roles/{roleKey}/scopes/{scopeKey}':
+    parameters:
+      - name: roleKey
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: scopeKey
+        in: path
+        required: true
+        schema:
+          type: string
+    delete:
+      summary: Remove a scope from a role
+      description: Remove a scope from a role
+      operationId: removeScopeFromRole
+      security:
+        - oauth:
+            - 'delete:role_scope'
+      tags:
+        - Role
+      responses:
+        '204':
+          description: The scope was removed from the role
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  /scopes:
+    get:
+      summary: Get scopes
+      description: Return scopes based upon request parameters
+      operationId: getScopes
+      security:
+        - oauth:
+            - 'auth:read'
+      tags:
+        - Scope
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: key
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+        - name: createdById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: deletedById
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            $ref: '#/components/schemas/ScopeSort'
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Scopes matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Scope'
+    post:
+      summary: Create a scope
+      description: Create a scope
+      operationId: createScope
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - Scope
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScopeCreateData'
+      responses:
+        '201':
+          description: The scope was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Scope'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/scopes/{key}':
+    parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+    delete:
+      summary: Delete a scope
+      description: Delete a scope
+      operationId: deleteScope
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - Scope
+      responses:
+        '204':
+          description: The scope was successfully deleted.
+        '404':
+          description: No scope exists for the specified ID
+  /companies:
+    get:
+      summary: Get companies
+      description: Return companies based upon request parameters
+      operationId: getCompanies
+      security:
+        - oauth:
+            - 'list:company'
+      tags:
+        - Company
+      parameters:
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+            default: 0
+            minimum: 0
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            default: 10
+            minimum: 1
+      responses:
+        '200':
+          description: Companies matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Company'
+    post:
+      summary: Create a company
+      description: Create a company
+      operationId: createCompany
+      security:
+        - oauth:
+            - 'create:company'
+      tags:
+        - Company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyCreateData'
+      responses:
+        '201':
+          description: The company was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+    put:
+      summary: Update a company
+      description: Update a company
+      operationId: updateCompany
+      security:
+        - oauth:
+            - 'update:company'
+      tags:
+        - Company
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyUpdateData'
+      responses:
+        '200':
+          description: The company was successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/companies/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get one company
+      description: Return company for a UUID
+      operationId: getCompany
+      security:
+        - oauth:
+            - 'get:company'
+      tags:
+        - Company
+      responses:
+        '200':
+          description: Company for specified UUID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/companies/{companyUuid}/accessTokens':
+    parameters:
+      - name: companyUuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get a company's access tokens
+      description: Return access tokens that belong to a company
+      operationId: getCompanyAccessTokens
+      security:
+        - oauth:
+            - 'auth:read'
+      tags:
+        - Company
+      responses:
+        '200':
+          description: Company for specified UUID
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccessToken'
+        '404':
+          description: Company UUID not found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  /accounts:
+    get:
+      summary: Get accounts
+      description: Return accounts based upon request parameters
+      operationId: getAccounts
+      security:
+        - oauth:
+            - 'list:account'
+      tags:
+        - Account
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: uuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: createdById
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedById
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            $ref: '#/components/schemas/AccountSort'
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: Accounts matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+    post:
+      summary: Create an account
+      description: Create an account
+      operationId: createAccount
+      security:
+        - oauth:
+            - 'create:account'
+      tags:
+        - Account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreateData'
+      responses:
+        '201':
+          description: The account was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+    put:
+      summary: Update an account
+      description: Update an account
+      operationId: updateAccount
+      security:
+        - oauth:
+            - 'update:account'
+      tags:
+        - Account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountUpdateData'
+      responses:
+        '201':
+          description: The account was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  '/accounts/{uuid}':
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      summary: Get one account
+      description: Return account for a UUID
+      operationId: getAccount
+      security:
+        - oauth:
+            - 'get:account'
+      tags:
+        - Account
+      responses:
+        '200':
+          description: The account was successfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Account'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  /richAccounts:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      summary: Get rich accounts
+      description: Return rich accounts based upon request parameters
+      operationId: getRichAccounts
+      security:
+        - oauth:
+            - 'list:account'
+      tags:
+        - Account
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: accessTokenUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: accountUuid
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+      responses:
+        '200':
+          description: Rich accounts matching the query parameters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RichAccount'
+  /auths:
+    post:
+      summary: Authenticate a bearer token
+      description: Exchange a bearer token for its access token
+      operationId: createAuth
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthCreateData'
+      responses:
+        '201':
+          description: The account was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessToken'
+        '401':
+          description: The bearer token is invalid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Invalid request provided
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  /logins:
+    post:
+      summary: Create a user login
+      description: Create a new access token using email / password pair
+      operationId: createLogin
+      tags:
+        - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginCreateData'
+      responses:
+        '201':
+          description: The account was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+        '401':
+          description: The email / password pair is invalid
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApiError'
+  /passwords:
+    post:
+      summary: Update a user password
+      description: Update a user password using email and the existing password.
+      operationId: updatePassword
+      tags:
+        - Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordCreateData'
+      responses:
+        '204':
+          description: The password was updated successfully
+        '401':
+          description: Invalid email / password pair
+  /passwords/resetRequests:
+    post:
+      summary: Create a password reset request.
+      description: |
+        Initiates an email to the specifed a token that can be used change the
+        associated user's password
+      operationId: requestPasswordReset
+      tags:
+        - Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequestCreateData'
+      responses:
+        '204':
+          description: An email has been sent to the specified email
+        '401':
+          description: Unknown email
+  /passwords/resets:
+    post:
+      summary: Reset a user password via token.
+      description: |
+        Updates the email of the user associated with the specified reset
+        request token.
+      operationId: resetPassword
+      tags:
+        - Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetCreateData'
+      responses:
+        '204':
+          description: The password was updated successfully.
+        '401':
+          description: Unknown reset request token
+  /userDeactivations:
+    get:
+      summary: Get user deactivations
+      description: Return user deactivations based upon request parameters
+      operationId: getUserDeactivations
+      security:
+        - oauth:
+            - 'auth:read'
+      tags:
+        - User Deactivation
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: userId
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: deletedAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: deletedAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: isDeleted
+          in: query
+          schema:
+            type: boolean
+        - name: deletedBy
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: offset
+          in: query
+          description: >
+            The number of resources to skip before the first resource in the
+            results.
+          schema:
+            type: integer
+            format: int64
+        - name: limit
+          in: query
+          required: true
+          description: |
+            The maximum number of resources to include in the results.
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+        - name: sortBy
+          in: query
+          description: |
+            The attribute with which to sort the resources.
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: |
+            The direction to use for ordering resources.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDeactivation'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+    post:
+      summary: Create user deactivations
+      description: Create user deactivation
+      operationId: createUserDeactivation
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - User Deactivation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDeactivationCreateData'
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDeactivation'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+  '/userDeactivations/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    delete:
+      summary: Delete a user deactivation
+      description: Delete a user deactivation
+      operationId: deleteUserDeactivation
+      security:
+        - oauth:
+            - 'auth:write'
+      tags:
+        - User Deactivation
+      responses:
+        '204':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDeactivation'
+        '404':
+          description: Unknown ID

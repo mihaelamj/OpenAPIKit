@@ -1,0 +1,6 @@
+type: string
+oneOf:
+  - format: ipv4
+    title: IP v4
+  - format: ipv6
+    title: IP v6

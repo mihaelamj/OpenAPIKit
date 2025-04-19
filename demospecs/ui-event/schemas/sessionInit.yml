@@ -1,0 +1,23 @@
+type: object
+required:
+  - id
+  - uuid
+  - sessionUuid
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+  uuid:
+    type: string
+    format: uuid
+  sessionUuid:
+    type: string
+    format: uuid
+  createdAt:
+    type: string
+    format: date-time
+  createdBy:
+    type: string
+    format: uuid

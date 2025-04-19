@@ -1,0 +1,8 @@
+type: object
+allOf:
+  - $ref: ./base.yml
+  - type: object
+    properties:
+      details:
+        type: string
+        example: Invalid input

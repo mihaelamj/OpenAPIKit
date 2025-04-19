@@ -1,0 +1,12 @@
+type: object
+required:
+  - eventType
+  - capType
+  - createdEvent
+properties:
+  eventType:
+    type: string
+  capType:
+    $ref: ./capType.yml
+  createdEvent:
+    $ref: ./staticOfferInventoryCapEvent.yml

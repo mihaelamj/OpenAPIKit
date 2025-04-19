@@ -1,0 +1,49 @@
+type: object
+required:
+  - sortNumber
+  - createdAt
+  - createdByUuid
+properties:
+  uuid:
+    type: string
+    format: uuid
+  name:
+    type: string
+  desc:
+    type: string
+    description: Description
+  url:
+    type: string
+    format: url
+  partnerName:
+    type: string
+  partnerImageUrl:
+    type: string
+    format: url
+  recommendationScore:
+    type: number
+  offerSourceKey: 
+    type: string
+  sortNumber:
+    type: number 
+    format: int64
+  memo: 
+    type: string
+  payout: 
+    type: number
+  predictedRevenue: 
+    type: number
+  createdAt:
+    type: string
+    format: date-time
+  createdByUuid:
+    type: string
+    format: uuid
+  deletedAt:
+    type: string
+    format: date-time
+  deletedByUuid:
+    type: string
+    format: uuid
+allOf:
+  - $ref: ./offerDetailsRecord.yml

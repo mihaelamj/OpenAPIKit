@@ -1,0 +1,6 @@
+name: createdAt
+in: query
+description: creation date of object
+schema:
+  type: string
+  format: date-time

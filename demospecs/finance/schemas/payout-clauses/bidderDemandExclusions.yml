@@ -1,0 +1,12 @@
+type: object
+title: Bidder Demand Exclusions
+required:
+  - excludedDemandSubAccountIds
+properties:
+  excludedDemandSubAccountIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+allOf:
+  - $ref: ../abstractPayoutClause.yml

@@ -1,0 +1,10 @@
+type: object
+required:
+  - message
+properties:
+  message:
+    type: string
+    example: A server error occurred
+  details:
+    type: string
+    example: The server encountered an unexpected condition that prevented it from fulfilling the request.

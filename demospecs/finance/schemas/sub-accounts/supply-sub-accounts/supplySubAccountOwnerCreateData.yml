@@ -1,0 +1,11 @@
+type: object
+properties:
+  supplySubAccountId:
+    type: integer
+    format: int64
+  supplyManager:
+    type: string
+    format: uuid
+  supplyYieldManager:
+    type: string
+    format: uuid

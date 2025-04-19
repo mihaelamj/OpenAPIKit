@@ -1,0 +1,13 @@
+type: object
+required:
+  - groupBy
+  - groupKey
+  - totalPayout
+properties:
+  groupBy:
+    $ref: ./summaryGroupBy.yml
+  groupKey:
+    type: string
+  totalPayout:
+    type: number
+    format: double

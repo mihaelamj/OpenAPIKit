@@ -1,0 +1,22 @@
+type: object
+required:
+  - accountId
+  - name
+  - displayName
+  - roles
+properties:
+  accountId:
+    type: integer
+    format: int64
+  name:
+    type: string
+  displayName:
+    type: string
+  notes:
+    type: string
+  roles:
+    items:
+      type: string
+  subtextOverride:
+    type: string
+    description: Override the default auto-generated call to action subtext for issuers

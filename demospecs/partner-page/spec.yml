@@ -1,0 +1,729 @@
+openapi: 3.0.3
+info:
+  title: partner-page
+  description: A set of easily-configurable landing pages for our publisher partners
+  version: 1.2.0
+  contact:
+    name: Consumer Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/12124236/Consumer+Team
+servers:
+  - url: 'https://api.evenfinancial.com/partnerpage'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/partnerpage'
+    description: Dev
+tags:
+  - name: Page
+    description: The partner page configuration object
+  - name: Template
+    description: Endpoints relating to partner page templates.
+  - name: Version
+    description: Endpoint relating to partner page version definitions.
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  securitySchemes:
+    api-bearer-auth:
+      type: http
+      scheme: bearer
+      bearerFormat: 'Bearer '
+  schemas:
+    AloomaMap:
+      $ref: ./schemas/aloomaMap.yml
+    ApiError:
+      $ref: ./schemas/error.yml
+    Page:
+      $ref: ./schemas/page.yml
+    PartnerPageTemplateV7:
+      $ref: ./schemas/partnerPageTemplateV7.yml
+    PartnerPageTemplateV8:
+      $ref: ./schemas/partnerPageTemplateV8.yml
+    PartnerPageTemplateV8All:
+      $ref: ./schemas/partnerPageTemplateV8All.yml
+    TemplateCreateData:
+      $ref: ./schemas/templateCreateData.yml
+    Template:
+      $ref: ./schemas/template.yml
+    TemplateType:
+      $ref: ./schemas/templateType.yml
+    Version:
+      $ref: ./schemas/version.yml
+paths:
+  /pages:
+    get:
+      summary: Get all partner pages
+      description: Get all partner pages
+      operationId: getPartnerPages
+      tags:
+        - Page
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Page'
+              example:
+                - id: '123'
+                  version: '8'
+                  partner: even
+                - id: '456'
+                  version: '8'
+                  partner: fiona
+        '500':
+          $ref: ./responses/500.yml
+    post:
+      summary: Create a partner page
+      description: Create a partner page
+      operationId: createPartnerPage
+      tags:
+        - Page
+      parameters:
+        - name: deviceType
+          description: The desired config for deviceType.  Defaults to 'other'.
+          in: query
+          schema:
+            type: string
+            example: mobile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerPageTemplateV8'
+            example:
+              $ref: ./examples/partnerPageV8.yml
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPageTemplateV8'
+              example:
+                id: '2'
+                version: '8'
+                partner: even
+                eventHandlers: []
+                brand: fiona
+                app.purpose: debt_consolidation
+                productType: savings
+                ui.maxResults: 3
+                theme.colorCta: '#f8f7fc'
+                theme.colorError: '#f8f7fc'
+                theme.colorBorder: '#f8f7fc'
+                theme.partnerLogo: string
+                partnerDisplayName: even
+                shouldAutoRedirect: true
+                theme.colorPrimary: '#f8f7fc'
+                theme.fontSizeBase: 12px
+                theme.colorSecondary: '#f8f7fc'
+                theme.partnerLogoLink: 'http://test.com'
+                shouldDisplayNavigation: false
+                theme.borderRadiusLarge: 16px
+                theme.borderRadiusSmall: 5px
+                theme.fontFamilyPrimary: Open Sans
+                credentials.access_token: >-
+                  445c04e1-cc8d-4d77-a0ed-c9b4d2909f41_9a442418-8b8d-4839-8cd8-4b8efc1d77d8
+                credentials.company_uuid: 40c2d6c9-3d26-4b60-94af-d4f7737d31ce
+                shouldShowSecondaryPages: false
+                theme.fontFamilySecondary: Open Sans
+                shouldAllowLoanCoApplicant: false
+                shouldShowPartnershipHeading: true
+                theme.colorBackgroundPrimary: '#f8f7fc'
+                theme.colorBackgroundSecondary: '#f8f7fc'
+                eventScripts: []
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/error.yml
+              example:
+                message: >-
+                  Partner page with productType {productType} already exists for
+                  this partner.
+                type: BadRequestException
+        '500':
+          $ref: ./responses/500.yml
+  '/pages/admin/{partnerKey}/all':
+    x-lint-skip:
+      - path-resource-is-plural
+    parameters:
+      - $ref: ./parameters/partnerKey.yml
+    get:
+      summary: Get admin partner pages for partner
+      description: Get admin partner pages for partner
+      operationId: getPagesForPartner
+      tags:
+        - Page
+      x-lint-skip:
+        - index-endpoint-has-limit
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPageTemplateV8'
+              example:
+                savings:
+                  - id: '2'
+                    version: '8'
+                    partner: even
+                    eventHandlers: []
+                    brand: fiona
+                    app.purpose: debt_consolidation
+                    productType: savings
+                    ui.maxResults: 3
+                    theme.colorCta: '#f8f7fc'
+                    theme.colorError: '#f8f7fc'
+                    theme.colorBorder: '#f8f7fc'
+                    theme.partnerLogo: string
+                    partnerDisplayName: even
+                    shouldAutoRedirect: true
+                    theme.colorPrimary: '#f8f7fc'
+                    theme.fontSizeBase: 12px
+                    theme.colorSecondary: '#f8f7fc'
+                    theme.partnerLogoLink: 'http://test.com'
+                    shouldDisplayNavigation: false
+                    theme.borderRadiusLarge: 16px
+                    theme.borderRadiusSmall: 5px
+                    theme.fontFamilyPrimary: Open Sans
+                    credentials.access_token: >-
+                      445c04e1-cc8d-4d77-a0ed-c9b4d2909f41_9a442418-8b8d-4839-8cd8-4b8efc1d77d8
+                    credentials.company_uuid: 40c2d6c9-3d26-4b60-94af-d4f7737d31ce
+                    shouldShowSecondaryPages: false
+                    theme.fontFamilySecondary: Open Sans
+                    shouldAllowLoanCoApplicant: false
+                    shouldShowPartnershipHeading: true
+                    theme.colorBackgroundPrimary: '#f8f7fc'
+                    theme.colorBackgroundSecondary: '#f8f7fc'
+                    eventScripts: []
+                  - id: '4'
+                    version: '8'
+                    partner: even
+                    eventHandlers: []
+                    brand: fiona
+                    app.purpose: debt_consolidation
+                    productType: loan
+                    ui.maxResults: 3
+                    theme.colorCta: '#f8f7fc'
+                    theme.colorError: '#f8f7fc'
+                    theme.colorBorder: '#f8f7fc'
+                    theme.partnerLogo: string
+                    partnerDisplayName: even
+                    shouldAutoRedirect: true
+                    theme.colorPrimary: '#f8f7fc'
+                    theme.fontSizeBase: 12px
+                    theme.colorSecondary: '#f8f7fc'
+                    theme.partnerLogoLink: 'http://test.com'
+                    shouldDisplayNavigation: false
+                    theme.borderRadiusLarge: 16px
+                    theme.borderRadiusSmall: 5px
+                    theme.fontFamilyPrimary: Open Sans
+                    credentials.access_token: >-
+                      445c04e1-cc8d-4d77-a0ed-c9b4d2909f41_9a442418-8b8d-4839-8cd8-4b8efc1d77d8
+                    credentials.company_uuid: 40c2d6c9-3d26-4b60-94af-d4f7737d31ce
+                    shouldShowSecondaryPages: false
+                    theme.fontFamilySecondary: Open Sans
+                    shouldAllowLoanCoApplicant: false
+                    shouldShowPartnershipHeading: true
+                    theme.colorBackgroundPrimary: '#f8f7fc'
+                    theme.colorBackgroundSecondary: '#f8f7fc'
+                    eventScripts: []
+        '400':
+          $ref: ./responses/400.yml
+        '404':
+          $ref: ./responses/404.yml
+        '500':
+          $ref: ./responses/500.yml
+  '/pages/{partnerKey}/all':
+    x-lint-skip:
+      - path-resource-is-plural
+    get:
+      summary: Get partner pages for partner
+      description: >-
+        Get the partner pages for all products for the specified partner with
+        the deviceType specified in the query string
+      operationId: getPagesForPartnerAndDeviceType
+      tags:
+        - Page
+      x-lint-skip:
+        - index-endpoint-has-limit
+      parameters:
+        - $ref: ./parameters/partnerKey.yml
+        - name: deviceType
+          in: query
+          schema:
+            type: string
+            example: mobile
+          description: The desired config for deviceType. Defaults to 'other'.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPageTemplateV8All'
+              example:
+                savings:
+                  - id: '2'
+                    version: '8'
+                    partner: even
+                    eventHandlers: []
+                    brand: fiona
+                    app.purpose: debt_consolidation
+                    productType: savings
+                    ui.maxResults: 3
+                    theme.colorCta: '#f8f7fc'
+                    theme.colorError: '#f8f7fc'
+                    theme.colorBorder: '#f8f7fc'
+                    theme.partnerLogo: string
+                    partnerDisplayName: even
+                    shouldAutoRedirect: true
+                    theme.colorPrimary: '#f8f7fc'
+                    theme.fontSizeBase: 12px
+                    theme.colorSecondary: '#f8f7fc'
+                    theme.partnerLogoLink: 'http://test.com'
+                    shouldDisplayNavigation: false
+                    theme.borderRadiusLarge: 16px
+                    theme.borderRadiusSmall: 5px
+                    theme.fontFamilyPrimary: Open Sans
+                    credentials.access_token: >-
+                      445c04e1-cc8d-4d77-a0ed-c9b4d2909f41_9a442418-8b8d-4839-8cd8-4b8efc1d77d8
+                    credentials.company_uuid: 40c2d6c9-3d26-4b60-94af-d4f7737d31ce
+                    shouldShowSecondaryPages: false
+                    theme.fontFamilySecondary: Open Sans
+                    shouldAllowLoanCoApplicant: false
+                    shouldShowPartnershipHeading: true
+                    theme.colorBackgroundPrimary: '#f8f7fc'
+                    theme.colorBackgroundSecondary: '#f8f7fc'
+                    eventScripts: []
+                  - id: '4'
+                    version: '8'
+                    partner: even
+                    eventHandlers: []
+                    brand: fiona
+                    app.purpose: debt_consolidation
+                    productType: savings
+                    ui.maxResults: 3
+                    theme.colorCta: '#f8f7fc'
+                    theme.colorError: '#f8f7fc'
+                    theme.colorBorder: '#f8f7fc'
+                    theme.partnerLogo: string
+                    partnerDisplayName: even
+                    shouldAutoRedirect: true
+                    theme.colorPrimary: '#f8f7fc'
+                    theme.fontSizeBase: 12px
+                    theme.colorSecondary: '#f8f7fc'
+                    theme.partnerLogoLink: 'http://test.com'
+                    shouldDisplayNavigation: false
+                    theme.borderRadiusLarge: 16px
+                    theme.borderRadiusSmall: 5px
+                    theme.fontFamilyPrimary: Open Sans
+                    credentials.access_token: >-
+                      445c04e1-cc8d-4d77-a0ed-c9b4d2909f41_9a442418-8b8d-4839-8cd8-4b8efc1d77d8
+                    credentials.company_uuid: 40c2d6c9-3d26-4b60-94af-d4f7737d31ce
+                    shouldShowSecondaryPages: false
+                    theme.fontFamilySecondary: Open Sans
+                    shouldAllowLoanCoApplicant: false
+                    shouldShowPartnershipHeading: true
+                    theme.colorBackgroundPrimary: '#f8f7fc'
+                    theme.colorBackgroundSecondary: '#f8f7fc'
+                    eventScripts: []
+        '400':
+          $ref: ./responses/400.yml
+        '404':
+          $ref: ./responses/404.yml
+        '500':
+          $ref: ./responses/500.yml
+  '/pages/{partnerKey}/{productType}':
+    parameters:
+      - $ref: ./parameters/partnerKey.yml
+      - name: productType
+        in: path
+        schema:
+          type: string
+        example: savings
+        description: The specific product configuration desired
+        required: true
+    get:
+      summary: Get partner pages for partner and product type
+      description: >-
+        Get a list of available product configurations for the specified Partner
+        with the specified deviceType query string
+      operationId: partnerPage.get.productType
+      tags:
+        - Page
+      parameters:
+        - in: query
+          name: deviceType
+          description: The desired config for deviceType. Defaults to 'other'.
+          schema:
+            type: string
+            example: mobile
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/partnerPageTemplateV8.yml
+              example:
+                id: '2'
+                version: '8'
+                partner: even
+                eventHandlers: []
+                brand: fiona
+                app.purpose: debt_consolidation
+                productType: savings
+                ui.maxResults: 3
+                theme.colorCta: '#f8f7fc'
+                theme.colorError: '#f8f7fc'
+                theme.colorBorder: '#f8f7fc'
+                theme.partnerLogo: string
+                partnerDisplayName: even
+                shouldAutoRedirect: true
+                theme.colorPrimary: '#f8f7fc'
+                theme.fontSizeBase: 12px
+                theme.colorSecondary: '#f8f7fc'
+                theme.partnerLogoLink: 'http://test.com'
+                shouldDisplayNavigation: false
+                theme.borderRadiusLarge: 16px
+                theme.borderRadiusSmall: 5px
+                theme.fontFamilyPrimary: Open Sans
+                credentials.access_token: >-
+                  445c04e1-cc8d-4d77-a0ed-c9b4d2909f41_9a442418-8b8d-4839-8cd8-4b8efc1d77d8
+                credentials.company_uuid: 40c2d6c9-3d26-4b60-94af-d4f7737d31ce
+                shouldShowSecondaryPages: false
+                theme.fontFamilySecondary: Open Sans
+                shouldAllowLoanCoApplicant: false
+                shouldShowPartnershipHeading: true
+                theme.colorBackgroundPrimary: '#f8f7fc'
+                theme.colorBackgroundSecondary: '#f8f7fc'
+                eventScripts: []
+        '400':
+          $ref: ./responses/400.yml
+        '404':
+          $ref: ./responses/404.yml
+        '500':
+          $ref: ./responses/500.yml
+  '/pages/{partnerKey}/overrides':
+    parameters:
+      - $ref: ./parameters/partnerKey.yml
+    get:
+      summary: Get partner page overrides
+      description: Get partner page overrides
+      operationId: getPageOverrides
+      tags:
+        - Page
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/PartnerPageTemplateV7'
+                  - $ref: '#/components/schemas/PartnerPageTemplateV8'
+              examples:
+                v8:
+                  $ref: ./examples/partnerPageV8.yml
+        '400':
+          $ref: ./responses/400.yml
+        '401':
+          $ref: ./responses/401.yml
+        '404':
+          $ref: ./responses/404.yml
+  /versions:
+    get:
+      summary: Get partner page versions
+      description: Get partner page versions
+      operationId: getVersions
+      tags:
+        - Version
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Version'
+              example:
+                version: '8'
+        '401':
+          $ref: ./responses/401.yml
+        '404':
+          $ref: ./responses/404.yml
+        '500':
+          $ref: ./responses/500.yml
+  '/versions/{version}':
+    parameters:
+      - in: path
+        name: version
+        required: true
+        description: Version number of the Partner Page template to return
+        schema:
+          type: string
+        example: 8
+    get:
+      summary: Get partner page version
+      description: Get partner page version
+      operationId: getVersion
+      tags:
+        - Version
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Version'
+              examples:
+                v7_template:
+                  $ref: ./examples/versionV7.yml
+                v8_template:
+                  $ref: ./examples/versionV8.yml
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/error.yml
+              example:
+                message: 'Partner page template version {version} not found.'
+                type: NotFoundException
+        '500':
+          $ref: ./responses/500.yml
+  '/pages/{id}':
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The id of the partner page in the database
+    put:
+      summary: Update partner page
+      description: >-
+        Adds deleted_at/deleted_by to the entry of the supplied ID, and creates
+        a new Partner Page for that Partner
+      operationId: updatePage
+      tags:
+        - Page
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerPageTemplateV8'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPageTemplateV8'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/error.yml
+              example:
+                message: Partner page already exists for this partner.
+                type: BadRequestException
+        '500':
+          $ref: ./responses/500.yml
+    delete:
+      summary: Delete partner page
+      description: Delete partner page
+      operationId: deletePage
+      tags:
+        - Page
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerPageTemplateV8'
+              example:
+                id: '1795'
+                version: '8'
+                partner: test-partnerpage
+                eventHandlers: []
+                brand: fiona
+                clientTags: {}
+                app.purpose: debt_consolidation
+                productType: loan
+                ui.maxResults: 3
+                theme.colorCta: '#3fea90'
+                theme.colorError: '#ff7200'
+                theme.colorBorder: '#e2e5e9'
+                theme.partnerLogo: >-
+                  //partnerpage-static.evenfinancial.com/assets/fiona-content-logo-c5c9b55c.png
+                partnerDisplayName: supply-demo
+                shouldAutoRedirect: true
+                theme.colorPrimary: '#4b2372'
+                theme.fontSizeBase: 16px
+                theme.colorSecondary: '#ff7200'
+                theme.partnerLogoLink: 'https://hifiona.com'
+                shouldDisplayNavigation: false
+                theme.borderRadiusLarge: 14px
+                theme.borderRadiusSmall: 4px
+                theme.fontFamilyPrimary: BrandonGrotesque
+                credentials.access_token: >-
+                  3bb8c816-d3d0-4bd0-8408-b244e000a843_4c840aa7-3451-4552-9338-678a4323a9a2
+                credentials.company_uuid: 6f1e2bf2-8bf7-4345-9a78-3673be161a4b
+                shouldShowSecondaryPages: false
+                theme.fontFamilySecondary: BrandonText
+                shouldAllowLoanCoApplicant: false
+                shouldShowPartnershipHeading: true
+                theme.colorBackgroundPrimary: '#ffffff'
+                theme.colorBackgroundSecondary: '#f4f4f4'
+  /pages/alooma:
+    x-lint-skip:
+      - path-resource-is-plural
+    get:
+      summary: Get partner pages as mapped in Alooma
+      description: Get partner pages as mapped in Alooma
+      operationId: partnerPage.getAloomaMaps
+      tags:
+        - Page
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/aloomaMap.yml
+        '500':
+          description: Unknown Error
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/error.yml
+  /templates:
+    get:
+      summary: Get templates
+      operationId: getTemplates
+      tags:
+        - Template
+      x-lint-skip:
+        - index-endpoint-has-limit
+      parameters:
+        - in: query
+          name: type
+          schema:
+            $ref: ./schemas/templateType.yml
+          description: Filter templates by the type of template
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./schemas/template.yml
+        '400':
+          $ref: ./responses/400.yml
+        '401':
+          $ref: ./responses/401.yml
+        '404':
+          $ref: ./responses/404.yml
+  '/templates/{uuid}':
+    parameters:
+      - $ref: ./parameters/uuid.yml
+    get:
+      description: Get a template
+      summary: Get a template
+      operationId: getTemplate
+      tags:
+        - Template
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/template.yml
+        '400':
+          $ref: ./responses/400.yml
+        '401':
+          $ref: ./responses/401.yml
+        '404':
+          $ref: ./responses/404.yml
+    post:
+      description: Create a template
+      summary: Create a template
+      operationId: createTemplate
+      tags:
+        - Template
+      parameters:
+        - $ref: ./parameters/uuid.yml
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/templateCreateData.yml
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/template.yml
+        '400':
+          $ref: ./responses/400.yml
+        '401':
+          $ref: ./responses/401.yml
+        '404':
+          $ref: ./responses/404.yml
+    put:
+      description: Update a template
+      summary: Update a template
+      operationId: updateTemplate
+      tags:
+        - Template
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/templateCreateData.yml
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/template.yml
+        '400':
+          $ref: ./responses/400.yml
+        '401':
+          $ref: ./responses/401.yml
+        '404':
+          $ref: ./responses/404.yml
+    delete:
+      description: Delete a template
+      summary: Delete a template
+      operationId: deleteTemplate
+      tags:
+        - Template
+      responses:
+        '200':
+          description: Success
+        '400':
+          $ref: ./responses/400.yml
+        '401':
+          $ref: ./responses/401.yml
+        '404':
+          $ref: ./responses/404.yml

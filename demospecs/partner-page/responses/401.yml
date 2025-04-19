@@ -1,0 +1,8 @@
+description: Not Authenticated
+content:
+  application/json:
+    schema:
+      $ref: ./../schemas/error.yml
+    example:
+      message: Authentication is required to access this resource.
+      type: AuthenticationException

@@ -1,0 +1,10 @@
+name: displayName
+in: query
+description: A comma separated list of sub account display names
+style: form
+explode: false
+schema:
+  type: array
+  items:
+    type: string
+    minimum: 1

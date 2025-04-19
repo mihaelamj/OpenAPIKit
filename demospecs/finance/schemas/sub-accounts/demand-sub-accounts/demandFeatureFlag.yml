@@ -1,0 +1,9 @@
+type: object
+required:
+  - demandSubAccountId
+properties:
+  demandSubAccountId:
+    type: integer
+    format: int64
+allOf:
+  - $ref: ../subAccountFeatureFlag.yml

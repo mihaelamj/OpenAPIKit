@@ -1,0 +1,22 @@
+type: object
+properties:
+  uuid:
+    type: string
+    format: uuid
+  name:
+    type: string
+  desc:
+    type: string
+    description: Description
+  url:
+    type: string
+    format: url
+  partnerName:
+    type: string
+  partnerImageUrl:
+    type: string
+    format: url
+  recommendationScore:
+    type: number
+  payout: 
+    type: number

@@ -1,0 +1,43 @@
+type: object
+required:
+  - companyUuid
+  - emailAddress
+  - firstName
+  - lastName
+  - roles
+properties:
+  companyUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the company that this user belongs to
+  emailAddress:
+    type: string
+    description: |
+      The user's email address.
+  firstName:
+    type: string
+    description: |
+      The user's email address.
+  lastName:
+    type: string
+    description: |
+      The user's email address.
+  title:
+    type: string
+    description: |
+      The user's email address.
+  roles:
+    type: array
+    description: |
+      The roles that this user should belong to.
+    items:
+      type: string
+  password:
+    type: string
+    description: |
+      The user's password, used to create access tokens for this user.
+  expiresImmediately:
+    type: boolean
+    description: |
+      Whether the user's password expires immediately. Defaults to false.

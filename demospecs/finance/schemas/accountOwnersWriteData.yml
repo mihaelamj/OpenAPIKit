@@ -1,0 +1,15 @@
+type: object
+required:
+  - supplyManager
+  - demandManager
+  - supplyYieldManager
+  - demandYieldManager
+properties:
+  supplyManager:
+    type: string
+  demandManager:
+    type: string
+  supplyYieldManager:
+    type: string
+  demandYieldManager:
+    type: string

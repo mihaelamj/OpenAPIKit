@@ -1,0 +1,58 @@
+type: object
+title: SupplyDemandInclusion
+description: A whitelist that allows leed traffic to flow from specified supply partners to specified dynamic demand apis
+required:
+  - id
+  - demandSubAccountId
+  - supplySubAccountId
+  - createdReason
+  - createdMemo
+  - createdAt
+  - createdBy
+properties:
+  id:
+    title: Id
+    type: integer
+    format: int64
+  demandSubAccountId:
+    title: Demand Sub Account Id
+    type: integer
+    format: int64
+  supplySubAccountId:
+    title: Demand Sub Account Id
+    type: integer
+    format: int64
+  createdReason:
+    title: Created Reason
+    description: enumerated field with set reasons for creation
+    type: string
+  createdMemo:
+    title: Created Memo
+    description: field to provide further details to the reason for creation
+    type: string
+  createdAt:
+    title: Created At
+    type: string
+    format: date-time
+  createdBy:
+    title: Created By
+    description: access token uuid of the creator
+    type: string
+    format: uuid
+  deletedReason:
+    title: Deleted Reason
+    description: enumerated field with set reasons for deletion
+    type: string
+  deletedMemo: 
+    title: Deleted Memo
+    description: field to provide further details to the reason for deletion
+    type: string
+  deletedAt:
+    title: Deleted At
+    type: string
+    format: date-time
+  deletedBy:
+    title: Deleted By
+    description: access token uuid of the deletor
+    type: string
+    format: uuid

@@ -1,0 +1,5 @@
+description: Create a transunion supplier configuration
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/transUnionSupplierConfiguration.yml

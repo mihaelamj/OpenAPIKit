@@ -1,0 +1,7 @@
+name: deletedAtMin
+description: earliest bound for deletion date
+in: query
+style: form
+schema:
+  type: string
+  format: date-time

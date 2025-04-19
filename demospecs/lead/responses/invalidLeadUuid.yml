@@ -1,0 +1,9 @@
+description: Invalid UUID
+content:
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: ../../core/schemas/apiError.yml
+    example:
+      - message: Lead UUID is invalid

@@ -1,0 +1,38 @@
+type: object
+description: |
+  A generic, internal offer representation
+required:
+  - id
+  - uuid
+  - sourceSubAccountId
+  - apiSubAccountId
+  - productTypeKey
+  - productSubTypeKey
+  - createdAt
+  - createdByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+  uuid:
+    type: string
+    format: uuid
+  sourceSubAccountId:
+    type: integer
+    format: int64
+  apiSubAccountId:
+    type: integer
+    format: int64
+  productTypeKey:
+    $ref: ../../core/schemas/productType.yml
+  productSubTypeKey:
+    $ref: ../../lead/schemas/productSubType.yml
+  demandPayout:
+    type: number
+    format: double
+  createdAt:
+    type: string
+    format: date-time
+  createdByUuid:
+    type: string
+    format: uuid

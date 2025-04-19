@@ -1,0 +1,41 @@
+type: object
+required:
+  - subAccountId
+  - productType
+  - effectiveAt
+  - fileType
+  - leadUuidProcessorInformation
+  - details
+properties:
+  subAccountId:
+    type: integer
+    format: int64
+  productType:
+    $ref: ../../../core/schemas/productType.yml
+  effectiveAt:
+    type: string
+    format: date-time
+  sheetNumber:
+    type: integer
+    format: int32
+  headerRow:
+    type: integer
+    format: int32
+  fieldNames:
+    type: array
+    items:
+      type: string
+  dataRow:
+    type: integer
+    format: int32
+  fileType:
+    $ref: ./fileType.yml
+  leadUuidProcessorInformation:
+    $ref: ./processorInformation.yml
+  offerIdProcessorInformation:
+    $ref: ./processorInformation.yml
+  productSubTypeProcessorInformation:
+    $ref: ./processorInformation.yml
+  details:
+    allOf:
+       - $ref: ./details/importConfigurationDetails.yml

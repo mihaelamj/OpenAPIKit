@@ -1,0 +1,21 @@
+type: object
+title: Life insurance information
+description: Life insurance information
+required:
+  - carrier
+  - duration
+  - policyAmount
+properties:
+  carrier:
+    type: string
+    description: >
+      Carrier of the policy
+  duration:
+    type: integer
+    format: int64
+    description: >
+      Duration, in years
+  policyAmount:
+    type: integer
+    format: int64
+    description: Policy amount, in dollars

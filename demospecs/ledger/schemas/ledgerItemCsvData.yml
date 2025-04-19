@@ -1,0 +1,39 @@
+type: object
+title: ledgerItemCsvData
+required:
+  - ledgerItemId
+  - month
+  - partner
+  - accountRevenue
+  - billDate
+  - dueDate
+  - lineDescription
+properties:
+  ledgerItemId:
+    title: Ledger Item Id
+    type: integer
+    format: int64
+  month:
+    title: Month
+    $ref: ../../core/schemas/month.yml
+  partner:
+    title: Partner
+    type: string
+  partnerName:
+    title: Partner Name
+    type: string
+  accountRevenue:
+    title: Account Revenue
+    type: number
+    format: double
+  billDate: 
+    title: Bill Date
+    type: string
+    format: date
+  dueDate:
+    title: Due Date
+    type: string
+    format: date
+  lineDescription:
+    title: Line Description
+    type: string

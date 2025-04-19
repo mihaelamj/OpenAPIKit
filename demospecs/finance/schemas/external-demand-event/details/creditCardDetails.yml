@@ -1,0 +1,9 @@
+type: object
+properties:
+  creditLimit:
+    type: number
+    format: float
+  cardProductName:
+    type: string
+allOf:
+  - $ref: '../externalDemandEventDetails.yml'

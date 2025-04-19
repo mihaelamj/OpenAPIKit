@@ -1,0 +1,39 @@
+ type: object
+ properties:
+  subAccountOwnerId:
+    description: Ids of Sub Account Owners
+    type: array
+    items:
+      type: integer
+      format: int64
+  subAccountOwnerCreatedBy:
+    description: Uuids of people who created Sub Account Owner objects
+    type: array
+    items:
+      type: string
+      format: uuid
+  subAccountOwnerCreatedAtMin:
+    description: Minimum bound for a date-time range to search over Creation time
+    type: string
+    format: date-time
+  subAccountOwnerCreatedAtMax:
+    description: Maximum bound for a date-time range to search over Creation time
+    type: string
+    format: date-time
+  subAccountOwnerDeletedBy:
+    description: Uuids of people who deleted Sub Account Owner objects
+    type: array
+    items:
+      type: string
+      format: uuid
+  subAccountOwnerDeletedAtMin:
+    description: Minimum bound for a date-time range to search over Deletion time
+    type: string
+    format: date-time
+  subAccountOwnerDeletedAtMax:
+    description: Maximum bound for a date-time range to search over Deletion time
+    type: string
+    format: date-time
+  subAccountOwnerIsDeleted:
+    description: Flag to include or exclude deleted records of Sub Account Owners
+    type: boolean

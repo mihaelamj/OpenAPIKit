@@ -1,0 +1,5 @@
+name: sortBy
+description: how do you want to sort, default created_at
+in: query
+schema:
+  type: string

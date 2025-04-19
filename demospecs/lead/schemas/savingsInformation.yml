@@ -1,0 +1,6 @@
+type: object
+properties:
+  minDepositAmount:
+    type: integer
+    format: int64
+    description: The minimum amount a `Lead` is interesting in depositing when opening a new savings account

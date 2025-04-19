@@ -1,0 +1,11 @@
+type: object
+required:
+  - revenueAmountProcessor
+  - revenueTimestampProcessor
+properties:
+  revenueAmountProcessor:
+    $ref: ../processorInformation.yml
+  revenueTimestampProcessor:
+    $ref: ../processorInformation.yml 
+allOf:
+  - $ref: ./importConfigurationDetails.yml

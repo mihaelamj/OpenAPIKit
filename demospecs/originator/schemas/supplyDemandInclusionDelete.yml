@@ -1,0 +1,14 @@
+type: object
+title: SupplyDemandInclusionDelete
+required:
+  - deletedReason
+  - deletedMemo
+properties:
+  deletedReason:
+    title: Deleted Reason
+    description: enumerated field with set reasons for deletion
+    type: string
+  deletedMemo:
+    title: Deleted Memo
+    description: field to provide further details to the reason for deletion
+    type: string

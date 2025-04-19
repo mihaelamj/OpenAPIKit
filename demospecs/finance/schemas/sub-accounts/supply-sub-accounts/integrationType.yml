@@ -1,0 +1,14 @@
+type: string
+enum:
+  - api_cherry_pick
+  - api_mobile
+  - api_offer_wall
+  - credit_com_embed
+  - mps_embed_even
+  - mps_embed_fiona
+  - three_step_mps_embed_even
+  - three_step_mps_embed_fiona
+  - mps_partner_page_even
+  - mps_partner_page_fiona
+  - cla
+  - pls

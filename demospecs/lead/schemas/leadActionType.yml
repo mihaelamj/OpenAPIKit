@@ -1,0 +1,19 @@
+type: string
+enum:
+  - initialized
+  - api_rejected
+  - api_approved
+  - api_listing
+  - clicked_referral_link
+  - clicked_special_offer_link
+  - special_offer_conversion
+  - applied
+  - rejected
+  - approved
+  - listed
+  - funded
+  - not_funded
+  - clicked_credit_card_offer_link
+  - clicked_mortgage_offer_link
+  - clicked_savings_offer_link
+  - unknown

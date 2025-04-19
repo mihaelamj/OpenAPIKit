@@ -1,0 +1,15 @@
+type: object
+required:
+  - offerIds 
+properties:
+  offerIds:
+    type: array
+    items:
+      type: integer
+      format: int64
+    description: |
+      Identifiers for the offers that are deactivated.
+  deactivationReason:
+    type: string
+    description: |
+      Reason why the offers were deactivated.

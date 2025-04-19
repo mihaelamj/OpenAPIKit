@@ -1,0 +1,29 @@
+type: object
+properties:
+  percentAvailable:
+    type: string
+    description: >
+      The percent of credit available to the subject in revolving, check credit, or open accounts. 
+      If the account type is installment, mortgage, closed with balance, unspecified, or totals, this field is blank.
+      (TU41 User Guide March 30, 2019 page 704/705)
+  highCredit:
+    type: integer
+    format: int32
+    description: >
+      The maximum amount of credit that the subject incurred in this account type.
+      (TU41 User Guide March 30, 2019 page 704/705)
+  creditLimit:
+    type: integer
+    format: int32
+  balance:
+    type: integer
+    format: int32
+  pastDue:
+    type: integer
+    format: int32
+  monthlyPayment:
+    type: integer
+    format: int32
+    description: >
+      The minimum monthly payment required of the subject for this account type.
+      (TU41 User Guide March 30, 2019 page 704/705)

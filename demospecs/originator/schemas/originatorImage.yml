@@ -1,0 +1,6 @@
+type: object
+properties:
+  sizeKey:
+    type: string
+  url:
+    type: string

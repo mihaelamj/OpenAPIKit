@@ -1,0 +1,6 @@
+type: object
+description: Added account info
+properties:
+  status:
+    description: Status of adding Bank Account
+    type: string

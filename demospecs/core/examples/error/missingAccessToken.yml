@@ -1,0 +1,7 @@
+summary: Access token was not specified
+value:
+  [
+    {
+      "message": "Access token is missing"
+    }
+  ]

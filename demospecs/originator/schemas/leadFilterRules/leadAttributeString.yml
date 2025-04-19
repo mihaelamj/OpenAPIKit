@@ -1,0 +1,6 @@
+type: string
+enum:
+  - employment_status
+  - loan_purpose
+  - public_record_code
+  - self_reported_credit_rating

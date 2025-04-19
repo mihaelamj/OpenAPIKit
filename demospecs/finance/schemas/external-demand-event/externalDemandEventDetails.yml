@@ -1,0 +1,6 @@
+type: object
+required:
+  - edeDetailsKey
+properties:
+  edeDetailsKey:
+    type: string

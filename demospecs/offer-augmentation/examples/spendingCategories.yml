@@ -1,0 +1,13 @@
+summary: List of spending categories
+value:
+  [
+    {
+      "uuid": "d0c91bff-8336-48ba-a6f2-4b4f7d2c8526",
+      "name": "Travel"
+    },
+    {
+      "uuid": "78f8ae08-0e72-4336-a708-3c9eba246085",
+      "parentUuid": "d0c91bff-8336-48ba-a6f2-4b4f7d2c8526",
+      "name": "Airfare"
+    }
+  ]

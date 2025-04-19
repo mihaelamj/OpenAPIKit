@@ -1,0 +1,18 @@
+type: object
+description: An association of an earn rate and a qualifier, like a category or merchant
+required:
+  - type
+properties:
+  type:
+    description: Refers to the type (and schema) of the item
+    type: string
+    enum:
+      - category
+      - merchant
+      - ebp
+      - paymentMethod
+  earnRate:
+    type: number
+    description: Numerical representation of the default earn rate per dollar spent of the item
+  personalization:
+    $ref: ./earningItemPersonalization.yml

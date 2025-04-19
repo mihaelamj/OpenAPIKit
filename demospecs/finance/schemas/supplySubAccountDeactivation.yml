@@ -1,0 +1,41 @@
+type: object
+required:
+  - id
+  - supplySubAccountId
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  supplySubAccountId:
+    type: integer
+    format: int64
+    description: |
+      An identifier for the supply sub account that is deactivated.
+  deactivationReason: 
+    type: string
+    description: |
+      Reason why the supply sub account was deactivated.  
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this resource.

@@ -1,0 +1,11 @@
+name: companyUuid
+in: query
+description: A comma separated list of company uuids
+style: form
+explode: false
+schema:
+  type: array
+  items:
+    type: string
+    format: uuid
+    minimum: 1

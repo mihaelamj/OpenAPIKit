@@ -1,0 +1,7 @@
+title: PersonalizationLevel
+type: string
+description: discriminator for If the card contains personalized details
+enum:
+  - generic
+  - stale
+  - transactions

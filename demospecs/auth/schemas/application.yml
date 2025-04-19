@@ -1,0 +1,41 @@
+type: object
+required:
+  - id
+  - uuid
+  - name
+  - accountId
+  - companyUuid
+  - createdById
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for this resource.
+  name:
+    type: string
+  accountId:
+    type: integer
+    format: int64
+    description: |
+      The UUID of the company that this application belongs to
+  companyUuid:
+    type: string
+    format: uuid
+    description: |
+      A unique identifier for this resource.
+  createdById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to create this resource.
+  deletedById:
+    type: integer
+    format: int64
+    description: |
+      The ID of the access token that was used to create this resource.

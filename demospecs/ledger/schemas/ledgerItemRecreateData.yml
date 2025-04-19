@@ -1,0 +1,8 @@
+type: object
+title: ledgerItemRecreateData
+required:
+  - copyAdjustments
+properties:
+  copyAdjustments:
+    title: Copy Adjustments
+    type: boolean

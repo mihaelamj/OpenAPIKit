@@ -1,0 +1,6 @@
+type: string
+enum:
+  - checking
+  - savings
+  - other
+  - unknown

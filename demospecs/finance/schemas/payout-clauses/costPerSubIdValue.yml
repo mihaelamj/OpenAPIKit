@@ -1,0 +1,13 @@
+type: object
+required:
+  - key
+  - value
+properties:
+  key:
+    type: string
+    title: Sub Id Value
+  value:
+    type: number
+    title: Amount (in $ USD)
+    multipleOf: 0.01
+    minimum: 0

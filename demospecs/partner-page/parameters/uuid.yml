@@ -1,0 +1,7 @@
+name: uuid
+in: path
+required: true
+schema:
+  type: string
+description: The universally unique identifier of the resource.
+example: 00000000-0000-0000-0000-000000000000

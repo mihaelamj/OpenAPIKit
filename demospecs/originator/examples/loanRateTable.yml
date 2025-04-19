@@ -1,0 +1,88 @@
+summary: A loan rate table response
+value:
+  {
+    "uuid": "2c6cb6e4-0aa2-4ab5-9109-8679de537e10",
+    "leadUuid": "f823a7c0-586a-4fc3-9cfa-c38694b80b2c",
+    "loanOffers": [
+      {
+        "uuid": "fef16e91-960f-4ac7-a8ec-98d7a6b32c7e",
+        "originator": "<Originator>",
+        "originatorId": null,
+        "termLength": 36,
+        "termUnit": "month",
+        "maxAmount": 25000,
+        "minAmount": 1500,
+        "maxApr": 35.99,
+        "minApr": 25.01,
+        "meanApr": 30.5,
+        "feeRate": null,
+        "maxFeeRate": null,
+        "minFeeRate": null,
+        "feeFixed": null,
+        "maxFeeFixed": null,
+        "minFeeFixed": null,
+        "allowPrepayment": true,
+        "prepaymentFee": 0,
+        "monthlyPayment": 119.3,
+        "maxMonthlyPayment": 137.4,
+        "minMonthlyPayment": 119.3,
+        "meanMonthlyPayment": 128.18,
+        "maxTotalPayment": 4947,
+        "minTotalPayment": 4295,
+        "meanTotalPayment": 4615,
+        "terms": null,
+        "url": "https://offers.evenfinancial.com/ref/fef16e91-960f-4ac7-a8ec-98d7a6b32c7e",
+        "preQualified": false,
+        "preApproved": false,
+        "sponsored": false,
+        "aprType": "fixed",
+        "recommendationScore": 95
+      }
+    ],
+    "specialOffers": [
+      {
+        "uuid": "6a43bd3d-67ba-4cdf-9fb0-c137b869fb26",
+        "name": "Resolve Your Debt",
+        "desc": "Apply today for our customized debt resolution solutions and join thousands of other customers on the road to financial freedom.",
+        "url": "https://offers.evenfinancial.com/ref/6cecafe3-78fb-40b5-9775-41dbb0537ca0",
+        "partnerName": "Freedom Debt Relief",
+        "partnerImageUrl": "https://aff-tag.evenfinancial.com/images/freedom/debt-relief/fdr.png",
+        "recommendationScore": 76
+      }
+    ],
+    "savingsOffers": [],
+    "creditCardOffers": [],
+    "mortgageOffers": [],
+    "pendingResponses": [
+      {
+        "partner": {
+          "uuid": "91d08be0-2a8c-4d28-b399-7e1b38e2522e",
+          "name": "Lending Club",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+          "disclaimer": "Cras vestibulum diam sed tempor sagittis.",
+          "imageUrl": "https://images.evenfinancial.com/old/images/lendingclub/lendingclub_120.png"
+        },
+        "productTypes": [
+          "loan"
+        ]
+      }
+    ],
+    "pendingOriginators": [
+      {
+        "key": "avant",
+        "name": "Avant",
+        "description": "Personal loans from $1,000 to $35,000",
+        "images": [
+          {
+            "sizeKey": "150",
+            "url": "aff-tag.evenfinancial.com/images/avant/avant_120.png"
+          },
+          {
+            "sizeKey": "115",
+            "url": "aff-tag.evenfinancial.com/images/avant/avant_120.png"
+          }
+        ],
+        "disclaimer": "Suspendisse rhoncus magna erat, nec rhoncus leo elementum eget."
+      }
+    ]
+  }

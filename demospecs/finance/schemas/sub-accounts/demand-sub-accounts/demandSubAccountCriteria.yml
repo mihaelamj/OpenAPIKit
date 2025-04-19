@@ -1,0 +1,17 @@
+type: object
+properties:
+  subAccountOwnerDemandPartnerManager:
+    description: List of Uuids pertaining to a Demand Partner Manager
+    type: array
+    items:
+      type: string
+      format: uuid
+  subAccountOwnerDemandYieldManager:
+    description: List of Uuids pertaining to a Demand Yield Manager
+    type: array
+    items:
+      type: string
+      format: uuid
+allOf:
+  - $ref: ../subAccountCriteria.yml
+  - $ref: ../subAccountOwnerCriteria.yml

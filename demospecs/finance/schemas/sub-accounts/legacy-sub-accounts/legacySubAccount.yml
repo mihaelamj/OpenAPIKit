@@ -1,0 +1,77 @@
+type: object
+required:
+  - id
+  - uuid
+  - accountId
+  - companyUuid
+  - subAccountTypeKey
+  - name
+  - displayName
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+  uuid:
+    type: string
+    format: uuid
+  accountId:
+    type: integer
+    format: int64
+  companyUuid:
+    type: string
+    format: uuid
+  subAccountTypeKey:
+    $ref: ../subAccountType.yml
+  name:
+    type: string
+  displayName:
+    type: string
+  description:
+    type: string
+  disclaimer:
+    type: string
+  imageUrl:
+    type: string
+    format: url
+  notes:
+    type: string
+  productType:
+    type: string
+    description: Product types to identify what vertical the sub account is set for (demand only)
+  subtextOverride:
+    type: string
+    description: Override the default auto-generated call to action subtext for issuers
+  preSelectTextOverride:
+    type: string
+    description: Override the default display text for indicating a pre-selected offer if shouldDisplayPreSelect is true.
+  supplyProductTypes:
+    type: array
+    items:
+      type: string
+    description: Product types to identify what vertical the sub account is set for (supply only)
+  foundedYear:
+    type: integer
+    format: int32
+  amBestRating:
+    type: string
+    description: A.M. Best's rating
+  createdAt:
+    type: string
+    format: date-time
+  createdBy:
+    type: string
+    format: uuid
+  updatedAt:
+    type: string
+    format: date-time
+  updatedBy:
+    type: string
+    format: uuid
+  deletedAt:
+    type: string
+    format: date-time
+  deletedBy:
+    type: string
+    format: uuid

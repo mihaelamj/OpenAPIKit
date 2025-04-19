@@ -1,0 +1,34 @@
+type: object
+required:
+  - uuid
+  - name
+  - address1
+  - city
+  - state
+  - zipCode
+  - phoneNumber
+  - roles
+properties:
+  uuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID to update
+  name:
+    type: string
+  address1:
+    type: string
+  address2:
+    type: string
+  city:
+    type: string
+  state:
+    type: string
+  zipCode:
+    type: string
+  phoneNumber:
+    type: string
+  roles:
+    type: array
+    items:
+      type: string

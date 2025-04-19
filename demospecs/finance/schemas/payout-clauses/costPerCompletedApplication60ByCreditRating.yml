@@ -1,0 +1,38 @@
+type: object
+title: Cost Per Completed Application 60 by Credit Rating
+required:
+  - defaultCost
+  - key
+properties:
+  defaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Default Amount (in $ USD)
+    minimum: 0.01
+  excellentCost:
+    type: number
+    multipleOf: 0.01
+    title: Excellent Amount (in $ USD)
+    minimum: 0.01
+  goodCost:
+    type: number
+    multipleOf: 0.01
+    title: Good Amount (in $ USD)
+    minimum: 0.01
+  fairCost:
+    type: number
+    multipleOf: 0.01
+    title: Fair Amount (in $ USD)
+    minimum: 0.01
+  poorCost:
+    type: number
+    multipleOf: 0.01
+    title: Poor Amount (in $ USD)
+    minimum: 0.01
+  limitedCost:
+    type: number
+    multipleOf: 0.01
+    title: Limited Amount (in $ USD)
+    minimum: 0.01
+allOf:
+  - $ref: ../abstractPayoutClause.yml

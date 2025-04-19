@@ -1,0 +1,17 @@
+type: object
+required:
+  - leadUuid
+  - supplySubAccountId
+  - offerIds
+properties:
+  leadUuid:
+    type: string
+    format: uuid
+  supplySubAccountId:
+    type: integer
+    format: int64
+  offerIds:
+    type: array
+    items:
+      type: integer
+      format: int64

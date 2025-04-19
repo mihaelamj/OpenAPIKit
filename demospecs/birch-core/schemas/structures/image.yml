@@ -1,0 +1,20 @@
+type: object
+description: Defines an image
+properties:
+  baseUrl:
+    type: string
+    format: url
+  originalFormat:
+    type: object
+    properties:
+      width:
+        type: number
+      height:
+        type: number
+      format:
+        type: string
+  primary:
+    type: boolean
+  supportsManipulation:
+    type: boolean
+

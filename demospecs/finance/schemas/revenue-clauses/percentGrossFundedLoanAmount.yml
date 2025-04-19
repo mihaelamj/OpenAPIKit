@@ -1,0 +1,13 @@
+type: object
+title: Percent of Gross Funded Loan Amount
+required:
+  - percent
+properties:
+  percent:
+    type: number
+    title: Percent
+    multipleOf: 0.001
+    minimum: 0.001
+    maximum: 100.0
+allOf:
+  - $ref: ../abstractRevenueClause.yml  

@@ -1,0 +1,5 @@
+description: Create a reward value calculation
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/rewardValueCalculation.yml

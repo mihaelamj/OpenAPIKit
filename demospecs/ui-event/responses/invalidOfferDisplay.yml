@@ -1,0 +1,18 @@
+description: Invalid request body JSON format
+content:
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: ../../core/schemas/apiError.yml
+    examples:
+      missingLeadUuid:
+        summary: The request body did not include 'leadUuid'
+        value:
+          [
+            {
+              "attribute": "leadUuid",
+              "type": "missing",
+              "message": "leadUuid must be specified"
+            }
+          ]

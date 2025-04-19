@@ -1,0 +1,51 @@
+type: object
+required:
+  - id
+  - offerId
+  - offerName
+  - productType
+  - demandSubAccountId
+  - demandSubAccountName
+  - filters
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+  offerId:
+    type: integer
+    format: int64
+  offerName:
+    type: string
+  productType:
+    $ref: ../../core/schemas/productType.yml
+  nonPreSelectOfferId:
+    type: integer
+    format: int64
+  demandSubAccountId:
+    type: integer
+    format: int64
+  demandSubAccountName:
+    type: string
+  vantageScoreCeiling:
+    type: integer
+    format: int32
+  vantageScoreFloor:
+    type: integer
+    format: int32
+  approvedScores:
+    type: array
+    items:
+      type: integer
+      format: int32
+  filters:
+    type: array
+    items:
+      $ref: ./preSelectRuleFilter.yml
+  createdAt:
+    type: string
+    format: date-time
+  createdBy:
+    type: string
+    format: uuid

@@ -1,0 +1,42 @@
+type: object
+required:
+  - accountId
+  - subAccountType
+  - name
+  - displayName
+  - roles
+properties:
+  accountId:
+    type: integer
+    format: int64
+  subAccountType:
+    $ref: ../subAccountType.yml
+  name:
+    type: string
+  displayName:
+    type: string
+  imageUrl:
+    type: string
+    format: url
+  notes:
+    type: string
+  roles:
+    items:
+      type: string
+  subtextOverride:
+    type: string
+    description: Override the default auto-generated call to action subtext for issuers
+  preSelectTextOverride:
+        type: string
+        description: Override the default display text for indicating a pre-selected offer if shouldDisplayPreSelect is true.
+  supplyProductType:
+    type: array
+    items:
+      type: string
+    description: Product type exclusive to supply sub accounts
+  foundedYear:
+    type: integer
+    format: int32
+  amBestRating:
+    type: string
+    description: A.M. Best's rating

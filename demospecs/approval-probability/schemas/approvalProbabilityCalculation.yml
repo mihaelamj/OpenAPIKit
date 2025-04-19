@@ -1,0 +1,86 @@
+type: object
+required:
+  - uuid
+  - productType
+  - identityHash
+  - result
+  - createdAt
+  - createdBy
+properties:
+  uuid:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      A unique identifier for the caclulation.
+  productType:
+    type: string
+    description: |
+      The product type for the calculation.
+  identityHash:
+    type: string
+    writeOnly: true
+    description: |
+      A SHA-256 hash that is unique to the user, based upon PII. The input data
+      to the hash much be one of the following:
+        - SSN, email
+        - SSN, phone number
+        - SSN, email, phone number
+
+      To make the hash, concatenate these attributes together produce the
+      SHA-256 hash. E.g.:
+      ```
+      sha256(concat(user.ssn, user.email, user.phoneNumber))
+      ```
+
+      If any attribute is missing, or the attributes are not in the specified
+      order, any potential offer match will fail.
+  state:
+    $ref: ../../core/schemas/state-lead.yml
+  providedCreditRating:
+    $ref: ../../lead/schemas/providedCreditRating.yml
+  annualIncome:
+    type: integer
+    format: int32
+    minimum: 0
+  employmentStatus:
+    $ref: ../../lead/schemas/employmentStatus.yml
+  result:
+    readOnly: true
+    allOf:
+      - $ref: ./result.yml
+  approvalProbability:
+    type: integer
+    format: int32
+    minimum: 1
+    maximum: 100
+    readOnly: true
+    description: |
+      The likelihood of the specified identity being pre-approved for an offer
+      for the specified `productType`, expressed as a percentage.
+
+      A value of `100` indicates that pre-approved offers exist. In this case,
+      `rateTableUuid` will be defined.
+
+      If the `result` is `inconclusive`, then this will not be
+      specified.
+  rateTableUuid:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of a rate table with existing pre-approved offers
+      for the specifed identity. Available if and only if the
+      value of `approvalProbability` is `100`.
+  createdAt:
+    type: string
+    format: date-time
+    readOnly: true
+    description: |
+      When the calculation was performed.
+  createdBy:
+    type: string
+    format: uuid
+    readOnly: true
+    description: |
+      The UUID of the access token that was used to request the calculation.

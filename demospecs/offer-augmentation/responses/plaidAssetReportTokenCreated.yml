@@ -1,0 +1,5 @@
+description: Token added successfully
+content:
+  application/json:
+    schema:
+      $ref: ../schemas/plaidAssetReportToken.yml

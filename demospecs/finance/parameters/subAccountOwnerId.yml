@@ -1,0 +1,10 @@
+name: subAccountOwnerId
+description: comma separated list of sub account owner ids
+in: query
+style: form
+explode: false
+schema:
+  type: array
+  items:
+    type: integer
+    format: int64

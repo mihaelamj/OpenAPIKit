@@ -1,0 +1,13 @@
+type: object
+title: MockRateTables
+description: A mock rate table that allows for better testing and demonstration of the Even flow
+required:
+  - name
+properties:
+  name:
+    title: Mock Rate Table Name
+    type: string
+  notes:
+    title: Notes
+    description: Additional notes about the mock rate table
+    type: string

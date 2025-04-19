@@ -1,0 +1,8 @@
+type: string
+enum:
+  - LeadCapHit
+  - DemandSubAccountClickCapHit
+  - BudgetCapHit
+  - ClickCapHit
+description: |
+  The reason for which this demand sub account or static offer inventory cap event was created.

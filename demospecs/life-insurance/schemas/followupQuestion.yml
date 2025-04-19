@@ -1,0 +1,13 @@
+type: object
+required:
+  - triggeringValue
+  - triggeredQuestionUuid
+properties:
+  triggeringValue:
+    type: string
+    description: >
+      When the current question response matches this value, the followup question is asked.
+      The special value of `*` means that any response should result in this followup question
+  triggeredQuestionUuid:
+    type: string
+    pattern: uuid

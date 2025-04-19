@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: birch-model
+  description: >-
+    Provide an interface for all credit card and redemption program model
+    related data
+  version: 0.1.0
+  contact:
+    name: Alex Whiteside
+    email: alex.whiteside@evenfinancial.com
+servers:
+  - url: 'https://api.onbirch.com/model'
+    description: Production
+  - url: 'https://dev.api.onbirch.com/model'
+    description: Development
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  schemas:
+    CompactCreditCard:
+      $ref: ../birch-core/schemas/credit-card/compactCreditCard.yml
+    CreditCard:
+      oneOf:
+        - $ref: ../birch-core/schemas/credit-card/fullCreditCard.yml
+        - $ref: ../birch-core/schemas/credit-card/compactCreditCard.yml
+    CreditCardRepresentation:
+      $ref: ../birch-core/schemas/credit-card/creditCardRepresentations.yml
+    FullCreditCard:
+      $ref: ../birch-core/schemas/credit-card/fullCreditCard.yml
+tags:
+  - name: Credit Card
+paths:
+  /cards:
+    get:
+      x-lint-skip:
+        - index-endpoint-has-limit
+      operationId: getAllCards
+      tags:
+        - Credit Card
+      summary: Get cards supported by Birch
+      description: 'Returns Card and its metadata, additional details'
+      parameters:
+        - name: uuid
+          in: query
+          required: false
+          description: The UUID of the card(s) you want
+          schema:
+            type: string
+            format: uuid
+        - name: format
+          description: The level of detail you want (compact or full)
+          in: query
+          required: true
+          schema:
+            $ref: ../birch-core/schemas/credit-card/creditCardRepresentations.yml
+      responses:
+        '200':
+          description: A compact array of cards available
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreditCard'
+  '/cards/{uuid}':
+    get:
+      tags:
+        - Credit Card
+      operationId: getCardsById
+      summary: Get a specific credit card
+      description: Get a specific credit card
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          description: The UUID of the card you want
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A credit card object
+          content:
+            application/json:
+              schema:
+                $ref: ../birch-core/schemas/credit-card/fullCreditCard.yml
+        '404':
+          description: '`Card` with the given UUID does not exist'

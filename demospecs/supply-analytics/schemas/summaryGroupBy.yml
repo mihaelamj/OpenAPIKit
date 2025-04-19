@@ -1,0 +1,5 @@
+type: string
+enum:
+  - day
+  - credit_rating
+  - loan_purpose

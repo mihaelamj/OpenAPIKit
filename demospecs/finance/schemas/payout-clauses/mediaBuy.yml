@@ -1,0 +1,16 @@
+type: object
+title: Media Buy
+required:
+  - cost
+  - buyDate
+properties:
+  cost:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+  buyDate:
+    type: string
+    format: date
+allOf:
+  - $ref: ../abstractPayoutClause.yml

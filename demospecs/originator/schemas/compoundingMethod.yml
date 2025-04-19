@@ -1,0 +1,10 @@
+type: string
+enum:
+  - annually
+  - continuous
+  - daily
+  - monthly
+  - quarterly
+  - semiAnnually
+  - simple
+  - weekly

@@ -1,0 +1,8 @@
+type: object
+properties:
+  name:
+    type: string
+    description: Name associated with a credit card benefit
+  details:
+    type: string
+    description: Description associated with a credit card benefit

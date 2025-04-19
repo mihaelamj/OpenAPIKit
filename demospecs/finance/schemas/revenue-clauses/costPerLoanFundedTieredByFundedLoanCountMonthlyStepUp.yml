@@ -1,0 +1,30 @@
+type: object
+title: Cost Per Loan Funded Tiered by Funded Loan Count Monthly Step Up
+required:
+  - baseCost
+  - costByFundedLoanCount
+properties:
+  baseCost:
+    type: number
+    title: Default Amount (in $ USD)
+    multipleOf: 0.01
+    minimum: 0.01
+  costByFundedLoanCount:
+    type: array
+    items:
+      type: object
+      required:
+        - key
+        - value
+      properties:
+        key:
+          type: integer
+          format: int64
+          title: Funded loan count
+        value:
+          type: number
+          title: Amount (in $ USD)
+          multipleOf: 0.01
+          minimum: 0
+allOf:
+  - $ref: ../abstractRevenueClause.yml

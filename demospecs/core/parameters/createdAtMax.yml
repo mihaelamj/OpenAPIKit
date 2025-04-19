@@ -1,0 +1,7 @@
+name: createdAtMax
+description: latest bound to look at for creation date
+in: query
+style: form
+schema:
+  type: string
+  format: date-time

@@ -1,0 +1,9 @@
+type: object
+required:
+  - supplySubAccountId
+properties:
+  supplySubAccountId:
+    type: integer
+    format: int64
+allOf:
+  - $ref: ../subAccountFeatureFlag.yml

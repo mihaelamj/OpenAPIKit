@@ -1,0 +1,10 @@
+name: subAccountOwnerDeletedBy
+description: comma separated list of uuids
+in: query
+style: form
+explode: false
+schema:
+  type: array
+  items:
+    type: string
+    format: uuid

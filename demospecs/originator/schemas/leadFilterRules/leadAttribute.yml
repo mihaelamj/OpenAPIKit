@@ -1,0 +1,30 @@
+type: string
+enum:
+  - age
+  - annual_income
+  - closed_with_balance_past_due
+  - collection_count
+  - collection_count_last_6_months
+  - days_on_file
+  - debt_to_income_ratio
+  - employment_status
+  - historical_negative_occurrences_count
+  - inquiry_count
+  - installment_past_due
+  - is_frozen
+  - loan_purpose
+  - mortgage_past_due
+  - negative_trade_count
+  - non_mortgage_debt_to_income_ratio
+  - open_past_due
+  - past_due_balance
+  - public_record_code
+  - requested_loan_amount
+  - request_to_income_ratio
+  - revolving_past_due
+  - self_reported_credit_rating
+  - self_reported_credit_score
+  - total_past_due
+  - trade_count
+  - trades_30_days_past_due
+  - vantage_score_3

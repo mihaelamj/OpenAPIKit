@@ -1,0 +1,4 @@
+type: object
+readOnly: true
+additionalProperties:
+  type: string

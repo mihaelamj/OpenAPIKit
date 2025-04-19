@@ -1,0 +1,4 @@
+type: object
+title: Even Owned
+allOf:
+  - $ref: ../abstractPayoutClause.yml

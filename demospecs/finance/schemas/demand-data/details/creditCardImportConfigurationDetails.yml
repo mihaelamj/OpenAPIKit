@@ -1,0 +1,25 @@
+type: object
+required:
+  - appliedTimestampProcessor
+  - approvedTimestampProcessor
+  - fundedTimestampProcessor
+  - openedTimestampProcessor
+  - rejectedTimestampProcessor
+  - openedCreditLimitProcessor
+properties:
+  appliedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  approvedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  fundedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  openedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  rejectedTimestampProcessor:
+    $ref: ../processorInformation.yml
+  openedCreditLimitProcessor:
+    $ref: ../processorInformation.yml
+  cardProductNameProcessor:
+    $ref: ../processorInformation.yml 
+allOf:
+  - $ref: ./importConfigurationDetails.yml

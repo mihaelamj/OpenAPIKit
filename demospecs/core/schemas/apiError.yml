@@ -1,0 +1,13 @@
+type: object
+properties:
+  attribute:
+    type: string
+    readOnly: true
+  type:
+    type: string
+    readOnly: true
+  details:
+    $ref: ./apiErrorDetails.yml
+  message:
+    type: string
+    readOnly: true

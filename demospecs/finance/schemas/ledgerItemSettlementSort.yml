@@ -1,0 +1,9 @@
+type: string
+enum:
+  - id
+  - accountId
+  - ledgerItemId
+  - status
+  - createdAt
+  - startedAt
+  - completedAt

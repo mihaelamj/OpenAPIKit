@@ -1,0 +1,6 @@
+title: Ledger Item Type
+type: string
+enum:
+  - payable
+  - receivable
+  - unknown

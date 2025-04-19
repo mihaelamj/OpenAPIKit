@@ -1,0 +1,8 @@
+type: string
+enum:
+  - rent
+  - condo
+  - multi_unit
+  - single_family
+  - townhouse
+  - unknown

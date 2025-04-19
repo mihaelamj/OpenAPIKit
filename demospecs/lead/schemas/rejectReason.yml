@@ -1,0 +1,11 @@
+type: string
+enum:
+  - low_fico
+  - no_fico
+  - major_derogatory
+  - underwriting_decline
+  - debt_to_income_ratio
+  - not_in_active_state
+  - incorrect_data_provided
+  - duplicate
+  - unknown

@@ -1,0 +1,6 @@
+name: subAccountOwnerIsDeleted
+description: include deleted Sub Account Owners, true/false
+in: query
+style: form
+schema:
+  type: boolean

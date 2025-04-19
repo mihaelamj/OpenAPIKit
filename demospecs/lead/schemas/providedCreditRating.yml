@@ -1,0 +1,8 @@
+type: string
+enum:
+  - excellent
+  - good
+  - fair
+  - poor
+  - limited
+  - unknown

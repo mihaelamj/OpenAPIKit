@@ -1,0 +1,16 @@
+type: object
+description: A mapping of an aggregator's credit card account and a birch credit card
+properties:
+  subAccountId:
+    description: The Birch SubAccount id (this is also a Plaid account id, or a finicity account id)
+    type: string
+  cardUuid:
+    description: The card associated with this account
+    type: string
+    format: uuid
+    nullable: true
+  openDate:
+    description: The date the account was opened
+    type: string
+    format: date
+    nullable: true

@@ -1,0 +1,10 @@
+type: string
+enum:
+  - add_int_to_value
+  - excel_timestamp
+  - no_op
+  - strip_prefix
+  - strip_suffix
+  - timestamp
+  - uuid
+  - is_not_null 

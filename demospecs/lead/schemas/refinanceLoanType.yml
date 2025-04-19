@@ -1,0 +1,4 @@
+type: string
+enum:
+  - federal_student_loan
+  - private_student_loan

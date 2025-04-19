@@ -1,0 +1,182 @@
+openapi: 3.0.3
+info:
+  title: birch-web
+  description: Birch Web Application
+  version: 1.0.0
+servers:
+  - url: 'https://birchfinance.com/api'
+components:
+  x-lint-skip:
+    - inline-schema-is-scalar
+  schemas:
+    AddBankResponse:
+      $ref: ./schemas/addBankResponse.yml
+    AddBankResponseMobile:
+      $ref: ./schemas/addBankResponseMobile.yml
+    AddBankRequest:
+      $ref: ./schemas/addBankRequest.yml
+    AddBankRequestMobile:
+      $ref: ./schemas/addBankRequestMobile.yml
+    GetRateTable:
+      $ref: ../originator/schemas/rateTablePublic.yml
+    GetRateTableRequest:
+      $ref: ./schemas/getRateTableRequest.yml
+    LeadRequestJson:
+      $ref: ../lead/schemas/leadRequestJson.yml
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+tags:
+  - name: Plaid
+  - name: Bank
+paths:
+  /plaid/addBanks:
+    post:
+      description: Add new Plaid bank connection
+      operationId: addBanks
+      tags:
+        - Plaid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/addBankRequest.yml
+      responses:
+        '200':
+          description: Response containing sub accounts and user id
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/addBankResponse.yml
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: ../core/schemas/apiError.yml
+              example:
+                summary: An internal server error
+                description: An unknown error occured
+                value:
+                  message: Internal Error
+                  details: Something went wrong..
+  /mobile/plaid/addBanks:
+    post:
+      description: Add new Plaid bank connection from Mobile
+      operationId: addBanksMobile
+      tags:
+        - Plaid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/addBankRequestMobile.yml
+      responses:
+        '200':
+          description: Response containing status of adding Bank Account
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/addBankResponseMobile.yml
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+        '401':
+          description: Not authorized
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ../core/schemas/apiError.yml
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: ../core/schemas/apiError.yml
+              example:
+                summary: An internal server error
+                description: An unknown error occured
+                value:
+                  message: Internal Error
+                  details: Something went wrong..
+  /even/getRateTables:
+    post:
+      tags:
+        - Even
+      summary: getRateTables
+      description: getRateTables
+      operationId: getRateTables
+      requestBody:
+        description: Get `RateTable` for User by `productType`
+        content:
+          application/json:
+            schema:
+              $ref: ./schemas/getRateTableRequest.yml
+        required: true
+      responses:
+        '200':
+          description: >-
+            Returns `RateTable` for specified `productType` if table exists
+            within 30 days
+          content:
+            application/json:
+              schema:
+                $ref: ../originator/schemas/rateTablePublic.yml
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: ../core/schemas/apiError.yml
+              example:
+                summary: An internal server error
+                description: An unknown error occured
+                value:
+                  message: Internal Error
+                  details: Something went wrong...
+  /even/createUpdateLeadAndGetRateTables:
+    post:
+      tags:
+        - Even
+      summary: createUpdateLeadAndGetRateTables
+      operationId: createUpdateLeadAndGetRateTables
+      requestBody:
+        description: Create `Lead` and get `RateTable`
+        content:
+          application/json:
+            schema:
+              $ref: ../lead/schemas/leadRequestJson.yml
+        required: true
+      responses:
+        '200':
+          description: Return `RateTable` for newly created lead
+          content:
+            application/json:
+              schema:
+                $ref: ../originator/schemas/rateTablePublic.yml
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: ../core/schemas/apiError.yml
+              example:
+                summary: An internal server error
+                description: An unknown error occured
+                value:
+                  message: Internal Error
+                  details: Something went wrong..

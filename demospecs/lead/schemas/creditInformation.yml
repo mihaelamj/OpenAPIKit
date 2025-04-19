@@ -1,0 +1,9 @@
+type: object
+description: Credit history information relating to a `Lead`
+properties:
+  providedCreditRating:
+    $ref: ./providedCreditRating.yml
+  providedNumericCreditScore:
+    type: integer
+    format: int32
+    description: FICO credit score provided by a `Lead`

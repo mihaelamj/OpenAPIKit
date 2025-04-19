@@ -1,0 +1,24 @@
+type: object
+description: |
+  An polymorphic, internal representation of an offer from any vertical.
+required:
+  - generic
+  - version
+  - instance
+properties:
+  generic:
+    $ref: ./offerRecord.yml
+  version:
+    $ref: ./offerVersionRecord.yml
+  deactivatedAt: 
+    type: string
+    format: date-time
+    description: |
+      When the resource was deactivated.
+  deactivatedBy:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to deactivate this resource.
+  instance:
+    $ref: ./offerDetailsRecord.yml

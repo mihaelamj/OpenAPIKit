@@ -1,0 +1,46 @@
+type: object
+properties:
+  educationLevel:
+    $ref: ./educationLevel.yml
+  graduateDegreeType:
+    $ref: ./graduateDegreeType.yml
+  universityAttended:
+    type: string
+    description: |
+      Name of university where a lead received their undergraduate degree.
+      A lookup service for possible universities is available from using the /leads/universities endpoint.
+      To maximize returned offers, this string must match one of the names returned from the lookup.
+    deprecated: true
+  graduationDate:
+    type: string
+    format: date
+    description: Date the lead graudated from undergrad (YYYY-MM-DD)
+    deprecated: true
+  graduateGraduationDate:
+    type: string
+    format: date
+    description: Lead's graduate school graduation date (YYYY-MM-DD)
+  graduateLastAttendedDate:
+    type: string
+    format: date
+    description: Lead's last attended month/year for graduate school (YYYY-MM-DD)
+  graduateUniversityAttended:
+    type: string
+    description: |
+      Name of university where a lead received their graduate degree.
+      A lookup service for possible universities is available from using the /leads/universities endpoint.
+      To maximize returned offers, this string must match one of the names returned from the lookup.
+  undergraduateGraduationDate:
+    type: string
+    format: date
+    description: Date the lead graduated from undergrad (YYYY-MM-DD). 
+  undergraduateLastAttendedDate:
+    type: string
+    format: date
+    description: Lead's last attended month/year for undergrad (YYYY-MM-DD)
+  undergraduateUniversityAttended:
+    type: string
+    description: |
+      Name of university where a lead received their undergraduate degree.
+      A lookup service for possible universities is available from using the /leads/universities endpoint.
+      To maximize returned offers, this string must match one of the names returned from the lookup.

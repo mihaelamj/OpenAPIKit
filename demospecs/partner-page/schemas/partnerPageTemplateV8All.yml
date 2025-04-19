@@ -1,0 +1,6 @@
+type: object
+properties:
+  productType:
+    type: array
+    items:
+      $ref: ./partnerPageTemplateV8.yml

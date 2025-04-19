@@ -1,0 +1,9 @@
+type: object
+required:
+  - revenue
+properties:
+  revenue:
+    type: number
+    format: float
+allOf:
+  - $ref: '../externalDemandEventDetails.yml'

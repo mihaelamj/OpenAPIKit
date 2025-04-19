@@ -1,0 +1,17 @@
+type: object
+properties:
+  subAccountOwnerSupplyPartnerManager:
+    description: List of Uuids pertaining to a Supply Partner Manager
+    type: array
+    items:
+      type: string
+      format: uuid
+  subAccountOwnerSupplyYieldManager:
+    description: List of Uuids pertaining to a Supply Yield Manager
+    type: array
+    items:
+      type: string
+      format: uuid
+allOf:
+  - $ref: ../subAccountCriteria.yml
+  - $ref: ../subAccountOwnerCriteria.yml

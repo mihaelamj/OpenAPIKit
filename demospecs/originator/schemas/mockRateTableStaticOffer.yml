@@ -1,0 +1,15 @@
+type: object
+title: MockRateTableStaticOffers
+description: Mock rate table and static offer link
+required:
+  - mockRateTableId
+  - staticOfferId
+properties:
+  mockRateTableId:
+    title: Mock Rate Table ID
+    type: integer
+    format: int64
+  staticOfferId:
+    title: Static Offer ID
+    type: integer
+    format: int64

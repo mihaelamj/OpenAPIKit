@@ -1,0 +1,63 @@
+type: object
+title: Cost Per Completed Application by Credit Rating and Device Type
+required:
+  - defaultCost
+  - key
+properties:
+  defaultCost:
+    type: number
+    multipleOf: 0.01
+    title: Default Amount (in $ USD)
+    minimum: 0.01
+  excellentDesktopCost:
+    type: number
+    multipleOf: 0.01
+    title: Excellent Amount for Desktop (in $ USD)
+    minimum: 0.01
+  excellentMobileCost:
+    type: number
+    multipleOf: 0.01
+    title: Excellent Amount for Mobile (in $ USD)
+    minimum: 0.01
+  goodDesktopCost:
+    type: number
+    multipleOf: 0.01
+    title: Good Amount for Desktop (in $ USD)
+    minimum: 0.01
+  goodMobileCost:
+    type: number
+    multipleOf: 0.01
+    title: Good Amount for Mobile (in $ USD)
+    minimum: 0.01
+  fairDesktopCost:
+    type: number
+    multipleOf: 0.01
+    title: Fair Amount for Desktop (in $ USD)
+    minimum: 0.01
+  fairMobileCost:
+    type: number
+    multipleOf: 0.01
+    title: Fair Amount for Mobile (in $ USD)
+    minimum: 0.01
+  poorDesktopCost:
+    type: number
+    multipleOf: 0.01
+    title: Poor Amount for Desktop (in $ USD)
+    minimum: 0.01
+  poorMobileCost:
+    type: number
+    multipleOf: 0.01
+    title: Poor Amount fot Mobile (in $ USD)
+    minimum: 0.01
+  limitedDesktopCost:
+    type: number
+    multipleOf: 0.01
+    title: Limited Amount for Desktop (in $ USD)
+    minimum: 0.01
+  limitedMobileCost:
+    type: number
+    multipleOf: 0.01
+    title: Limited Amount for Mobile (in $ USD)
+    minimum: 0.01
+allOf:
+  - $ref: ../abstractPayoutClause.yml

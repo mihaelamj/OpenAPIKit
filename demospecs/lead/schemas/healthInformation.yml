@@ -1,0 +1,12 @@
+type: object
+properties:
+  gender:
+    $ref: ./gender.yml
+  heightInInches:
+    type: integer
+    format: int32
+  weightInPounds:
+    type: integer
+    format: int32
+  tobaccoSmoker:
+    type: boolean

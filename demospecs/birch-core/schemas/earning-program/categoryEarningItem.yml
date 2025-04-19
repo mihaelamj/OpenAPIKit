@@ -1,0 +1,9 @@
+type: object
+description: An association of an earn rate and a category
+allOf:
+  - $ref: ./earningItem.yml
+  - type: object
+    properties:
+      category:
+        $ref: ../category.yml
+        description: The category of the item

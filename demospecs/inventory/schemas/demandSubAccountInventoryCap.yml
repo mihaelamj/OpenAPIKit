@@ -1,0 +1,122 @@
+type: object
+required:
+  - id
+  - version
+  - demandSubAccountId
+  - capType
+  - demandSubAccountInventoryCapEvents
+  - startDate
+  - endDate
+  - createdAt
+  - createdByUuid
+  - updatedAt
+  - updatedByUuid
+properties:
+  id:
+    type: integer
+    format: int64
+    description: |
+      A unique, internal identifier for this resource.
+  version:
+    type: integer
+    format: int32
+    description: |
+      Version number for the cap.
+  demandSubAccountId:
+    type: integer
+    format: int64
+    description: |
+      ID of the demand sub-account that corresponds to the cap.
+  capType:
+    $ref: ./capTypeWrapper.yml
+  leadCapAmount:
+    type: integer
+    format: int64
+    description: |
+      Amount of allowable lead attributions allowed for the cap.
+
+      If non-null, `clickCapAmount` and `budgetCapAmount` must be null.
+  currentAttributedLeads:
+    type: integer
+    format: int64
+    description: |
+      Current number of leads attributed to the cap within the given time window.
+  clickCapAmount:
+    type: integer
+    format: int64
+    description: |
+      Amount of allowable click attributions allowed for the cap.
+
+      If non-null, `leadCapAmount` and `budgetCapAmount` must be null.
+  currentAttributedClicks:
+    type: integer
+    format: int64
+    description: |
+      Current number of clicks attributed to the cap within the given time window.
+  budgetCapAmount:
+    type: number
+    format: float
+    description: |
+      Amount of allowable revenue attribution allowed for the cap.
+
+      If non-null, `clickCapAmount` and `leadCapAmount` must be null.
+  currentAttributedRevenue:
+    type: number
+    format: float
+    description: |
+      Current amount of revenue attributed to the cap within the given time window.
+  lastCalculatedAt:
+    type: string
+    format: date-time
+    description: |
+      Last time attributed `currentAttributedClicks`, `currentAttributedLeads`, and 
+      `currentAttributedRevenue` were calculated.
+  demandSubAccountInventoryCapEvents:
+    type: array
+    items:
+      $ref: ./demandSubAccountInventoryCapEvent.yml
+    description: |
+      List containing events that represent when a cap was exhausted.
+
+      For caps that have naturally expired because their end date has reached, 
+      we do not create a cap event.
+  startDate:
+    type: string
+    format: date
+    description: |
+      The start date for the window in which the cap should have been in force.
+  endDate:
+    type: string
+    format: date
+    description: |
+      The end date for the window in which the cap should have been in force.
+  createdAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was created.
+  createdByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to create this resource.
+  updatedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was updated.
+  updatedByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to update this resource.
+  deletedAt:
+    type: string
+    format: date-time
+    description: |
+      When the resource was deleted.
+  deletedByUuid:
+    type: string
+    format: uuid
+    description: |
+      The UUID of the access token that was used to delete this resource.

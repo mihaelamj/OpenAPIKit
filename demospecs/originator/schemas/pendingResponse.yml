@@ -1,0 +1,11 @@
+type: object
+required:
+  - partner
+  - productTypes
+properties:
+  partner:
+    $ref: ./demandPartner.yml
+  productTypes:
+    type: array
+    items:
+      $ref: ../../core/schemas/productType.yml

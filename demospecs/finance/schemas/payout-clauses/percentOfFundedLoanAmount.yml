@@ -1,0 +1,13 @@
+type: object
+title: Email Campaign
+required:
+  - percent
+  - key
+properties:
+  percent:
+    type: number
+    multipleOf: 0.01
+    title: Amount (in $ USD)
+    minimum: 0.01
+allOf:
+  - $ref: ../abstractPayoutClause.yml

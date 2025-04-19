@@ -1,0 +1,26 @@
+type: object
+description: A request to get data about a simululation
+required:
+  - cardUuids
+properties:
+  cardUuids:
+    description: The card uuids to simulate - or null for all cards
+    type: array
+    items:
+      type: string
+      format: uuid
+  redemptionPreferences:
+    description: A user's indicated preferences about the rewards they would like to receive
+    type: array
+    items:
+      $ref: ./redemptionPreference.yml
+  aggregatedSpending:
+    $ref: ./aggregatedSpending.yml
+  allowTransferPartners:
+    description: Designates whether the user is willing to leverage transfer partners for higher redemption values
+    type: boolean
+  userProfile:
+    $ref: ./userProfile.yml
+  plaidAssetReportToken:
+    description: A Plaid Asset Report Token
+    type: string

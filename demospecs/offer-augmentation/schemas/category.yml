@@ -1,0 +1,15 @@
+type: object
+description: A Category
+properties:
+  uuid:
+    type: string
+    format: uuid
+  name:
+    type: string
+    description: A detailed name for the category
+  displayName:
+    type: string
+    description: A more user friendly name for the category
+  phrase:
+    type: string
+    description: Sentence friendly

@@ -1,0 +1,52 @@
+type: object
+required:
+  - id
+  - uuid
+  - accountId
+  - companyUuid
+  - name
+  - displayName
+  - createdAt
+  - createdBy
+properties:
+  id:
+    type: integer
+    format: int64
+  uuid:
+    type: string
+    format: uuid
+  accountId:
+    type: integer
+    format: int64
+  companyUuid:
+    type: string
+    format: uuid
+  name:
+    type: string
+  displayName:
+    type: string
+  description:
+    type: string
+  notes:
+    type: string
+  subtextOverride:
+    type: string
+    description: Override the default auto-generated call to action subtext for issuers
+  createdAt:
+    type: string
+    format: date-time
+  createdBy:
+    type: string
+    format: uuid
+  updatedAt:
+    type: string
+    format: date-time
+  updatedBy:
+    type: string
+    format: uuid
+  deletedAt:
+    type: string
+    format: date-time
+  deletedBy:
+    type: string
+    format: uuid

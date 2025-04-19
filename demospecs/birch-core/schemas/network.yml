@@ -1,0 +1,28 @@
+type: object
+description: The payment network a card operates on
+required:
+  - uuid
+  - type
+  - network
+properties:
+  uuid:
+    type: string
+    format: uuid
+  type:
+    type: string
+    enum:
+      - store
+      - credit
+  level:
+    type: string
+    description: The level or package of the card on the network, such as world elite
+  image:
+    type: string
+    format: url
+  network:
+    description: The network or store lines providing credit
+    type: string
+  merchant:
+    $ref: ./merchant.yml
+
+

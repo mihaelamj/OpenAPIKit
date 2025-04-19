@@ -1,0 +1,16 @@
+type: object
+required:
+  - staticOfferUuid
+  - earningProgram
+properties:
+  staticOfferUuid:
+    type: string
+    format: uuid
+    description: |
+      The offer UUID from the specified rate table whose reward value was
+      calculated.
+  earningProgram:
+    type: array
+    description: Reward earning data for the card associated with the given static offer uuid
+    items:
+      $ref: ./earningProgram.yml

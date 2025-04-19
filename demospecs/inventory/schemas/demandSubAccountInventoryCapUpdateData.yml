@@ -1,0 +1,18 @@
+type: object
+required:
+  - leadCapAmount
+  - clickCapAmount
+  - budgetCapAmount
+  - startDate
+  - endDate
+properties:
+  leadCapAmount:
+    type: string
+  clickCapAmount:
+    type: string
+  budgetCapAmount:
+    type: string
+  startDate:
+    type: string
+  endDate:
+    type: string

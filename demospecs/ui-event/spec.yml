@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: ui-event
+  description: |
+    For recording events that happen UIs, to aid funnel analysis and meet
+    compliance requirements
+  version: 1.0.0
+  contact:
+    name: Finance Team
+    url: >-
+      https://evenfinancial.atlassian.net/wiki/spaces/ENG/pages/36044820/Finance+Team
+servers:
+  - url: 'https://api.evenfinancial.com/uiEvent'
+    description: Prod
+  - url: 'https://dev-api.evenfinancial.com/uiEvent'
+    description: Dev
+components:
+  securitySchemes:
+    oauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/accessTokens
+          scopes:
+            'ui-event:write': Allows recording UI events
+            'ui-event:read': Allows read access to UI event endpoints
+  schemas:
+    ApiError:
+      $ref: ../core/schemas/apiError.yml
+    ApiErrorDetails:
+      $ref: ../core/schemas/apiErrorDetails.yml
+    OfferDisplay:
+      $ref: ./schemas/offerDisplay.yml
+    NewSessionInit:
+      $ref: ./schemas/newSessionInit.yml
+    OfferDisplaySort:
+      type: string
+      enum:
+        - id
+        - uuid
+        - leadUuid
+        - rateTableUuid
+        - offerUuid
+        - createdAt
+        - createdBy
+    Order:
+      $ref: ../core/schemas/order.yml
+    SessionInit:
+      $ref: ./schemas/sessionInit.yml
+tags:
+  - name: Offer Display
+    description: |
+      Indicates that the specified offer was shown to the user.
+  - name: Session Init
+    description: |
+      Indicates the beginning of a new user session.
+paths:
+  /offerDisplays:
+    get:
+      summary: Get multiple offer display events
+      description: >
+        Returns a list of offer display events that match the specified
+        criteria.
+      operationId: OfferDisplayController.index
+      tags:
+        - Offer Display
+      security:
+        - oauth:
+            - 'ui-event:read'
+      parameters:
+        - name: id
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              format: int64
+              minimum: 1
+        - name: leadUuid
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: rateTableUuid
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: createdAtMin
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdAtMax
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: createdBy
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+        - name: limit
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+            maximum: 1000
+        - name: offset
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+        - name: sortBy
+          in: query
+          schema:
+            $ref: '#/components/schemas/OfferDisplaySort'
+        - name: order
+          in: query
+          schema:
+            $ref: ../core/schemas/order.yml
+      responses:
+        '200':
+          description: Valid request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfferDisplay'
+        '400':
+          description: Missing required query parameter
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                missingLimit:
+                  summary: The request did not include a 'limit' query parameter
+                  value: Query parameter 'limit' must be defined
+                missingOffset:
+                  summary: The request did not include an 'offset' query parameter
+                  value: Query parameter 'offset' must be defined
+    post:
+      summary: Record an offer display event
+      operationId: OfferDisplayController.create
+      tags:
+        - Offer Display
+      security:
+        - oauth:
+            - 'ui-event:write'
+      requestBody:
+        $ref: ./request-bodies/offerDisplay.yml
+      responses:
+        '201':
+          $ref: ./responses/offerDisplayCreated.yml
+        '400':
+          $ref: ./responses/invalidOfferDisplay.yml
+  '/offerDisplays/{id}':
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a single offer display event
+      description: >
+        Returns the offer display event corresponding to the specified ID in the
+        URL path, if one exists.
+      operationId: OfferDisplayController.get
+      tags:
+        - Offer Display
+      security:
+        - oauth:
+            - 'ui-event:read'
+      responses:
+        '200':
+          description: Record found
+          content:
+            application/json:
+              schema:
+                $ref: ./schemas/offerDisplay.yml
+        '404':
+          description: ID not found
+          content:
+            text/plain:
+              schema:
+                type: string
+  /sessionInits:
+    post:
+      summary: Record the beginning of a new session
+      operationId: SessionInitController.create
+      tags:
+        - Session Init
+      security:
+        - oauth:
+            - 'ui-event:write'
+      requestBody:
+        $ref: ./request-bodies/sessionInit.yml
+      responses:
+        '201':
+          $ref: ./responses/sessionInitCreated.yml
+        '400':
+          $ref: ./responses/invalidSessionInit.yml

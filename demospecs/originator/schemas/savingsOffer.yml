@@ -1,0 +1,9 @@
+type: object
+description: An offer for a savings account
+required:
+  - details
+properties:
+  details:
+    $ref: ./savingsOfferDetails.yml
+allOf:
+  - $ref: ./offer.yml

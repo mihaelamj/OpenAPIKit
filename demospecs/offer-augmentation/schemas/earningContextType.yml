@@ -1,0 +1,8 @@
+description: The type of context this is. Basic contexts have no details.
+type: string
+enum:
+  - basic
+  - calculation
+  - introductory
+  - rotating
+  - capped

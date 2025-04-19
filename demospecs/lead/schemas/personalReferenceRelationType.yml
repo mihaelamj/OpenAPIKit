@@ -1,0 +1,10 @@
+type: string
+enum:
+  - parent
+  - employer
+  - spouse
+  - guardian
+  - sibling
+  - relative
+  - friend
+  - other
